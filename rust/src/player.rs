@@ -1,5 +1,6 @@
 use godot::prelude::*;
 use godot::classes::Sprite2D;
+use godot::classes::Node2D;
 
 #[derive(GodotClass)]
 #[class(base=Sprite2D)]
@@ -8,6 +9,34 @@ struct Player {
 	angular_speed: f64,
 
 	base: Base<Sprite2D>
+}
+#[derive(GodotClass)]
+#[class(base=Node2D)]
+struct Mobile {
+	hitpoints: i32,
+	base: Base<Node2D>,
+}
+#[godot_api]
+impl Mobile {
+	#[signal]
+	fn damage_taken(amount: i32);
+	#[func]
+	fn take_damage(&mut self, amount: i32) {
+		self.hitpoints -= amount;
+		let hp = self.hitpoints;
+		godot_print!("Mobile taking {amount} damage of {hp} total");
+	}
+}
+
+#[godot_api]
+impl INode2D for Mobile {
+	fn init(base: Base<Node2D>) -> Self {
+		Self {
+			hitpoints: 200,
+			base,
+		}
+	}
+
 }
 
 use godot::classes::ISprite2D;

@@ -26,6 +26,12 @@ impl Mobile {
 		let hp = self.hitpoints;
 		godot_print!("Mobile taking {amount} damage of {hp} total");
 	}
+	#[func]
+	fn hit_by_missile(&mut self, amount: i32) {
+		self.hitpoints -= amount;
+		let hp = self.hitpoints;
+		godot_print!("Mobile hit by missile! {hp} left");
+	}
 }
 
 #[godot_api]

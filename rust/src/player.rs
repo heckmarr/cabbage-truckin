@@ -84,10 +84,8 @@ impl ISprite2D for Player {
 		}
 		if moved {
 			self.base_mut().rotate(rot);
-			moved = false;
 		}
 		let rot = self.base().get_rotation();		
-//		self.position = Vector2::ZERO;
 		if event.is_action_pressed("ui_up") {
 			let velocity = Vector2::UP.rotated(rot) * self.speed as f32;
 			self.position = velocity * delta;
@@ -99,11 +97,5 @@ impl ISprite2D for Player {
 				godot_print!("Hit boundary!");
 			}
 		}
-		//let radians = (self.angular_speed * delta) as f32;
-		//self.base_mut().rotate(radians);
-		// .rotate() requires a f32, so we convert it as a f32 rather than f64
-		//let rotation = self.base().get_rotation();
-		//let velocity = Vector2::UP.rotated(rotation) * self.speed as f32;
-		//self.base_mut().translate(velocity * delta as f32);
 	}
 }

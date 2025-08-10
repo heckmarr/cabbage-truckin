@@ -6,8 +6,10 @@ use godot::classes::Node2D;
 #[class(base=Sprite2D)]
 struct Player {
 	speed: f64,
-	angular_speed: f64,
-
+	position: Vector2,
+	delta: f32,
+	direction: f32,
+	rotation: f32,
 	base: Base<Sprite2D>
 }
 #[derive(GodotClass)]
@@ -46,7 +48,8 @@ impl INode2D for Mobile {
 }
 
 use godot::classes::ISprite2D;
-
+use godot::classes::Input;
+use godot::classes::InputEvent;
 #[godot_api]
 impl ISprite2D for Player {
 	fn init(base: Base<Sprite2D>) -> Self {
@@ -54,17 +57,39 @@ impl ISprite2D for Player {
 
 		Self {
 			speed: 400.0,
-			angular_speed: std::f64::consts::PI,
+			position: Vector2::ZERO,
+			delta: 0.0,
+			direction: 0.0,
+			rotation: 0.0,
 			base,
 		}
 	}
+	fn process(&mut self, delta: f32) {
+		self.delta = delta;
+	}
 
-	fn physics_process(&mut self, delta: f64) {
-		let radians = (self.angular_speed * delta) as f32;
-		self.base_mut().rotate(radians);
+	fn unhandled_input(&mut self, event: Gd<InputEvent>) {
+		if event.is_action_pressed("ui_left") {
+			self.direction = -1.0;
+		}
+		if event.is_action_pressed("ui_right") {
+			self.direction = 1.0;
+		}
+		self.rotation += self.direction as f32;
+		let rot: f32 = self.rotation;
+		self.base_mut().rotate(rot);		
+		let mut velocity = Vector2::ZERO;
+		if event.is_action_pressed("ui_up") {
+			velocity = Vector2::UP.rotated(self.rotation) * self.speed as f32;
+		}
+		self.position += velocity * self.delta;
+		let pos: Vector2 = self.position;
+		self.base_mut().translate(pos);
+		//let radians = (self.angular_speed * delta) as f32;
+		//self.base_mut().rotate(radians);
 		// .rotate() requires a f32, so we convert it as a f32 rather than f64
-		let rotation = self.base().get_rotation();
-		let velocity = Vector2::UP.rotated(rotation) * self.speed as f32;
-		self.base_mut().translate(velocity * delta as f32);
+		//let rotation = self.base().get_rotation();
+		//let velocity = Vector2::UP.rotated(rotation) * self.speed as f32;
+		//self.base_mut().translate(velocity * delta as f32);
 	}
 }

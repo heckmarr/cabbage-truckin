@@ -31,7 +31,7 @@ impl Mobile {
 	#[signal]
 	fn damage_taken(amount: i32);
 	#[func]
-	fn hit_by_missile(&mut self, amount: i32) {
+	fn damage_emit(&mut self, amount: i32) {
 		self.signals().damage_taken().emit(amount);
 	}
 	fn on_damage_taken(&mut self, amount: i32) {

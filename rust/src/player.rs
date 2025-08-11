@@ -13,26 +13,28 @@ struct Player {
 	base: Base<Sprite2D>
 }
 #[derive(GodotClass)]
-#[class(init, base=Node2D)]
+#[class(base=Node2D)]
 struct Mobile {
 	hitpoints: i32,
 	base: Base<Node2D>,
 }
+use godot::global::randi_range;
 
 #[godot_api]
 impl Mobile {
-	fn init(base: Base<Node2D>) -> Self {
-		godot_print!("Initializing mobile");
-		Self {
-			hitpoints: 100,
-			base,
-		}
-	}
+	#[signal]
+	fn random_damage_taken(amount: i32);
 	#[signal]
 	fn damage_taken(amount: i32);
 	#[func]
 	fn damage_emit(&mut self, amount: i32) {
 		self.signals().damage_taken().emit(amount);
+	}
+	#[func]
+	fn random_damage_emit(&mut self) {
+		//The random number range is 100-500
+		let rand_num = randi_range(100, 500) as i32;
+		self.signals().random_damage_taken().emit(rand_num);
 	}
 	fn on_damage_taken(&mut self, amount: i32) {
 		self.hitpoints -= amount;
@@ -44,10 +46,20 @@ impl Mobile {
 
 #[godot_api]
 impl INode2D for Mobile{
+	fn init(base: Base<Node2D>) -> Self {
+		godot_print!("Initializing mobile");
+		Self {
+			hitpoints: 100,
+			base,
+		}
+	}
 	fn ready(&mut self)  {
 		godot_print!("Connecting signals");
 		self.signals()
 			.damage_taken()
+			.connect_self(Self::on_damage_taken);
+		self.signals()
+			.random_damage_taken()
 			.connect_self(Self::on_damage_taken);
 	}
 }

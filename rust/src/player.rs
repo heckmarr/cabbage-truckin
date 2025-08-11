@@ -38,7 +38,11 @@ impl Mobile {
 	}
 	fn on_damage_taken(&mut self, amount: i32) {
 		self.hitpoints -= amount;
-		let hp = self.hitpoints;
+		let mut hp = self.hitpoints;
+		//stop at zero! He's dead already!
+		if hp < 0 {
+			hp = 0
+		}
 		godot_print!("Mobile taking {amount} damage of {hp} total");
 	}
 

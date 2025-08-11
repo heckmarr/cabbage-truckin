@@ -13,39 +13,45 @@ struct Player {
 	base: Base<Sprite2D>
 }
 #[derive(GodotClass)]
-#[class(base=Node2D)]
+#[class(init, base=Node2D)]
 struct Mobile {
 	hitpoints: i32,
 	base: Base<Node2D>,
 }
+
 #[godot_api]
 impl Mobile {
+	fn init(base: Base<Node2D>) -> Self {
+		godot_print!("Initializing mobile");
+		Self {
+			hitpoints: 100,
+			base,
+		}
+	}
 	#[signal]
 	fn damage_taken(amount: i32);
 	#[func]
-	fn take_damage(&mut self, amount: i32) {
+	fn hit_by_missile(&mut self, amount: i32) {
+		self.signals().damage_taken().emit(amount);
+	}
+	fn on_damage_taken(&mut self, amount: i32) {
 		self.hitpoints -= amount;
 		let hp = self.hitpoints;
 		godot_print!("Mobile taking {amount} damage of {hp} total");
 	}
-	#[func]
-	fn hit_by_missile(&mut self, amount: i32) {
-		self.hitpoints -= amount;
-		let hp = self.hitpoints;
-		godot_print!("Mobile hit by missile! {hp} left");
-	}
+
 }
 
 #[godot_api]
-impl INode2D for Mobile {
-	fn init(base: Base<Node2D>) -> Self {
-		Self {
-			hitpoints: 200,
-			base,
-		}
+impl INode2D for Mobile{
+	fn ready(&mut self)  {
+		godot_print!("Connecting signals");
+		self.signals()
+			.damage_taken()
+			.connect_self(Self::on_damage_taken);
 	}
-
 }
+
 
 use godot::classes::ISprite2D;
 use godot::classes::Input;

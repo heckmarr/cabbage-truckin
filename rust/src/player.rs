@@ -7,6 +7,7 @@ use godot::obj::NewAlloc;
 #[derive(GodotClass)]
 #[class(base=Sprite2D)]
 struct Player {
+	hitpoints: i32,
 	angular_speed: f32,
 	speed: f32,
 	position: Vector2,
@@ -25,6 +26,58 @@ use godot::global::randi_range;
 
 #[godot_api]
 impl Mobile {
+	#[signal]
+	fn mob_random_damage_taken(amount: i32);
+	#[signal]
+	fn mob_damage_taken(amount: i32);
+	#[func]
+	fn mob_damage_emit(&mut self, amount: i32) {
+		self.signals().mob_damage_taken().emit(amount);
+	}
+	#[func]
+	fn mob_random_damage_emit(&mut self) {
+		//The random number range is 100-500
+		let rand_num = randi_range(100, 500) as i32;
+		self.signals().mob_random_damage_taken().emit(rand_num);
+	}
+	fn on_mob_damage_taken(&mut self, amount: i32) {
+		self.hitpoints -= amount;
+		let mut hp = self.hitpoints;
+		//stop at zero! He's dead already!
+		if hp < 0 {
+			hp = 0
+		}
+		godot_print!("Mobile taking {amount} damage of {hp} total");
+	}
+
+}
+
+#[godot_api]
+impl INode2D for Mobile{
+	fn init(base: Base<Node2D>) -> Self {
+		godot_print!("Initializing mobile");
+		Self {
+			hitpoints: 100,
+			base,
+		}
+	}
+	fn ready(&mut self)  {
+		godot_print!("Connecting signals for Mobile");
+		self.signals()
+			.mob_damage_taken()
+			.connect_self(Self::on_mob_damage_taken);
+		self.signals()
+			.mob_random_damage_taken()
+			.connect_self(Self::on_mob_damage_taken);
+	}
+}
+
+
+use godot::classes::ISprite2D;
+use godot::classes::Input;
+use godot::classes::InputEvent;
+#[godot_api]
+impl Player {
 	#[signal]
 	fn random_damage_taken(amount: i32);
 	#[signal]
@@ -48,39 +101,17 @@ impl Mobile {
 		}
 		godot_print!("Mobile taking {amount} damage of {hp} total");
 	}
-
+	#[signal]
+	fn balete();
 }
 
-#[godot_api]
-impl INode2D for Mobile{
-	fn init(base: Base<Node2D>) -> Self {
-		godot_print!("Initializing mobile");
-		Self {
-			hitpoints: 100,
-			base,
-		}
-	}
-	fn ready(&mut self)  {
-		godot_print!("Connecting signals");
-		self.signals()
-			.damage_taken()
-			.connect_self(Self::on_damage_taken);
-		self.signals()
-			.random_damage_taken()
-			.connect_self(Self::on_damage_taken);
-	}
-}
-
-
-use godot::classes::ISprite2D;
-use godot::classes::Input;
-use godot::classes::InputEvent;
 #[godot_api]
 impl ISprite2D for Player {
 	fn init(base: Base<Sprite2D>) -> Self {
 		godot_print!("Hello, world!"); //Prints to the godot console
 
 		Self {
+			hitpoints: 100,
 			angular_speed: 3.14159,
 			speed: 200.0,
 			position: Vector2::ZERO,
@@ -96,6 +127,21 @@ impl ISprite2D for Player {
 		let event = Input::singleton();
 		let mut moved = false;
 		let mut rot: f32 = self.rotation;
+
+		if event.is_action_just_pressed("Pad-A") {
+			self.damage_emit(50);
+		}
+		if event.is_action_just_pressed("Pad-B") {
+			self.random_damage_emit();
+		}
+		if event.is_action_just_pressed("Pad-Y") {
+			godot_print!("Y");
+		}
+
+		if event.is_action_just_pressed("Pad-X") {
+			godot_print!("X");
+			self.signals().balete().emit();
+		}
 		if event.is_action_pressed("ui_left") {
 			godot_print!("playing {0}", self.anim);
 			self.direction = -1.0;
@@ -125,6 +171,17 @@ impl ISprite2D for Player {
 			}
 		}
 	}
+
+	fn ready(&mut self)  {
+		godot_print!("Connecting signals for Player");
+		self.signals()
+			.damage_taken()
+			.connect_self(Player::on_damage_taken);
+		self.signals()
+			.random_damage_taken()
+			.connect_self(Player::on_damage_taken);
+	}
+
 }
 impl Drop for Player {
 	fn drop(&mut self) {

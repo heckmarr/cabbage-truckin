@@ -126,3 +126,9 @@ impl ISprite2D for Player {
 		}
 	}
 }
+impl Drop for Player {
+	fn drop(&mut self) {
+		godot_print!("dropping {0}", self.anim);
+		self.anim.queue_free();
+	}
+}

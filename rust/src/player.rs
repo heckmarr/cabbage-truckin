@@ -1,7 +1,9 @@
 use godot::prelude::*;
 use godot::classes::Sprite2D;
 use godot::classes::Node2D;
-
+use godot::classes::AnimatedSprite2D;
+use godot::obj::Gd;
+use godot::obj::NewAlloc;
 #[derive(GodotClass)]
 #[class(base=Sprite2D)]
 struct Player {
@@ -10,6 +12,7 @@ struct Player {
 	position: Vector2,
 	direction: f32,
 	rotation: f32,
+	anim: Gd<AnimatedSprite2D>,
 	base: Base<Sprite2D>
 }
 #[derive(GodotClass)]
@@ -83,6 +86,7 @@ impl ISprite2D for Player {
 			position: Vector2::ZERO,
 			direction: 0.0,
 			rotation: 0.0,
+			anim: NewAlloc::new_alloc(),
 			base,
 		}
 	}
@@ -93,6 +97,7 @@ impl ISprite2D for Player {
 		let mut moved = false;
 		let mut rot: f32 = self.rotation;
 		if event.is_action_pressed("ui_left") {
+			godot_print!("playing {0}", self.anim);
 			self.direction = -1.0;
 			moved = true;
 			self.rotation = (self.direction * self.angular_speed * delta) as f32;

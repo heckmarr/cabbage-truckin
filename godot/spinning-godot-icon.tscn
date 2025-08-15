@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://tybn8gvtpgtn"]
+[gd_scene load_steps=5 format=3 uid="uid://tybn8gvtpgtn"]
 
 [ext_resource type="Texture2D" uid="uid://ddtnxwegnx0wa" path="res://icon.svg" id="1_nqri4"]
 [ext_resource type="Script" uid="uid://dg4saor4cdkag" path="res://player.gd" id="2_1g5rw"]
+[ext_resource type="Script" uid="uid://d1o2l1olufosy" path="res://mobiles.gd" id="3_1g5rw"]
 
 [sub_resource type="GDScript" id="GDScript_fq4x2"]
 
@@ -15,5 +16,7 @@ script = SubResource("GDScript_fq4x2")
 
 [node name="Mobiles" type="Mobiles" parent="."]
 mob = "Cashier"
+script = ExtResource("3_1g5rw")
 
 [connection signal="balete" from="." to="." method="_on_balete"]
+[connection signal="balete" from="Mobiles" to="Mobiles" method="_on_balete"]

@@ -61,21 +61,16 @@ impl ISprite2D for Mobiles {
 	}
 }
 
+impl Drop for Mobiles {
+	fn drop(&mut self) {
+		godot_print!("Dropping {0}", self.timer);
+		self.timer.queue_free();
+	}
+}
 #[godot_api]
 impl Mobiles {
-	#[func]
-	fn create(kind: MobileKind) -> Gd<Self> {
-		godot_print!("Initializing mobile");
-		
-		Gd::from_init_fn(|base| {
-			Self {
-				timer: NewAlloc::new_alloc(),
-				mob: kind,
-				base,
-			}
-		})
-	}
-
+	#[signal]
+	fn balete();
 }
 
 #[godot_api]

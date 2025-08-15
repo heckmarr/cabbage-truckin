@@ -2,14 +2,15 @@
 
 [ext_resource type="Texture2D" uid="uid://ddtnxwegnx0wa" path="res://icon.svg" id="1_nqri4"]
 [ext_resource type="Script" uid="uid://dg4saor4cdkag" path="res://player.gd" id="2_1g5rw"]
-[ext_resource type="Script" uid="uid://b68wvmuue2ns3" path="res://mobile.gd" id="2_fq4x2"]
+
+[sub_resource type="GDScript" id="GDScript_fq4x2"]
 
 [node name="Sprite2D" type="Player"]
 position = Vector2(570, 321)
 texture = ExtResource("1_nqri4")
 script = ExtResource("2_1g5rw")
 
-[node name="Mobile" type="Mobile" parent="."]
-script = ExtResource("2_fq4x2")
+[node name="packaging" type="Packaging" parent="."]
+script = SubResource("GDScript_fq4x2")
 
 [connection signal="balete" from="." to="." method="_on_balete"]

@@ -18,57 +18,57 @@ struct Player {
 }
 #[derive(GodotClass)]
 #[class(base=Node2D)]
-struct Mobile {
+struct Packaging {
 	hitpoints: i32,
 	base: Base<Node2D>,
 }
 use godot::global::randi_range;
 
 #[godot_api]
-impl Mobile {
+impl Packaging {
 	#[signal]
-	fn mob_random_damage_taken(amount: i32);
+	fn packaging_random_damage_taken(amount: i32);
 	#[signal]
-	fn mob_damage_taken(amount: i32);
+	fn packaging_damage_taken(amount: i32);
 	#[func]
-	fn mob_damage_emit(&mut self, amount: i32) {
-		self.signals().mob_damage_taken().emit(amount);
+	fn packaging_damage_emit(&mut self, amount: i32) {
+		self.signals().packaging_damage_taken().emit(amount);
 	}
 	#[func]
-	fn mob_random_damage_emit(&mut self) {
+	fn packaging_random_damage_emit(&mut self) {
 		//The random number range is 100-500
 		let rand_num = randi_range(100, 500) as i32;
-		self.signals().mob_random_damage_taken().emit(rand_num);
+		self.signals().packaging_random_damage_taken().emit(rand_num);
 	}
-	fn on_mob_damage_taken(&mut self, amount: i32) {
+	fn on_packaging_damage_taken(&mut self, amount: i32) {
 		self.hitpoints -= amount;
 		let mut hp = self.hitpoints;
 		//stop at zero! He's dead already!
 		if hp < 0 {
 			hp = 0
 		}
-		godot_print!("Mobile taking {amount} damage of {hp} total");
+		godot_print!("packaging taking {amount} damage of {hp} total");
 	}
 
 }
 
 #[godot_api]
-impl INode2D for Mobile{
+impl INode2D for Packaging{
 	fn init(base: Base<Node2D>) -> Self {
-		godot_print!("Initializing mobile");
+		godot_print!("Initializing damageable packaging");
 		Self {
 			hitpoints: 100,
 			base,
 		}
 	}
 	fn ready(&mut self)  {
-		godot_print!("Connecting signals for Mobile");
+		godot_print!("Connecting signals for packaging");
 		self.signals()
-			.mob_damage_taken()
-			.connect_self(Self::on_mob_damage_taken);
+			.packaging_damage_taken()
+			.connect_self(Self::on_packaging_damage_taken);
 		self.signals()
-			.mob_random_damage_taken()
-			.connect_self(Self::on_mob_damage_taken);
+			.packaging_random_damage_taken()
+			.connect_self(Self::on_packaging_damage_taken);
 	}
 }
 
@@ -99,7 +99,7 @@ impl Player {
 		if hp < 0 {
 			hp = 0
 		}
-		godot_print!("Mobile taking {amount} damage of {hp} total");
+		godot_print!("packaging taking {amount} damage of {hp} total");
 	}
 	#[signal]
 	fn balete();

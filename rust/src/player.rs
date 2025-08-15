@@ -4,6 +4,9 @@ use godot::classes::Node2D;
 use godot::classes::AnimatedSprite2D;
 use godot::obj::Gd;
 use godot::obj::NewAlloc;
+
+use godot::classes::Timer;
+
 #[derive(GodotClass)]
 #[class(base=Sprite2D)]
 struct Player {
@@ -16,6 +19,28 @@ struct Player {
 	anim: Gd<AnimatedSprite2D>,
 	base: Base<Sprite2D>
 }
+
+#[derive(Debug, GodotConvert, Var, Export)]
+#[godot(via = GString)]
+pub enum MobileKind {
+	Package,
+	WarehousePerson,
+	Cashier,
+	Chef,
+	Customer,
+	Stocker,
+}
+
+#[derive(GodotClass)]
+#[class(base=Sprite2D)]
+struct Mobiles {
+	timer: Gd<Timer>,
+	#[export]
+	mob: MobileKind,
+	base: Base<Sprite2D>,
+}
+
+
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 struct Packaging {
@@ -23,6 +48,35 @@ struct Packaging {
 	base: Base<Node2D>,
 }
 use godot::global::randi_range;
+
+#[godot_api]
+impl ISprite2D for Mobiles {
+	fn init(base: Base<Sprite2D>) -> Self {
+		godot_print!("Mobile ready");
+		Self {
+			timer: NewAlloc::new_alloc(),
+			mob: MobileKind::Chef,
+			base,
+		}
+	}
+}
+
+#[godot_api]
+impl Mobiles {
+	#[func]
+	fn create(kind: MobileKind) -> Gd<Self> {
+		godot_print!("Initializing mobile");
+		
+		Gd::from_init_fn(|base| {
+			Self {
+				timer: NewAlloc::new_alloc(),
+				mob: kind,
+				base,
+			}
+		})
+	}
+
+}
 
 #[godot_api]
 impl Packaging {

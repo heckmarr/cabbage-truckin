@@ -13,4 +13,7 @@ script = ExtResource("2_1g5rw")
 [node name="packaging" type="Packaging" parent="."]
 script = SubResource("GDScript_fq4x2")
 
+[node name="Mobiles" type="Mobiles" parent="."]
+mob = "Cashier"
+
 [connection signal="balete" from="." to="." method="_on_balete"]

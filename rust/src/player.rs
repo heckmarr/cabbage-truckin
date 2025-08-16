@@ -33,7 +33,6 @@ impl Player {
 	#[func]
 	fn damage_emit(&mut self, amount: i32) {
 		self.signals().damage_taken().emit(amount);
-		self.signals().damage_all_mobiles().emit(100);
 	}
 	#[func]
 	fn random_damage_emit(&mut self) {

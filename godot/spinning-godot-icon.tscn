@@ -11,7 +11,7 @@ position = Vector2(570, 321)
 texture = ExtResource("1_nqri4")
 script = ExtResource("2_1g5rw")
 
-[node name="packaging" type="Packaging" parent="."]
+[node name="packaging" type="Node2D" parent="."]
 script = SubResource("GDScript_fq4x2")
 
 [node name="Mobiles" type="Mobiles" parent="."]

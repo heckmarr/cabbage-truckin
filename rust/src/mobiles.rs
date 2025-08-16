@@ -1,6 +1,7 @@
 use godot::prelude::*;
 use godot::classes::Sprite2D;
 use godot::classes::ISprite2D;
+use godot::classes::AnimatedSprite2D;
 use godot::obj::Gd;
 use godot::obj::NewAlloc;
 
@@ -25,6 +26,7 @@ struct Mobiles {
 	timer: Gd<Timer>,
 	#[export]
 	mob: MobileKind,
+	anim: Gd<AnimatedSprite2D>,
 	base: Base<Sprite2D>,
 }
 
@@ -37,8 +39,9 @@ impl ISprite2D for Mobiles {
 		godot_print!("Mobile ready");
 		Self {
 			hitpoints: 100,
-			timer: NewAlloc::new_alloc(),
+			timer: Timer::new_alloc(),
 			mob: MobileKind::Customer,
+			anim: AnimatedSprite2D::new_alloc(),
 			base,
 		}
 	}
@@ -50,6 +53,14 @@ impl ISprite2D for Mobiles {
 		self.signals()
 			.mobile_random_damage_taken()
 			.connect_self(Self::on_mobile_damage_taken);
+		match self.mob {
+			MobileKind::Chef => godot_print!("Chef!"),
+			MobileKind::Customer => godot_print!("Customer!"),
+			MobileKind::Stocker => godot_print!("Stocker!"),
+			MobileKind::Cashier => godot_print!("Cashier!"),
+			MobileKind::Package => godot_print!("Package!"),
+			MobileKind::WarehousePerson => godot_print!("WarehousePerson!"),
+		}
 	}
 }
 
@@ -57,6 +68,8 @@ impl Drop for Mobiles {
 	fn drop(&mut self) {
 		godot_print!("Dropping {0}", self.timer);
 		self.timer.queue_free();
+		godot_print!("Dropping {0}", self.anim);
+		self.anim.queue_free();
 	}
 }
 #[godot_api]

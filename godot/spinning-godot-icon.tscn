@@ -1,22 +1,41 @@
-[gd_scene load_steps=5 format=3 uid="uid://tybn8gvtpgtn"]
+[gd_scene load_steps=9 format=3 uid="uid://tybn8gvtpgtn"]
 
 [ext_resource type="Texture2D" uid="uid://ddtnxwegnx0wa" path="res://icon.svg" id="1_nqri4"]
 [ext_resource type="Script" uid="uid://dg4saor4cdkag" path="res://player.gd" id="2_1g5rw"]
-[ext_resource type="Script" uid="uid://d1o2l1olufosy" path="res://mobiles.gd" id="3_1g5rw"]
-
-[sub_resource type="GDScript" id="GDScript_fq4x2"]
+[ext_resource type="Script" uid="uid://bmt8b2hxtvwvx" path="res://chef.gd" id="3_gm4ux"]
+[ext_resource type="Script" uid="uid://cxv0gwmv52i2h" path="res://cashier.gd" id="4_gm4ux"]
+[ext_resource type="Script" uid="uid://cjwv5wb00an0y" path="res://customer.gd" id="5_hmx16"]
+[ext_resource type="Script" uid="uid://b2rp58x7mvug3" path="res://stocker.gd" id="6_fnbrn"]
+[ext_resource type="Script" uid="uid://bonx1v0hm6l78" path="res://package.gd" id="7_uuqdb"]
+[ext_resource type="Script" uid="uid://bimbl0cc2mivr" path="res://warehouse_person.gd" id="8_y64iq"]
 
 [node name="Sprite2D" type="Player"]
 position = Vector2(570, 321)
 texture = ExtResource("1_nqri4")
 script = ExtResource("2_1g5rw")
 
-[node name="packaging" type="Node2D" parent="."]
-script = SubResource("GDScript_fq4x2")
+[node name="Chef" type="Mobiles" parent="."]
+mob = "Chef"
+script = ExtResource("3_gm4ux")
 
-[node name="Mobiles" type="Mobiles" parent="."]
+[node name="Cashier" type="Mobiles" parent="."]
 mob = "Cashier"
-script = ExtResource("3_1g5rw")
+script = ExtResource("4_gm4ux")
+
+[node name="Customer" type="Mobiles" parent="."]
+script = ExtResource("5_hmx16")
+
+[node name="Stocker" type="Mobiles" parent="."]
+mob = "Stocker"
+script = ExtResource("6_fnbrn")
+
+[node name="Package" type="Mobiles" parent="."]
+mob = "Package"
+script = ExtResource("7_uuqdb")
+
+[node name="WarehousePerson" type="Mobiles" parent="."]
+mob = "WarehousePerson"
+script = ExtResource("8_y64iq")
 
 [connection signal="balete" from="." to="." method="_on_balete"]
-[connection signal="balete" from="Mobiles" to="Mobiles" method="_on_balete"]
+[connection signal="balete" from="Chef" to="Chef" method="_on_balete"]

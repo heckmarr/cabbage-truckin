@@ -88,14 +88,15 @@ impl Mobiles {
 	fn mobile_random_damage_emit(&mut self) {
 		//The random number range is 100-500
 		let rand_num = randi_range(100, 500) as i32;
-		self.signals().mobile_random_damage_taken().emit(rand_num);
+		self.signals().mobile_damage_taken().emit(rand_num);
 	}
 	fn on_mobile_damage_taken(&mut self, amount: i32) {
 		self.hitpoints -= amount;
 		let mut hp = self.hitpoints;
 		//stop at zero! He's dead already!
-		if hp < 0 {
-			hp = 0
+		if hp <= 0 {
+			hp = 0;
+			self.signals().balete().emit();
 		}
 		godot_print!("packaging taking {amount} damage of {hp} total");
 	}

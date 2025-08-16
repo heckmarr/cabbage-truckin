@@ -25,12 +25,15 @@ use godot::classes::Input;
 #[godot_api]
 impl Player {
 	#[signal]
+	fn damage_all_mobiles(amount: i32);
+	#[signal]
 	fn random_damage_taken(amount: i32);
 	#[signal]
 	fn damage_taken(amount: i32);
 	#[func]
 	fn damage_emit(&mut self, amount: i32) {
 		self.signals().damage_taken().emit(amount);
+		self.signals().damage_all_mobiles().emit(100);
 	}
 	#[func]
 	fn random_damage_emit(&mut self) {
@@ -82,6 +85,7 @@ impl ISprite2D for Player {
 		}
 		if event.is_action_just_pressed("Pad-Y") {
 			godot_print!("Y");
+			self.signals().damage_all_mobiles().emit(100);
 		}
 
 		if event.is_action_just_pressed("Pad-X") {

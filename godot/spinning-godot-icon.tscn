@@ -38,6 +38,12 @@ mob = "WarehousePerson"
 script = ExtResource("8_y64iq")
 
 [connection signal="balete" from="." to="." method="_on_balete"]
+[connection signal="damage_all_mobiles" from="." to="Chef" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="damage_all_mobiles" from="." to="Cashier" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="damage_all_mobiles" from="." to="Customer" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="damage_all_mobiles" from="." to="Stocker" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="damage_all_mobiles" from="." to="Package" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="damage_all_mobiles" from="." to="WarehousePerson" method="_on_sprite_2d_damage_all_mobiles"]
 [connection signal="balete" from="Chef" to="Chef" method="_on_balete"]
 [connection signal="balete" from="Cashier" to="Cashier" method="_on_balete"]
 [connection signal="balete" from="Customer" to="Customer" method="_on_balete"]

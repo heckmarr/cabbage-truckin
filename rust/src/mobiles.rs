@@ -33,7 +33,6 @@ struct Mobiles {
 
 use godot::global::randi_range;
 
-
 #[godot_api]
 impl ISprite2D for Mobiles {
 	fn init(base: Base<Sprite2D>) -> Self {
@@ -55,12 +54,12 @@ impl ISprite2D for Mobiles {
 			.mobile_random_damage_taken()
 			.connect_self(Self::on_mobile_damage_taken);
 		match self.mob {
-			MobileKind::Chef => {godot_print!("Chef!")}
-			MobileKind::Customer => {godot_print!("Customer!")}
-			MobileKind::Stocker => {godot_print!("Stocker!")}
-			MobileKind::Cashier => {godot_print!("Cashier!")}
-			MobileKind::Package => {godot_print!("Package!")}
-			MobileKind::WarehousePerson => {godot_print!("WarehousePerson!")}
+			MobileKind::Chef => godot_print!("Chef!"),
+			MobileKind::Customer => godot_print!("Customer!"),
+			MobileKind::Stocker => godot_print!("Stocker!"),
+			MobileKind::Cashier => godot_print!("Cashier!"),
+			MobileKind::Package => godot_print!("Package!"),
+			MobileKind::WarehousePerson => godot_print!("WarehousePerson!"),
 		}
 	}
 }

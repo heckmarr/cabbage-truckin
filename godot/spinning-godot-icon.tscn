@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://tybn8gvtpgtn"]
 
-[ext_resource type="Texture2D" uid="uid://ddtnxwegnx0wa" path="res://icon.svg" id="1_nqri4"]
+[ext_resource type="Texture2D" uid="uid://b4446kjfs55gx" path="res://sprites/ghost-boss-normal.png" id="1_uuqdb"]
 [ext_resource type="Script" uid="uid://dg4saor4cdkag" path="res://player.gd" id="2_1g5rw"]
 [ext_resource type="Script" uid="uid://bmt8b2hxtvwvx" path="res://chef.gd" id="3_gm4ux"]
 [ext_resource type="Script" uid="uid://cxv0gwmv52i2h" path="res://cashier.gd" id="4_gm4ux"]
@@ -9,9 +9,9 @@
 [ext_resource type="Script" uid="uid://bonx1v0hm6l78" path="res://package.gd" id="7_uuqdb"]
 [ext_resource type="Script" uid="uid://bimbl0cc2mivr" path="res://warehouse_person.gd" id="8_y64iq"]
 
-[node name="Sprite2D" type="Player"]
-position = Vector2(570, 321)
-texture = ExtResource("1_nqri4")
+[node name="Ghost-Boss" type="Player"]
+position = Vector2(73, 99)
+texture = ExtResource("1_uuqdb")
 script = ExtResource("2_1g5rw")
 
 [node name="Chef" type="Mobiles" parent="."]

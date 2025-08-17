@@ -7,3 +7,4 @@ func _on_balete() -> void:
 
 func _on_sprite_2d_damage_all_mobiles(amount: int) -> void:
 	self.mobile_damage_emit(amount)
+ 

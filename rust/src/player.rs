@@ -47,7 +47,7 @@ impl Player {
 		if hp < 0 {
 			hp = 0
 		}
-		godot_print!("packaging taking {amount} damage of {hp} total");
+		godot_print!("Player taking {amount} damage of {hp} total");
 	}
 	#[signal]
 	fn balete();
@@ -56,7 +56,7 @@ impl Player {
 #[godot_api]
 impl ISprite2D for Player {
 	fn init(base: Base<Sprite2D>) -> Self {
-		godot_print!("Hello, world!"); //Prints to the godot console
+		godot_print!("Initializing Player"); //Prints to the godot console
 
 		Self {
 			hitpoints: 100,
@@ -116,7 +116,7 @@ impl ISprite2D for Player {
 			if in_bounds.x <= 1100.0 && in_bounds.y <= 600.0 && in_bounds.x > 0.0 && in_bounds.y > 0.0{
 				self.base_mut().translate(pos);
 			}else {
-				godot_print!("Hit boundary!");
+				godot_print!("Player hit boundary!");
 			}
 		}
 	}

@@ -32,7 +32,7 @@ impl Player {
 	#[signal]
 	fn damage_taken(amount: i32);
 	#[func]
-	fn boop(&mut self) {
+	fn boop() {
 		godot_print!("Timer went off!");
 	}
 	#[func]
@@ -128,6 +128,13 @@ impl ISprite2D for Player {
 	}
 
 	fn ready(&mut self) { 
+	
+		self.boss_timer.set_wait_time(5.0);
+		self.boss_timer.set_autostart(true);
+		self.boss_timer.set_one_shot(true);
+		self.boss_timer.signals().timeout().connect(Player::boop);
+		let timing = self.boss_timer.clone();
+		self.base_mut().add_child(&timing);
 		godot_print!("Connecting signals for Player"); 
 		self.signals()
 			.damage_taken()

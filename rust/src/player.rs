@@ -3,7 +3,7 @@ use godot::classes::Sprite2D;
 use godot::classes::AnimatedSprite2D;
 use godot::global::randi_range;
 use godot::obj::Gd;
-use godot::obj::NewAlloc;
+use godot::classes::Timer;
 
 
 #[derive(GodotClass)]
@@ -16,6 +16,7 @@ struct Player {
 	direction: f32,
 	rotation: f32,
 	anim: Gd<AnimatedSprite2D>,
+	boss_timer: Gd<Timer>,
 	base: Base<Sprite2D>
 }
 
@@ -30,6 +31,10 @@ impl Player {
 	fn random_damage_taken(amount: i32);
 	#[signal]
 	fn damage_taken(amount: i32);
+	#[func]
+	fn boop(&mut self) {
+		godot_print!("Timer went off!");
+	}
 	#[func]
 	fn damage_emit(&mut self, amount: i32) {
 		self.signals().damage_taken().emit(amount);
@@ -65,7 +70,8 @@ impl ISprite2D for Player {
 			position: Vector2::ZERO,
 			direction: 0.0,
 			rotation: 0.0,
-			anim: NewAlloc::new_alloc(),
+			anim: AnimatedSprite2D::new_alloc(),
+			boss_timer: Timer::new_alloc(),
 			base,
 		}
 	}
@@ -121,8 +127,8 @@ impl ISprite2D for Player {
 		}
 	}
 
-	fn ready(&mut self)  {
-		godot_print!("Connecting signals for Player");
+	fn ready(&mut self) { 
+		godot_print!("Connecting signals for Player"); 
 		self.signals()
 			.damage_taken()
 			.connect_self(Player::on_damage_taken);
@@ -136,5 +142,6 @@ impl Drop for Player {
 	fn drop(&mut self) {
 		godot_print!("dropping {0}", self.anim);
 		self.anim.queue_free();
+		self.boss_timer.queue_free();
 	}
 }

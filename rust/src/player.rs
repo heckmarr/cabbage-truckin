@@ -25,13 +25,15 @@ use godot::classes::ISprite2D;
 use godot::classes::Input;
 #[godot_api]
 impl Player {
+	
+	#[signal]
+	fn on_timer_done();
 	#[signal]
 	fn damage_all_mobiles(amount: i32);
 	#[signal]
 	fn random_damage_taken(amount: i32);
 	#[signal]
 	fn damage_taken(amount: i32);
-	#[func]
 	fn boop() {
 		godot_print!("Timer went off!");
 	}

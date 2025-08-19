@@ -17,15 +17,20 @@ struct Player {
 	rotation: f32,
 	anim: Gd<AnimatedSprite2D>,
 	boss_timer: Gd<Timer>,
+	tex: Gd<Texture2D>,
 	base: Base<Sprite2D>
 }
 
 
 use godot::classes::ISprite2D;
 use godot::classes::Input;
+use godot::classes::Texture2D;
 #[godot_api]
 impl Player {
-
+	#[signal]
+	fn unboop_the_boss();
+	#[signal]
+	fn boop_the_boss();
 	#[signal]
 	fn damage_all_mobiles(amount: i32);
 	#[signal]
@@ -45,6 +50,17 @@ impl Player {
 		//The random number range is 100-500
 		let rand_num = randi_range(100, 500) as i32;
 		self.signals().random_damage_taken().emit(rand_num);
+	}
+	#[func]
+	fn on_unboop_the_boss(&mut self) {
+		let tex = load("res://sprites/ghost-boss-normal.png") as Gd<Texture2D>;
+		self.base_mut().set_texture(&tex);
+	}
+	#[func]
+	fn on_boop_the_boss(&mut self)  {
+		let tex = load("res://sprites/ghost-boss-angry.png") as Gd<Texture2D>;
+		self.base_mut().set_texture(&tex);
+		
 	}
 	fn on_damage_taken(&mut self, amount: i32) {
 		self.hitpoints -= amount;
@@ -73,6 +89,7 @@ impl ISprite2D for Player {
 			rotation: 0.0,
 			anim: AnimatedSprite2D::new_alloc(),
 			boss_timer: Timer::new_alloc(),
+			tex: Texture2D::new_gd(),
 			base,
 		}
 	}
@@ -86,8 +103,11 @@ impl ISprite2D for Player {
 		if event.is_action_just_pressed("Pad-A") {
 			self.damage_emit(50);
 		}
-		if event.is_action_just_pressed("Pad-B") {
-			self.random_damage_emit();
+		if event.is_action_pressed("Pad-B") {
+			self.signals().boop_the_boss().emit();
+		}
+		if event.is_action_just_released("Pad-B") {
+			self.signals().unboop_the_boss().emit();
 		}
 		if event.is_action_just_pressed("Pad-Y") {
 			godot_print!("Y");
@@ -129,7 +149,12 @@ impl ISprite2D for Player {
 	}
 
 	fn ready(&mut self) { 
-	
+		self.signals()
+			.unboop_the_boss()
+			.connect_self(Player::on_unboop_the_boss);
+		self.signals()
+			.boop_the_boss()
+			.connect_self(Player::on_boop_the_boss);
 		godot_print!("Connecting signals for Player"); 
 		self.signals()
 			.damage_taken()

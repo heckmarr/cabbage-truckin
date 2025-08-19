@@ -6,15 +6,13 @@ use godot::obj::Gd;
 use godot::classes::Timer;
 use godot::classes::Node2D;
 
-struct Point(f32, f32);
-
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 struct BoundRect {
-	top_left: Point,
-	top_right: Point,
-	bottom_left: Point,
-	bottom_right: Point,
+	top_left: Vector2,
+	top_right: Vector2,
+	bottom_left: Vector2,
+	bottom_right: Vector2,
 	base: Base<Node2D>
 }
 
@@ -45,23 +43,23 @@ impl INode2D for BoundRect {
 		godot_print!("Initializing target bounding box"); //Prints to the godot console
 
 		Self {
-			top_left: Point(0.0, 0.0),
-			top_right: Point(150.0, 0.0),
-			bottom_left: Point(0.0, 150.0),
-			bottom_right: Point(150.0, 150.0),
+			top_left: Vector2::new(0.0, 0.0),
+			top_right: Vector2::new(150.0, 0.0),
+			bottom_left: Vector2::new(0.0, 150.0),
+			bottom_right: Vector2::new(150.0, 150.0),
 			base,
 		}
 	}
 	fn ready(&mut self) {
 		//set all the positions
 		let mut tl: Gd<Node2D> = self.base_mut().get_node_as("TopLeft");
-		tl.set_position(Vector2::new(self.top_left.0, self.top_left.1));
+		tl.set_position(self.top_left);
 		let mut tr: Gd<Node2D> = self.base_mut().get_node_as("TopRight");
-		tr.set_position(Vector2::new(self.top_right.0, self.top_right.1));
+		tr.set_position(self.top_right);
 		let mut bl: Gd<Node2D> = self.base_mut().get_node_as("BottomLeft");
-		bl.set_position(Vector2::new(self.bottom_left.0, self.bottom_left.1));
+		bl.set_position(self.bottom_left);
 		let mut br: Gd<Node2D> = self.base_mut().get_node_as("BottomRight");
-		br.set_position(Vector2::new(self.bottom_right.0, self.bottom_right.1));
+		br.set_position(self.bottom_right);
 	}
 
 }

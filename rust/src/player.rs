@@ -25,7 +25,7 @@ use godot::classes::ISprite2D;
 use godot::classes::Input;
 #[godot_api]
 impl Player {
-	
+
 	#[signal]
 	fn damage_all_mobiles(amount: i32);
 	#[signal]

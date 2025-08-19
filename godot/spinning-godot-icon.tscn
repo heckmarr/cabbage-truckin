@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://tybn8gvtpgtn"]
+[gd_scene load_steps=14 format=3 uid="uid://tybn8gvtpgtn"]
 
 [ext_resource type="Texture2D" uid="uid://b4446kjfs55gx" path="res://sprites/ghost-boss-normal.png" id="1_uuqdb"]
 [ext_resource type="Script" uid="uid://dg4saor4cdkag" path="res://player.gd" id="2_1g5rw"]
@@ -8,6 +8,11 @@
 [ext_resource type="Script" uid="uid://b2rp58x7mvug3" path="res://stocker.gd" id="6_fnbrn"]
 [ext_resource type="Script" uid="uid://bonx1v0hm6l78" path="res://package.gd" id="7_uuqdb"]
 [ext_resource type="Script" uid="uid://bimbl0cc2mivr" path="res://warehouse_person.gd" id="8_y64iq"]
+[ext_resource type="Script" uid="uid://dmk4ktpo52l2r" path="res://bound_rect.gd" id="9_2fyi4"]
+[ext_resource type="Texture2D" uid="uid://b62c2duqa6cty" path="res://sprites/targ-upper-left.png" id="10_j52xb"]
+[ext_resource type="Texture2D" uid="uid://ivaaeruc6hcp" path="res://sprites/targ-upper-right.png" id="11_a1n5j"]
+[ext_resource type="Texture2D" uid="uid://dy743hfc6k6hu" path="res://sprites/targ-lower-left.png" id="12_30opg"]
+[ext_resource type="Texture2D" uid="uid://dpeep5d7ilj53" path="res://sprites/targ-lower-right.png" id="13_oshlo"]
 
 [node name="Ghost-Boss" type="Player"]
 position = Vector2(73, 99)
@@ -36,6 +41,29 @@ script = ExtResource("7_uuqdb")
 [node name="WarehousePerson" type="Mobiles" parent="."]
 mob = "WarehousePerson"
 script = ExtResource("8_y64iq")
+
+[node name="BoundRect" type="BoundRect" parent="."]
+script = ExtResource("9_2fyi4")
+
+[node name="TopLeft" type="Node2D" parent="BoundRect"]
+
+[node name="Sprite2D" type="Sprite2D" parent="BoundRect/TopLeft"]
+texture = ExtResource("10_j52xb")
+
+[node name="TopRight" type="Node2D" parent="BoundRect"]
+
+[node name="Sprite2D" type="Sprite2D" parent="BoundRect/TopRight"]
+texture = ExtResource("11_a1n5j")
+
+[node name="BottomLeft" type="Node2D" parent="BoundRect"]
+
+[node name="Sprite2D" type="Sprite2D" parent="BoundRect/BottomLeft"]
+texture = ExtResource("12_30opg")
+
+[node name="BottomRight" type="Node2D" parent="BoundRect"]
+
+[node name="Sprite2D" type="Sprite2D" parent="BoundRect/BottomRight"]
+texture = ExtResource("13_oshlo")
 
 [connection signal="balete" from="." to="." method="_on_balete"]
 [connection signal="damage_all_mobiles" from="." to="Chef" method="_on_sprite_2d_damage_all_mobiles"]

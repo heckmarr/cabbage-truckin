@@ -42,7 +42,7 @@ impl ISprite2D for Mobiles {
 		godot_print!("Mobile ready");
 		let idnum = randi();
 		Self {
-			id: ,//TODO This
+			id: InstanceId::try_from_i64(idnum).expect("Invalid id!"),
 			position: Vector2::new(0.0, 0.0),
 			hitpoints: 100,
 			timer: Timer::new_alloc(),
@@ -60,11 +60,7 @@ impl ISprite2D for Mobiles {
 			.mobile_random_damage_taken()
 			.connect_self(Self::on_mobile_damage_taken);
 		match self.mob {
-			MobileKind::Chef => {godot_print!("Chef!");
-						 let chef_pos: Gd<Mobiles> = Gd::from_instance_id(self.id);
-							let pos: Vector2 = chef_pos.bind().position;
-							godot_print!("Chef position is {pos}");
-						}
+			MobileKind::Chef => {godot_print!("Chef!")}
 			MobileKind::Customer => {godot_print!("Customer!")}
 			MobileKind::Stocker => {godot_print!("Stocker!")}
 			MobileKind::Cashier => {godot_print!("Cashier!")}

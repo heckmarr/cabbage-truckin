@@ -5,7 +5,6 @@ use godot::classes::AnimatedSprite2D;
 use godot::obj::Gd;
 use godot::obj::NewAlloc;
 
-
 use godot::classes::Timer;
 
 #[derive(Debug, GodotConvert, Var, Export)]
@@ -18,10 +17,13 @@ pub enum MobileKind {
 	Customer,
 	Stocker,
 }
+use godot::obj::InstanceId;
 
 #[derive(GodotClass)]
 #[class(base=Sprite2D)]
-struct Mobiles {
+pub struct Mobiles {
+	pub id: InstanceId,
+	pub position: Vector2,
 	hitpoints: i32,
 	timer: Gd<Timer>,
 	#[export]
@@ -32,12 +34,16 @@ struct Mobiles {
 
 
 use godot::global::randi_range;
+use godot::global::randi;
 
 #[godot_api]
 impl ISprite2D for Mobiles {
 	fn init(base: Base<Sprite2D>) -> Self {
 		godot_print!("Mobile ready");
+		let idnum = randi();
 		Self {
+			id: InstanceId::try_from_i64(idnum).expect("Invalid id!"),
+			position: Vector2::new(0.0, 0.0),
 			hitpoints: 100,
 			timer: Timer::new_alloc(),
 			mob: MobileKind::Customer,
@@ -54,12 +60,12 @@ impl ISprite2D for Mobiles {
 			.mobile_random_damage_taken()
 			.connect_self(Self::on_mobile_damage_taken);
 		match self.mob {
-			MobileKind::Chef => godot_print!("Chef!"),
-			MobileKind::Customer => godot_print!("Customer!"),
-			MobileKind::Stocker => godot_print!("Stocker!"),
-			MobileKind::Cashier => godot_print!("Cashier!"),
-			MobileKind::Package => godot_print!("Package!"),
-			MobileKind::WarehousePerson => godot_print!("WarehousePerson!"),
+			MobileKind::Chef => {godot_print!("Chef!")}
+			MobileKind::Customer => {godot_print!("Customer!")}
+			MobileKind::Stocker => {godot_print!("Stocker!")}
+			MobileKind::Cashier => {godot_print!("Cashier!")}
+			MobileKind::Package => {godot_print!("Package!")}
+			MobileKind::WarehousePerson => {godot_print!("WarehousePerson!")}
 		}
 	}
 }

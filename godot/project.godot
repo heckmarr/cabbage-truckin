@@ -15,6 +15,10 @@ run/main_scene="uid://tybn8gvtpgtn"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
+[global_group]
+
+Mobile="Mobiles that can be selected and interacted with"
+
 [input]
 
 Pad-A={

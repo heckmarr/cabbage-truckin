@@ -6,13 +6,14 @@ use godot::obj::Gd;
 use godot::classes::Timer;
 use godot::classes::Node2D;
 
+
 #[derive(GodotClass)]
 #[class(base=Node2D)]
-struct BoundRect {
-	top_left: Vector2,
-	top_right: Vector2,
-	bottom_left: Vector2,
-	bottom_right: Vector2,
+pub struct BoundRect {
+	pub top_left: Vector2,
+	pub top_right: Vector2,
+	pub bottom_left: Vector2,
+	pub bottom_right: Vector2,
 	base: Base<Node2D>
 }
 
@@ -30,11 +31,8 @@ struct Player {
 	tex: Gd<Texture2D>,
 	base: Base<Sprite2D>
 }
-
-#[godot_api]
-impl BoundRect {
-
-}
+use crate::mobiles::Mobiles;
+use crate::mobiles::MobileKind;
 
 use godot::classes::INode2D;
 
@@ -52,7 +50,21 @@ impl INode2D for BoundRect {
 		}
 	}
 	fn ready(&mut self) {
+		let tlpos = self.top_left;
+		godot_print!("{tlpos} top left position in ready");
 		//set all the positions
+		let mut tl: Gd<Node2D> = self.base_mut().get_node_as("TopLeft");
+		tl.set_position(self.top_left);
+		let mut tr: Gd<Node2D> = self.base_mut().get_node_as("TopRight");
+		tr.set_position(self.top_right);
+		let mut bl: Gd<Node2D> = self.base_mut().get_node_as("BottomLeft");
+		bl.set_position(self.bottom_left);
+		let mut br: Gd<Node2D> = self.base_mut().get_node_as("BottomRight");
+		br.set_position(self.bottom_right);
+	}
+	fn process(&mut self, delta: f32) {
+		let tlpos = self.top_left;
+//		godot_print!("{tlpos} top left position in process");
 		let mut tl: Gd<Node2D> = self.base_mut().get_node_as("TopLeft");
 		tl.set_position(self.top_left);
 		let mut tr: Gd<Node2D> = self.base_mut().get_node_as("TopRight");

@@ -1,6 +1,7 @@
 extends Player
 
 
+var scene = preload("res://spinning-godot-icon.tscn")
 func _on_balete() -> void:
 	self.queue_free()
 func _enter_tree() -> void:

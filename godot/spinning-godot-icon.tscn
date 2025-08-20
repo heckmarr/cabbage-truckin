@@ -19,30 +19,7 @@ position = Vector2(73, 99)
 texture = ExtResource("1_uuqdb")
 script = ExtResource("2_1g5rw")
 
-[node name="Chef" type="Mobiles" parent="."]
-mob = "Chef"
-script = ExtResource("3_gm4ux")
-
-[node name="Cashier" type="Mobiles" parent="."]
-mob = "Cashier"
-script = ExtResource("4_gm4ux")
-
-[node name="Customer" type="Mobiles" parent="."]
-script = ExtResource("5_hmx16")
-
-[node name="Stocker" type="Mobiles" parent="."]
-mob = "Stocker"
-script = ExtResource("6_fnbrn")
-
-[node name="Package" type="Mobiles" parent="."]
-mob = "Package"
-script = ExtResource("7_uuqdb")
-
-[node name="WarehousePerson" type="Mobiles" parent="."]
-mob = "WarehousePerson"
-script = ExtResource("8_y64iq")
-
-[node name="BoundRect" type="BoundRect" parent="."]
+[node name="BoundRect" type="BoundRect" parent="." groups=["Mobile"]]
 script = ExtResource("9_2fyi4")
 
 [node name="TopLeft" type="Node2D" parent="BoundRect"]
@@ -65,16 +42,39 @@ texture = ExtResource("12_30opg")
 [node name="Sprite2D" type="Sprite2D" parent="BoundRect/BottomRight"]
 texture = ExtResource("13_oshlo")
 
+[node name="Chef" type="Mobiles" parent="BoundRect" groups=["Mobile"]]
+mob = "Chef"
+script = ExtResource("3_gm4ux")
+
+[node name="Cashier" type="Mobiles" parent="BoundRect" groups=["Mobile"]]
+mob = "Cashier"
+script = ExtResource("4_gm4ux")
+
+[node name="Customer" type="Mobiles" parent="BoundRect"]
+script = ExtResource("5_hmx16")
+
+[node name="Stocker" type="Mobiles" parent="BoundRect" groups=["Mobile"]]
+mob = "Stocker"
+script = ExtResource("6_fnbrn")
+
+[node name="Package" type="Mobiles" parent="BoundRect" groups=["Mobile"]]
+mob = "Package"
+script = ExtResource("7_uuqdb")
+
+[node name="WarehousePerson" type="Mobiles" parent="BoundRect" groups=["Mobile"]]
+mob = "WarehousePerson"
+script = ExtResource("8_y64iq")
+
 [connection signal="balete" from="." to="." method="_on_balete"]
-[connection signal="damage_all_mobiles" from="." to="Chef" method="_on_sprite_2d_damage_all_mobiles"]
-[connection signal="damage_all_mobiles" from="." to="Cashier" method="_on_sprite_2d_damage_all_mobiles"]
-[connection signal="damage_all_mobiles" from="." to="Customer" method="_on_sprite_2d_damage_all_mobiles"]
-[connection signal="damage_all_mobiles" from="." to="Stocker" method="_on_sprite_2d_damage_all_mobiles"]
-[connection signal="damage_all_mobiles" from="." to="Package" method="_on_sprite_2d_damage_all_mobiles"]
-[connection signal="damage_all_mobiles" from="." to="WarehousePerson" method="_on_sprite_2d_damage_all_mobiles"]
-[connection signal="balete" from="Chef" to="Chef" method="_on_balete"]
-[connection signal="balete" from="Cashier" to="Cashier" method="_on_balete"]
-[connection signal="balete" from="Customer" to="Customer" method="_on_balete"]
-[connection signal="balete" from="Stocker" to="Stocker" method="_on_balete"]
-[connection signal="balete" from="Package" to="Package" method="_on_balete"]
-[connection signal="balete" from="WarehousePerson" to="WarehousePerson" method="_on_balete"]
+[connection signal="damage_all_mobiles" from="." to="BoundRect/Chef" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="damage_all_mobiles" from="." to="BoundRect/Cashier" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="damage_all_mobiles" from="." to="BoundRect/Customer" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="damage_all_mobiles" from="." to="BoundRect/Stocker" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="damage_all_mobiles" from="." to="BoundRect/Package" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="damage_all_mobiles" from="." to="BoundRect/WarehousePerson" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="balete" from="BoundRect/Chef" to="BoundRect/Chef" method="_on_balete"]
+[connection signal="balete" from="BoundRect/Cashier" to="BoundRect/Cashier" method="_on_balete"]
+[connection signal="balete" from="BoundRect/Customer" to="BoundRect/Customer" method="_on_balete"]
+[connection signal="balete" from="BoundRect/Stocker" to="BoundRect/Stocker" method="_on_balete"]
+[connection signal="balete" from="BoundRect/Package" to="BoundRect/Package" method="_on_balete"]
+[connection signal="balete" from="BoundRect/WarehousePerson" to="BoundRect/WarehousePerson" method="_on_balete"]

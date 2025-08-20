@@ -18,18 +18,18 @@ pub enum MobileKind {
 	Stocker,
 }
 use godot::obj::InstanceId;
+use godot::classes::Node2D;
+use godot::classes::INode2D;
 
 #[derive(GodotClass)]
-#[class(base=Sprite2D)]
+#[class(base=Node2D)]
 pub struct Mobiles {
-	pub id: InstanceId,
-	pub position: Vector2,
 	hitpoints: i32,
 	timer: Gd<Timer>,
 	#[export]
 	mob: MobileKind,
 	anim: Gd<AnimatedSprite2D>,
-	base: Base<Sprite2D>,
+	base: Base<Node2D>,
 }
 
 
@@ -37,13 +37,11 @@ use godot::global::randi_range;
 use godot::global::randi;
 
 #[godot_api]
-impl ISprite2D for Mobiles {
-	fn init(base: Base<Sprite2D>) -> Self {
+impl INode2D for Mobiles {
+	fn init(base: Base<Node2D>) -> Self {
 		godot_print!("Mobile ready");
 		let idnum = randi();
 		Self {
-			id: InstanceId::try_from_i64(idnum).expect("Invalid id!"),
-			position: Vector2::new(0.0, 0.0),
 			hitpoints: 100,
 			timer: Timer::new_alloc(),
 			mob: MobileKind::Customer,
@@ -60,7 +58,11 @@ impl ISprite2D for Mobiles {
 			.mobile_random_damage_taken()
 			.connect_self(Self::on_mobile_damage_taken);
 		match self.mob {
-			MobileKind::Chef => {godot_print!("Chef!")}
+			MobileKind::Chef => {godot_print!("Chef!");
+					self.base_mut().set_position(Vector2::new(300.0, 200.0));
+					let pos = self.base().get_position();
+					godot_print!("Chef position moving to x: {pos}");
+			}
 			MobileKind::Customer => {godot_print!("Customer!")}
 			MobileKind::Stocker => {godot_print!("Stocker!")}
 			MobileKind::Cashier => {godot_print!("Cashier!")}

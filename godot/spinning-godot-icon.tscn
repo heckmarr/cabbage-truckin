@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://tybn8gvtpgtn"]
+[gd_scene load_steps=19 format=3 uid="uid://tybn8gvtpgtn"]
 
 [ext_resource type="Texture2D" uid="uid://b4446kjfs55gx" path="res://sprites/ghost-boss-normal.png" id="1_uuqdb"]
 [ext_resource type="Script" uid="uid://dg4saor4cdkag" path="res://player.gd" id="2_1g5rw"]
@@ -9,10 +9,15 @@
 [ext_resource type="Script" uid="uid://bonx1v0hm6l78" path="res://package.gd" id="7_uuqdb"]
 [ext_resource type="Script" uid="uid://bimbl0cc2mivr" path="res://warehouse_person.gd" id="8_y64iq"]
 [ext_resource type="Script" uid="uid://dmk4ktpo52l2r" path="res://bound_rect.gd" id="9_2fyi4"]
+[ext_resource type="Texture2D" uid="uid://cptm1oa2cijnw" path="res://sprites/chef-normal.png" id="9_swvky"]
 [ext_resource type="Texture2D" uid="uid://b62c2duqa6cty" path="res://sprites/targ-upper-left.png" id="10_j52xb"]
 [ext_resource type="Texture2D" uid="uid://ivaaeruc6hcp" path="res://sprites/targ-upper-right.png" id="11_a1n5j"]
+[ext_resource type="Texture2D" uid="uid://pujnn31qo1d5" path="res://sprites/cashier-normal.png" id="11_ct5ux"]
 [ext_resource type="Texture2D" uid="uid://dy743hfc6k6hu" path="res://sprites/targ-lower-left.png" id="12_30opg"]
 [ext_resource type="Texture2D" uid="uid://dpeep5d7ilj53" path="res://sprites/targ-lower-right.png" id="13_oshlo"]
+[ext_resource type="Texture2D" uid="uid://dxrhpyiithwwi" path="res://sprites/cashier-checking-out.png" id="14_28h0v"]
+[ext_resource type="Texture2D" uid="uid://ck0aihpk6mhw1" path="res://sprites/package-normal.png" id="16_2xg6p"]
+[ext_resource type="Texture2D" uid="uid://cmbo0d62enyr0" path="res://sprites/warehouse-normal.png" id="18_i01o4"]
 
 [node name="Ghost-Boss" type="Player"]
 position = Vector2(73, 99)
@@ -42,36 +47,53 @@ texture = ExtResource("12_30opg")
 [node name="Sprite2D" type="Sprite2D" parent="BoundRect/BottomRight"]
 texture = ExtResource("13_oshlo")
 
-[node name="Chef" type="Mobiles" parent="BoundRect" groups=["Mobile"]]
+[node name="Chef" type="Mobiles" parent="BoundRect" groups=["Chef", "Mobile"]]
 mob = "Chef"
 script = ExtResource("3_gm4ux")
+
+[node name="Sprite2D" type="Sprite2D" parent="BoundRect/Chef"]
+texture = ExtResource("9_swvky")
 
 [node name="Cashier" type="Mobiles" parent="BoundRect" groups=["Mobile"]]
 mob = "Cashier"
 script = ExtResource("4_gm4ux")
 
+[node name="Sprite2D" type="Sprite2D" parent="BoundRect/Cashier"]
+texture = ExtResource("11_ct5ux")
+
 [node name="Customer" type="Mobiles" parent="BoundRect"]
 script = ExtResource("5_hmx16")
+
+[node name="Sprite2D" type="Sprite2D" parent="BoundRect/Customer"]
 
 [node name="Stocker" type="Mobiles" parent="BoundRect" groups=["Mobile"]]
 mob = "Stocker"
 script = ExtResource("6_fnbrn")
 
+[node name="Sprite2D" type="Sprite2D" parent="BoundRect/Stocker"]
+texture = ExtResource("14_28h0v")
+
 [node name="Package" type="Mobiles" parent="BoundRect" groups=["Mobile"]]
 mob = "Package"
 script = ExtResource("7_uuqdb")
+
+[node name="Sprite2D" type="Sprite2D" parent="BoundRect/Package"]
+texture = ExtResource("16_2xg6p")
 
 [node name="WarehousePerson" type="Mobiles" parent="BoundRect" groups=["Mobile"]]
 mob = "WarehousePerson"
 script = ExtResource("8_y64iq")
 
+[node name="Sprite2D" type="Sprite2D" parent="BoundRect/WarehousePerson"]
+texture = ExtResource("18_i01o4")
+
 [connection signal="balete" from="." to="." method="_on_balete"]
-[connection signal="damage_all_mobiles" from="." to="BoundRect/Chef" method="_on_sprite_2d_damage_all_mobiles"]
 [connection signal="damage_all_mobiles" from="." to="BoundRect/Cashier" method="_on_sprite_2d_damage_all_mobiles"]
 [connection signal="damage_all_mobiles" from="." to="BoundRect/Customer" method="_on_sprite_2d_damage_all_mobiles"]
 [connection signal="damage_all_mobiles" from="." to="BoundRect/Stocker" method="_on_sprite_2d_damage_all_mobiles"]
 [connection signal="damage_all_mobiles" from="." to="BoundRect/Package" method="_on_sprite_2d_damage_all_mobiles"]
 [connection signal="damage_all_mobiles" from="." to="BoundRect/WarehousePerson" method="_on_sprite_2d_damage_all_mobiles"]
+[connection signal="damage_all_mobiles" from="." to="BoundRect/Chef" method="_on_sprite_2d_damage_all_mobiles"]
 [connection signal="balete" from="BoundRect/Chef" to="BoundRect/Chef" method="_on_balete"]
 [connection signal="balete" from="BoundRect/Cashier" to="BoundRect/Cashier" method="_on_balete"]
 [connection signal="balete" from="BoundRect/Customer" to="BoundRect/Customer" method="_on_balete"]

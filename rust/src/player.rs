@@ -17,21 +17,19 @@ pub struct BoundRect {
 	base: Base<Node2D>
 }
 
+
 #[derive(GodotClass)]
 #[class(base=Sprite2D)]
 struct Player {
+	chosen: i32,
+	selected_mob: i32,
 	hitpoints: i32,
-	angular_speed: f32,
-	speed: f32,
-	position: Vector2,
-	direction: f32,
-	rotation: f32,
+	direction: i32,
 	anim: Gd<AnimatedSprite2D>,
 	boss_timer: Gd<Timer>,
 	base: Base<Sprite2D>
 }
 use crate::mobiles::Mobiles;
-use crate::mobiles::MobileKind;
 
 use godot::classes::INode2D;
 
@@ -49,21 +47,9 @@ impl INode2D for BoundRect {
 		}
 	}
 	fn ready(&mut self) {
-		let tlpos = self.top_left;
-		godot_print!("{tlpos} top left position in ready");
+		let tlpos = self.top_right;
+		godot_print!("{tlpos} top right position in ready");
 		//set all the positions
-		let mut tl: Gd<Node2D> = self.base_mut().get_node_as("TopLeft");
-		tl.set_position(self.top_left);
-		let mut tr: Gd<Node2D> = self.base_mut().get_node_as("TopRight");
-		tr.set_position(self.top_right);
-		let mut bl: Gd<Node2D> = self.base_mut().get_node_as("BottomLeft");
-		bl.set_position(self.bottom_left);
-		let mut br: Gd<Node2D> = self.base_mut().get_node_as("BottomRight");
-		br.set_position(self.bottom_right);
-	}
-	fn process(&mut self, delta: f32) {
-		let tlpos = self.top_left;
-//		godot_print!("{tlpos} top left position in process");
 		let mut tl: Gd<Node2D> = self.base_mut().get_node_as("TopLeft");
 		tl.set_position(self.top_left);
 		let mut tr: Gd<Node2D> = self.base_mut().get_node_as("TopRight");
@@ -120,23 +106,18 @@ impl ISprite2D for Player {
 		godot_print!("Initializing Player"); //Prints to the godot console
 
 		Self {
+			selected_mob: 0,
+			chosen: 0,
 			hitpoints: 100,
-			angular_speed: 3.14159,
-			speed: 200.0,
-			position: Vector2::ZERO,
-			direction: 0.0,
-			rotation: 0.0,
+			direction: 0,
 			anim: AnimatedSprite2D::new_alloc(),
 			boss_timer: Timer::new_alloc(),
 			base,
 		}
 	}
-	fn process(&mut self, delta: f32) {
-		self.rotation = self.base().get_rotation();
-		self.direction = 0.0;
+	fn process(&mut self, _delta: f32) {
+		self.direction = 0;
 		let event = Input::singleton();
-		let mut moved = false;
-		let mut rot: f32 = self.rotation;
 
 		if event.is_action_just_pressed("Pad-A") {
 			self.damage_emit(50);
@@ -153,33 +134,56 @@ impl ISprite2D for Player {
 			godot_print!("X");
 			self.signals().balete().emit();
 		}
-		if event.is_action_pressed("ui_left") {
-			godot_print!("playing {0}", self.anim);
-			self.direction = -1.0;
-			moved = true;
-			self.rotation = (self.direction * self.angular_speed * delta) as f32;
-			rot = self.rotation;
+		if event.is_action_just_pressed("ui_left") {
+			godot_print!("moving selection left");
+			self.direction = -1;
+			self.chosen = self.chosen - self.direction;
 		}
-		if event.is_action_pressed("ui_right") {
-			self.direction = 1.0;
-			moved = true;
-			self.rotation = (self.direction * self.angular_speed * delta) as f32;
-			rot = self.rotation;
+		if event.is_action_just_pressed("ui_right") {
+			godot_print!("Moving selection to the right");
+			self.direction = 1;
+			self.chosen = self.chosen + self.direction;
 		}
-		if moved {
-			self.base_mut().rotate(rot);
+		if self.chosen < 0 {
+			self.chosen = 3;
+		}else if self.chosen > 3 {
+			self.chosen = 0;
 		}
-		let rot = self.base().get_rotation();		
-		if event.is_action_pressed("ui_up") {
-			let velocity = Vector2::UP.rotated(rot) * self.speed as f32;
-			self.position = velocity * delta;
-			let pos: Vector2 = self.position;
-			let in_bounds = self.base().get_position();
-			if in_bounds.x <= 1100.0 && in_bounds.y <= 600.0 && in_bounds.x > 0.0 && in_bounds.y > 0.0{
-				self.base_mut().translate(pos);
-			}else {
-				godot_print!("Player hit boundary!");
+		let mut types_of_mob = Array::new();
+		types_of_mob.push(0);
+		types_of_mob.push(1);
+		types_of_mob.push(2);
+		types_of_mob.push(3);
+		self.selected_mob = types_of_mob.at(self.chosen.try_into().unwrap());
+		match self.selected_mob {
+                        0 => {godot_print!("Chef!");
+				let br: Gd<Node> = self.base_mut().find_child("BoundRect").expect("No bound rect!");
+				let  cf: Gd<Node> = self.base().find_child("Chef").expect("No chef in tree!");
+				let br_path = br.get_path();
+				let cf_path = cf.get_path();
+
+				let mut br_obj: Gd<BoundRect> = br.get_node_as(&br_path);
+				let cf_obj: Gd<Mobiles> = cf.get_node_as(&cf_path);
+				br_obj.set_position(cf_obj.get_position());
+                                let pos = br_obj.get_position();
+                                godot_print!("Chef at {cf_path} being selected at {pos}");
+       	                }
+                        1 => {godot_print!("Stocker!");
+				let br: Gd<Node> = self.base_mut().find_child("BoundRect").expect("No bound rect!");
+				let st: Gd<Node> = self.base().find_child("Stocker").expect("No stocker in tree!");
+				let br_path = br.get_path();
+				let st_path = st.get_path();
+				
+
+				let mut br_obj: Gd<BoundRect> = br.get_node_as(&br_path);
+				let st_obj: Gd<Mobiles> = st.get_node_as(&st_path);
+				br_obj.set_position(st_obj.get_position());
+				let pos = br_obj.get_position();
+				godot_print!("Stocker at {st_path} being selected at {pos}");
 			}
+                        2 => {godot_print!("Cashier!")}
+                        3 => {godot_print!("WarehousePerson!")}
+			_ => {godot_print!("Customer or other unselectable");}
 		}
 	}
 

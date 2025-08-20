@@ -1,6 +1,4 @@
 use godot::prelude::*;
-use godot::classes::Sprite2D;
-use godot::classes::ISprite2D;
 use godot::classes::AnimatedSprite2D;
 use godot::obj::Gd;
 use godot::obj::NewAlloc;
@@ -17,7 +15,6 @@ pub enum MobileKind {
 	Customer,
 	Stocker,
 }
-use godot::obj::InstanceId;
 use godot::classes::Node2D;
 use godot::classes::INode2D;
 
@@ -34,13 +31,11 @@ pub struct Mobiles {
 
 
 use godot::global::randi_range;
-use godot::global::randi;
 
 #[godot_api]
 impl INode2D for Mobiles {
 	fn init(base: Base<Node2D>) -> Self {
 		godot_print!("Mobile ready");
-		let idnum = randi();
 		Self {
 			hitpoints: 100,
 			timer: Timer::new_alloc(),

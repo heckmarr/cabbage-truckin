@@ -40,10 +40,10 @@ impl INode2D for BoundRect {
 		godot_print!("Initializing target bounding box"); //Prints to the godot console
 
 		Self {
-			top_left: Vector2::new(0.0, 0.0),
-			top_right: Vector2::new(150.0, 0.0),
-			bottom_left: Vector2::new(0.0, 150.0),
-			bottom_right: Vector2::new(150.0, 150.0),
+			top_left: Vector2::new(-75.0, 0.0),
+			top_right: Vector2::new(75.0, 0.0),
+			bottom_left: Vector2::new(-75.0, 75.0),
+			bottom_right: Vector2::new(75.0, 75.0),
 			base,
 		}
 	}

@@ -22,7 +22,7 @@ struct Player {
 	base: Base<Node2D>
 }
 use crate::mobiles::Mobiles;
-use crate::targ::BoundRect;
+use crate::select::BoundRect;
 
 use godot::classes::INode2D;
 

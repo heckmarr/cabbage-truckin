@@ -1,32 +1,42 @@
 []==================GHOST BOSS CHECKLIST======================[]
 
-[ ]Warehouseman sprite
+[X]Warehouseperson sprite
 	[ ]PossessedWarehouseman sprite
-	[ ]knife fight animation
+	[X]knife fight animation
 	[ ]knife fight possessed(sword)
 	[ ]packing fall apart
 	[ ]packing forklifted in
 
-[ ]Cashier sprite
+[X]Cashier sprite
 	[ ]PossessedCashier sprite
 	[ ]Regular checkout
 	[ ]Powerchecking
 	[ ]customers
 	[ ]items to buy
 
-[ ]Chef
+[X]Chef
 	[ ]PossessedChef
-	[ ]Regular cooking
+	[X]Regular cooking
 	[ ]Possessed cooking
 	[ ]items being made
 	[ ]made items
 
-[ ]Stocker
+[X]Stocker
 	[ ]PossessedStocker
 	[ ]stocking puzzle
 	[ ]possessed stocking puzzle
 
 [ ]UI items
-	[ ]target square
+	[X]target square
+	[ ]action timer
 	[ ]Overall money made
 	[ ]adding to overall money
+	[ ]possess button
+[X]Ghost Boss sprite
+	[X]Ghost Boss angry sprite
+[ ]Backgrounds
+	[ ]Warehouse
+	[ ]Shelves
+	[ ]kitchen
+	[ ]checkout
+

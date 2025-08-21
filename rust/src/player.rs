@@ -7,61 +7,25 @@ use godot::classes::Timer;
 use godot::classes::Node2D;
 
 
+
 #[derive(GodotClass)]
 #[class(base=Node2D)]
-pub struct BoundRect {
-	pub top_left: Vector2,
-	pub top_right: Vector2,
-	pub bottom_left: Vector2,
-	pub bottom_right: Vector2,
-	base: Base<Node2D>
-}
-
-
-#[derive(GodotClass)]
-#[class(base=Sprite2D)]
 struct Player {
 	chosen: i32,
 	selected_mob: i32,
 	hitpoints: i32,
 	direction: i32,
+	spr: Gd<Sprite2D>,
 	anim: Gd<AnimatedSprite2D>,
 	boss_timer: Gd<Timer>,
 	tex: Gd<Texture2D>,
-	base: Base<Sprite2D>
+	base: Base<Node2D>
 }
 use crate::mobiles::Mobiles;
+use crate::targ::BoundRect;
 
 use godot::classes::INode2D;
 
-#[godot_api]
-impl INode2D for BoundRect {
-	fn init(base: Base<Node2D>) -> Self {
-		godot_print!("Initializing target bounding box"); //Prints to the godot console
-
-		Self {
-			top_left: Vector2::new(-75.0, 0.0),
-			top_right: Vector2::new(75.0, 0.0),
-			bottom_left: Vector2::new(-75.0, 75.0),
-			bottom_right: Vector2::new(75.0, 75.0),
-			base,
-		}
-	}
-	fn ready(&mut self) {
-		let tlpos = self.top_right;
-		godot_print!("{tlpos} top right position in ready");
-		//set all the positions
-		let mut tl: Gd<Node2D> = self.base_mut().get_node_as("TopLeft");
-		tl.set_position(self.top_left);
-		let mut tr: Gd<Node2D> = self.base_mut().get_node_as("TopRight");
-		tr.set_position(self.top_right);
-		let mut bl: Gd<Node2D> = self.base_mut().get_node_as("BottomLeft");
-		bl.set_position(self.bottom_left);
-		let mut br: Gd<Node2D> = self.base_mut().get_node_as("BottomRight");
-		br.set_position(self.bottom_right);
-	}
-
-}
 
 use godot::classes::ISprite2D;
 use godot::classes::Input;
@@ -94,13 +58,13 @@ impl Player {
 	}
 	#[func]
 	fn on_unboop_the_boss(&mut self) {
-		let tex = load("res://sprites/ghost-boss-normal.png") as Gd<Texture2D>;
-		self.base_mut().set_texture(&tex);
+		self.tex = load("res://sprites/ghost-boss-normal.png") as Gd<Texture2D>;
+		self.spr.set_texture(&self.tex);
 	}
 	#[func]
 	fn on_boop_the_boss(&mut self)  {
-		let tex = load("res://sprites/ghost-boss-angry.png") as Gd<Texture2D>;
-		self.base_mut().set_texture(&tex);
+		self.tex = load("res://sprites/ghost-boss-angry.png") as Gd<Texture2D>;
+		self.spr.set_texture(&self.tex);
 		
 	}
 	fn on_damage_taken(&mut self, amount: i32) {
@@ -117,11 +81,12 @@ impl Player {
 }
 
 #[godot_api]
-impl ISprite2D for Player {
-	fn init(base: Base<Sprite2D>) -> Self {
+impl INode2D for Player {
+	fn init(base: Base<Node2D>) -> Self {
 		godot_print!("Initializing Player"); //Prints to the godot console
 
 		Self {
+			spr: Sprite2D::new_alloc(),
 			selected_mob: 0,
 			chosen: 0,
 			hitpoints: 100,

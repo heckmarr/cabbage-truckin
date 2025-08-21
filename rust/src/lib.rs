@@ -7,3 +7,4 @@ unsafe impl ExtensionLibrary for SpinnyBot {}
 
 mod player;
 mod mobiles;
+mod targ;

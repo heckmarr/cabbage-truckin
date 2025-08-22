@@ -17,7 +17,7 @@ struct Player {
 	direction: i32,
 	spr: Gd<Sprite2D>,
 	anim: Gd<AnimatedSprite2D>,
-	boss_timer: Gd<Timer>,
+	cook_timer: Gd<Timer>,
 	tex: Gd<Texture2D>,
 	base: Base<Node2D>
 }
@@ -91,7 +91,7 @@ impl INode2D for Player {
 			hitpoints: 100,
 			direction: 0,
 			anim: AnimatedSprite2D::new_alloc(),
-			boss_timer: Timer::new_alloc(),
+			cook_timer: Timer::new_alloc(),
 			tex: Texture2D::new_gd(),
 			base,
 		}
@@ -129,6 +129,10 @@ impl INode2D for Player {
 			self.chosen = self.chosen + self.direction;
 		}
 		{//match scope
+			let mut print = true;
+			if self.direction == 0 {
+				print = false;
+			}
 			if self.chosen < 0 {
 				self.chosen = 3;
 			}else if self.chosen > 3 {
@@ -145,43 +149,47 @@ impl INode2D for Player {
 			let mut br_obj: Gd<BoundRect> = br.get_node_as(&br_path);
 			let pos = br_obj.get_position();
 			match self.selected_mob {
-                	        0 => {godot_print!("Chef!");
-					let  mob: Gd<Node> = self.base().find_child("Chef").expect("No chef in tree!");
+                	        0 => {	let  mob: Gd<Node> = self.base().find_child("Chef").expect("No chef in tree!");
 					let mob_path = mob.get_path();
 					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
 					//Now set the position
 					br_obj.set_position(mob_obj.get_position());
 					let mob_name = mob.get_name();
-                        	        godot_print!("{mob_name} at {mob_path} being selected at {pos}");
+                        	        if print {
+						godot_print!("{mob_name} at {mob_path} being selected at {pos}");
+					}
        	                	}
-                        	1 => {godot_print!("Stocker!");
-					let  mob: Gd<Node> = self.base().find_child("Stocker").expect("No stocker in tree!");
+                        	1 => {	let  mob: Gd<Node> = self.base().find_child("Stocker").expect("No stocker in tree!");
 					let mob_path = mob.get_path();
 					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
 					//Now set the position
 					br_obj.set_position(mob_obj.get_position());
 					let mob_name = mob.get_name();
-                        	        godot_print!("{mob_name} at {mob_path} being selected at {pos}");
+                        	        if print {
+						godot_print!("{mob_name} at {mob_path} being selected at {pos}");
+					}
 
 				}
-                        	2 => {godot_print!("Cashier!");
-					let  mob: Gd<Node> = self.base().find_child("Cashier").expect("No cashier in tree!");
+                        	2 => {	let  mob: Gd<Node> = self.base().find_child("Cashier").expect("No cashier in tree!");
 					let mob_path = mob.get_path();
 					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
 					//Now set the position
 					br_obj.set_position(mob_obj.get_position());
 					let mob_name = mob.get_name();
-                                	godot_print!("{mob_name} at {mob_path} being selected at {pos}");
+                        	        if print {
+						godot_print!("{mob_name} at {mob_path} being selected at {pos}");
+					}
 
 				}
-                        	3 => {godot_print!("WarehousePerson!");
-					let  mob: Gd<Node> = self.base().find_child("WarehousePerson").expect("No warehouseperson in tree!");
+                        	3 => {	let  mob: Gd<Node> = self.base().find_child("WarehousePerson").expect("No warehouseperson in tree!");
 					let mob_path = mob.get_path();
 					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
 					//Now set the position
 					br_obj.set_position(mob_obj.get_position());
 					let mob_name = mob.get_name();
-                                	godot_print!("{mob_name} at {mob_path} being selected at {pos}");
+                        	        if print {
+						godot_print!("{mob_name} at {mob_path} being selected at {pos}");
+					}
 
 				}
 				_ => {godot_print!("Customer or other unselectable");}
@@ -194,6 +202,15 @@ impl INode2D for Player {
 		let sprite = self.base_mut().find_child("ghost_boss_spr").expect("No ghost boss sprite in tree!");
 		let spr: Gd<Sprite2D> = self.base_mut().get_node_as(&sprite.get_path());
 		self.spr = spr;
+
+		let timer = self.base_mut().find_child("CookingTimer").expect("No cooking timer to speak of!");
+		let t: Gd<Timer> = self.base_mut().get_node_as(&timer.get_path());
+		self.cook_timer.set_autostart(true);
+		self.cook_timer.set_wait_time(5.0);
+		self.cook_timer = t;
+		
+
+		self.cook_timer.signals().timeout().connect(Player::on_timer_done);
 		self.signals()
 			.unboop_the_boss()
 			.connect_self(Player::on_unboop_the_boss);
@@ -214,6 +231,7 @@ impl Drop for Player {
 	fn drop(&mut self) {
 		godot_print!("dropping {0}", self.anim);
 		self.anim.queue_free();
-		self.boss_timer.queue_free();
+		self.cook_timer.queue_free();
+		self.spr.queue_free();
 	}
 }

@@ -55,6 +55,8 @@ script = ExtResource("3_gm4ux")
 [node name="Sprite2D" type="Sprite2D" parent="Player/Chef"]
 texture = ExtResource("9_swvky")
 
+[node name="CookingTimer" type="Timer" parent="Player/Chef"]
+
 [node name="Cashier" type="Mobiles" parent="Player" groups=["Mobile"]]
 mob = "Cashier"
 script = ExtResource("4_gm4ux")

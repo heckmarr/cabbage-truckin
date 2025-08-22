@@ -143,58 +143,56 @@ impl INode2D for Player {
 			types_of_mob.push(1);
 			types_of_mob.push(2);
 			types_of_mob.push(3);
-			self.selected_mob = types_of_mob.at(self.chosen.try_into().unwrap());
-			let br: Gd<Node> = self.base_mut().find_child("BoundRect").expect("No BoundRect in scene!");
-			let br_path = br.get_path();
-			let mut br_obj: Gd<BoundRect> = br.get_node_as(&br_path);
-			let pos = br_obj.get_position();
-			match self.selected_mob {
-                	        0 => {	let  mob: Gd<Node> = self.base().find_child("Chef").expect("No chef in tree!");
-					let mob_path = mob.get_path();
-					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-					//Now set the position
-					br_obj.set_position(mob_obj.get_position());
-					let mob_name = mob.get_name();
-                        	        if print {
+			if print {
+				let selected_mob = types_of_mob.at(self.chosen.try_into().unwrap());
+				let br: Gd<Node> = self.base_mut().find_child("BoundRect").expect("No BoundRect in scene!");
+				let br_path = br.get_path();
+				let mut br_obj: Gd<BoundRect> = br.get_node_as(&br_path);
+				let pos = br_obj.get_position();
+				br_obj.set_visible(true);
+				match selected_mob {
+        	        	        0 => {		
+						let  mob: Gd<Node> = self.base().find_child("Chef").expect("No chef in tree!");
+						let mob_path = mob.get_path();
+						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+						//Now set the position
+						br_obj.set_position(mob_obj.get_position());
+						let mob_name = mob.get_name();
+						godot_print!("{mob_name} at {mob_path} being selected at {pos}");
+					
+	       	                	}
+        	                	1 => {	
+						let  mob: Gd<Node> = self.base().find_child("Stocker").expect("No stocker in tree!");
+						let mob_path = mob.get_path();
+						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+						//Now set the position
+						br_obj.set_position(mob_obj.get_position());
+						let mob_name = mob.get_name();
+                        	        	godot_print!("{mob_name} at {mob_path} being selected at {pos}");
+					}
+        	                	2 => {	
+						let  mob: Gd<Node> = self.base().find_child("Cashier").expect("No cashier in tree!");
+						let mob_path = mob.get_path();
+						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+						//Now set the position
+						br_obj.set_position(mob_obj.get_position());
+						let mob_name = mob.get_name();
+                        	        	godot_print!("{mob_name} at {mob_path} being selected at {pos}");
+					}
+        	                	3 => {
+						let  mob: Gd<Node> = self.base().find_child("WarehousePerson").expect("No warehouseperson in tree!");
+						let mob_path = mob.get_path();
+						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+						//Now set the position
+						br_obj.set_position(mob_obj.get_position());
+						let mob_name = mob.get_name();
 						godot_print!("{mob_name} at {mob_path} being selected at {pos}");
 					}
-       	                	}
-                        	1 => {	let  mob: Gd<Node> = self.base().find_child("Stocker").expect("No stocker in tree!");
-					let mob_path = mob.get_path();
-					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-					//Now set the position
-					br_obj.set_position(mob_obj.get_position());
-					let mob_name = mob.get_name();
-                        	        if print {
-						godot_print!("{mob_name} at {mob_path} being selected at {pos}");
-					}
-
+					_ => {godot_print!("Customer or other unselectable");}
+			
 				}
-                        	2 => {	let  mob: Gd<Node> = self.base().find_child("Cashier").expect("No cashier in tree!");
-					let mob_path = mob.get_path();
-					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-					//Now set the position
-					br_obj.set_position(mob_obj.get_position());
-					let mob_name = mob.get_name();
-                        	        if print {
-						godot_print!("{mob_name} at {mob_path} being selected at {pos}");
-					}
-
-				}
-                        	3 => {	let  mob: Gd<Node> = self.base().find_child("WarehousePerson").expect("No warehouseperson in tree!");
-					let mob_path = mob.get_path();
-					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-					//Now set the position
-					br_obj.set_position(mob_obj.get_position());
-					let mob_name = mob.get_name();
-                        	        if print {
-						godot_print!("{mob_name} at {mob_path} being selected at {pos}");
-					}
-
-				}
-				_ => {godot_print!("Customer or other unselectable");}
-			}
-		}//scope of match
+			}//scope of print
+		}//scope of match and print
 	}
 
 	fn ready(&mut self) { 

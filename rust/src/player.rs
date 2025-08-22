@@ -13,6 +13,8 @@ use godot::classes::Node2D;
 struct Player {
 	chosen: i32,
 	selected_mob: i32,
+	arc_length: f32,
+	draw_arc: bool,
 	hitpoints: i32,
 	direction: i32,
 	spr: Gd<Sprite2D>,
@@ -35,6 +37,8 @@ impl Player {
 	fn unboop_the_boss();
 	#[signal]
 	fn boop_the_boss();
+	#[signal]
+	fn boss_just_booped();
 	#[signal]
 	fn damage_all_mobiles(amount: i32);
 	#[signal]
@@ -59,12 +63,18 @@ impl Player {
 	fn on_unboop_the_boss(&mut self) {
 		self.tex = load("res://sprites/ghost-boss-normal.png") as Gd<Texture2D>;
 		self.spr.set_texture(&self.tex);
+		self.draw_arc = false;
+		self.arc_length = 0.0;
+	}
+	#[func]
+	fn on_boss_just_booped(&mut self) {
+		self.arc_length = 1.57;
 	}
 	#[func]
 	fn on_boop_the_boss(&mut self)  {
 		self.tex = load("res://sprites/ghost-boss-angry.png") as Gd<Texture2D>;
 		self.spr.set_texture(&self.tex);
-		
+		self.draw_arc = true;
 	}
 	fn on_damage_taken(&mut self, amount: i32) {
 		self.hitpoints -= amount;
@@ -85,6 +95,8 @@ impl INode2D for Player {
 		godot_print!("Initializing Player"); //Prints to the godot console
 
 		Self {
+			arc_length: 1.57,
+			draw_arc: false,
 			spr: Sprite2D::new_alloc(),
 			selected_mob: 0,
 			chosen: 0,
@@ -97,11 +109,24 @@ impl INode2D for Player {
 		}
 	}
 	fn process(&mut self, _delta: f32) {
+		if self.draw_arc {
+			self.arc_length = self.arc_length - 0.01745329;
+			if self.arc_length <= 0.0 {
+				self.draw_arc = false;
+			}
+			self.base_mut().queue_redraw();
+			godot_print!("arc length is {0}", self.arc_length);
+		}
+
+
 		self.direction = 0;
 		let event = Input::singleton();
 
 		if event.is_action_just_pressed("Pad-A") {
 			self.damage_emit(50);
+		}
+		if event.is_action_just_pressed("Pad-B") {
+			self.signals().boss_just_booped().emit();
 		}
 		if event.is_action_pressed("Pad-B") {
 			self.signals().boop_the_boss().emit();
@@ -195,6 +220,22 @@ impl INode2D for Player {
 		}//scope of match and print
 	}
 
+	fn draw(&mut self) {
+		if self.draw_arc {
+			let col = Color::from_rgb(0.1, 1.0, 0.1);
+			let pos = self.base().get_position();
+			let arc_l = self.arc_length;
+			let draw_a = self.draw_arc;
+			if self.arc_length <= 0.0 {
+				self.arc_length = 1.57;
+				self.draw_arc = false;
+			}
+
+			let mut arc = self.base_mut();
+			arc.draw_arc_ex(pos, 300.0, 0.0, arc_l, 15, col).width(100.0).done();
+		}
+	}
+
 	fn ready(&mut self) { 
 		//add the Player items to the scene by adding them as children of the current node
 		let sprite = self.base().find_child("ghost_boss_spr").expect("No ghost boss sprite in tree!");
@@ -205,7 +246,9 @@ impl INode2D for Player {
 				.create_timer(5.0).expect("No scene tree to speak of!");
 		timer.signals().timeout().connect(Player::on_timer_done);
 		
-
+		self.signals()
+			.boss_just_booped()
+			.connect_self(Player::on_boss_just_booped);
 		self.signals()
 			.unboop_the_boss()
 			.connect_self(Player::on_unboop_the_boss);

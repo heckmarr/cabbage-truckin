@@ -199,18 +199,15 @@ impl INode2D for Player {
 
 	fn ready(&mut self) { 
 		//add the Player items to the scene by adding them as children of the current node
-		let sprite = self.base_mut().find_child("ghost_boss_spr").expect("No ghost boss sprite in tree!");
+		let sprite = self.base().find_child("ghost_boss_spr").expect("No ghost boss sprite in tree!");
 		let spr: Gd<Sprite2D> = self.base_mut().get_node_as(&sprite.get_path());
 		self.spr = spr;
 
-		let timer = self.base_mut().find_child("CookingTimer").expect("No cooking timer to speak of!");
-		let t: Gd<Timer> = self.base_mut().get_node_as(&timer.get_path());
-		self.cook_timer.set_autostart(true);
-		self.cook_timer.set_wait_time(5.0);
-		self.cook_timer = t;
+		let timer = self.base().get_tree().expect("Not in a tree!")
+				.create_timer(5.0).expect("No scene tree to speak of!");
+		timer.signals().timeout().connect(Player::on_timer_done);
 		
 
-		self.cook_timer.signals().timeout().connect(Player::on_timer_done);
 		self.signals()
 			.unboop_the_boss()
 			.connect_self(Player::on_unboop_the_boss);

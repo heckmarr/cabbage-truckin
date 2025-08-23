@@ -6,13 +6,13 @@ use godot::obj::Gd;
 use godot::classes::Timer;
 use godot::classes::Node2D;
 
-
+use crate::mobiles::MobileKind;
 
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 struct Player {
+	chosen_mob: MobileKind,
 	chosen: i32,
-	selected_mob: i32,
 	arc_length: f32,
 	draw_arc: bool,
 	hitpoints: i32,
@@ -28,7 +28,6 @@ use crate::select::BoundRect;
 
 use godot::classes::INode2D;
 
-use godot::classes::ISprite2D;
 use godot::classes::Input;
 use godot::classes::Texture2D;
 #[godot_api]
@@ -95,10 +94,10 @@ impl INode2D for Player {
 		godot_print!("Initializing Player"); //Prints to the godot console
 
 		Self {
+			chosen_mob: MobileKind::Customer,
 			arc_length: 1.57,
 			draw_arc: false,
 			spr: Sprite2D::new_alloc(),
-			selected_mob: 0,
 			chosen: 0,
 			hitpoints: 100,
 			direction: 0,
@@ -109,14 +108,6 @@ impl INode2D for Player {
 		}
 	}
 	fn process(&mut self, _delta: f32) {
-		if self.draw_arc {
-			self.arc_length = self.arc_length - 0.01745329;
-			if self.arc_length <= 0.0 {
-				self.draw_arc = false;
-			}
-			self.base_mut().queue_redraw();
-			godot_print!("arc length is {0}", self.arc_length);
-		}
 
 
 		self.direction = 0;
@@ -124,6 +115,45 @@ impl INode2D for Player {
 
 		if event.is_action_just_pressed("Pad-A") {
 			self.damage_emit(50);
+			//Possess the selected object
+			match self.chosen_mob {
+	                        MobileKind::Chef => {
+
+					let mob = self.base().find_child("Chef").expect("Mob not chosen!");
+					let mob_path = mob.get_path();
+					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+					mob_obj.signals().possessed().emit();
+					godot_print!("{mob} being possessed!");
+  	      	                }
+                        	MobileKind::Stocker => {
+					let mob = self.base().find_child("Stocker").expect("Mob not chosen!");
+					let mob_path = mob.get_path();
+					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+					mob_obj.signals().possessed().emit();
+					godot_print!("{mob} being possessed!");
+
+                        	}
+                        	MobileKind::Cashier => {
+					let mob = self.base().find_child("Cashier").expect("Mob not chosen!");
+					let mob_path = mob.get_path();
+					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+					mob_obj.signals().possessed().emit();
+					godot_print!("{mob} being possessed!");
+
+                        	}
+                        	MobileKind::WarehousePerson => {
+					let mob = self.base().find_child("WarehousePerson").expect("Mob not chosen!");
+					let mob_path = mob.get_path();
+					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+					mob_obj.signals().possessed().emit();
+					godot_print!("{mob} being possessed!");
+
+                        	}
+				_ => {
+					//pass
+				}
+
+			}
 		}
 		if event.is_action_just_pressed("Pad-B") {
 			self.signals().boss_just_booped().emit();
@@ -177,6 +207,7 @@ impl INode2D for Player {
 				br_obj.set_visible(true);
 				match selected_mob {
         	        	        0 => {		
+						self.chosen_mob = MobileKind::Chef;
 						let  mob: Gd<Node> = self.base().find_child("Chef").expect("No chef in tree!");
 						let mob_path = mob.get_path();
 						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
@@ -187,6 +218,7 @@ impl INode2D for Player {
 					
 	       	                	}
         	                	1 => {	
+						self.chosen_mob = MobileKind::Stocker;
 						let  mob: Gd<Node> = self.base().find_child("Stocker").expect("No stocker in tree!");
 						let mob_path = mob.get_path();
 						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
@@ -196,6 +228,7 @@ impl INode2D for Player {
                         	        	godot_print!("{mob_name} at {mob_path} being selected at {pos}");
 					}
         	                	2 => {	
+						self.chosen_mob = MobileKind::Cashier;
 						let  mob: Gd<Node> = self.base().find_child("Cashier").expect("No cashier in tree!");
 						let mob_path = mob.get_path();
 						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
@@ -205,6 +238,7 @@ impl INode2D for Player {
                         	        	godot_print!("{mob_name} at {mob_path} being selected at {pos}");
 					}
         	                	3 => {
+						self.chosen_mob = MobileKind::WarehousePerson;
 						let  mob: Gd<Node> = self.base().find_child("WarehousePerson").expect("No warehouseperson in tree!");
 						let mob_path = mob.get_path();
 						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
@@ -213,28 +247,30 @@ impl INode2D for Player {
 						let mob_name = mob.get_name();
 						godot_print!("{mob_name} at {mob_path} being selected at {pos}");
 					}
-					_ => {godot_print!("Customer or other unselectable");}
+					_ => {
+						//godot_print!("Customer or other unselectable");
+					}
 			
 				}
 			}//scope of print
 		}//scope of match and print
 	}
 
-	fn draw(&mut self) {
-		if self.draw_arc {
-			let col = Color::from_rgb(0.1, 1.0, 0.1);
-			let pos = self.base().get_position();
-			let arc_l = self.arc_length;
-			let draw_a = self.draw_arc;
-			if self.arc_length <= 0.0 {
-				self.arc_length = 1.57;
-				self.draw_arc = false;
-			}
-
-			let mut arc = self.base_mut();
-			arc.draw_arc_ex(pos, 300.0, 0.0, arc_l, 15, col).width(100.0).done();
-		}
-	}
+//	fn draw(&mut self) {
+//		if self.draw_arc {
+//			let col = Color::from_rgb(0.1, 1.0, 0.1);
+//			let pos = self.base().get_position();
+//			let arc_l = self.arc_length;
+//			let draw_a = self.draw_arc;
+//			if self.arc_length <= 0.0 {
+//				self.arc_length = 1.57;
+//				self.draw_arc = false;
+//			}
+//
+//			let mut arc = self.base_mut();
+//			arc.draw_arc_ex(pos, 300.0, 0.0, arc_l, 15, col).width(100.0).done();
+//		}
+//	}
 
 	fn ready(&mut self) { 
 		//add the Player items to the scene by adding them as children of the current node

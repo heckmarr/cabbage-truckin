@@ -1,9 +1,5 @@
 use godot::prelude::*;
-use godot::classes::Sprite2D;
-use godot::classes::AnimatedSprite2D;
-use godot::global::randi_range;
 use godot::obj::Gd;
-use godot::classes::Timer;
 use godot::classes::Node2D;
 
 
@@ -18,7 +14,6 @@ pub struct BoundRect {
 }
 
 
-use crate::mobiles::Mobiles;
 
 use godot::classes::INode2D;
 

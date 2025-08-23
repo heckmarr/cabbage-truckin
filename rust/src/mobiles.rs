@@ -17,6 +17,9 @@ pub enum MobileKind {
 }
 use godot::classes::Node2D;
 use godot::classes::INode2D;
+use godot::classes::AudioStreamPlayer;
+use godot::classes::AudioStreamOggVorbis;
+
 
 #[derive(GodotClass)]
 #[class(base=Node2D)]
@@ -28,12 +31,16 @@ pub struct Mobiles {
 	#[export]
 	mob: MobileKind,
 	anim: Gd<AnimatedSprite2D>,
+	sound_player: Gd<AudioStreamPlayer>,
+	sound: Gd<AudioStreamOggVorbis>,
 	base: Base<Node2D>,
 }
 
 
 #[godot_api]
 impl Mobiles {
+	#[signal]
+	fn play_sound();
 	#[signal]
 	pub fn possessed();
 	#[signal]
@@ -69,6 +76,9 @@ impl Mobiles {
 		}
 		godot_print!("packaging taking {amount} damage of {hp} total");
 	}
+	fn on_play_sound(&mut self) {
+		self.sound_player.play();
+	}
 
 }
 use godot::global::randi_range;
@@ -84,10 +94,22 @@ impl INode2D for Mobiles {
 			timer: Timer::new_alloc(),
 			mob: MobileKind::Customer,
 			anim: AnimatedSprite2D::new_alloc(),
+			sound_player: AudioStreamPlayer::new_alloc(),
+			sound: AudioStreamOggVorbis::new_gd(),
 			base,
 		}
 	}
 	fn ready(&mut self)  {
+		let s_p = self.base().find_child("Noise").expect("No sound player for this object!");
+		let sound_path = s_p.get_path();
+		let sound_p: Gd<AudioStreamPlayer> = s_p.get_node_as(&sound_path);
+		self.sound_player = sound_p;
+		self.sound = AudioStreamOggVorbis::load_from_file("res://audio/card-crackle.ogg").expect("No sound file!");
+		self.sound_player.set_stream(&self.sound);
+		self.signals().play_sound().connect_self(Self::on_play_sound);
+		godot_print!("Connecting sounds for mobiles");
+
+
 		godot_print!("Connecting signals for mobiles");
 		self.signals().possessed().connect_self(Self::on_possess);
 		self.signals()
@@ -147,6 +169,8 @@ impl INode2D for Mobiles {
                 }
 
 	}
+
+
 	fn draw(&mut self) {
                 if self.drawing_arc {
                         let col = Color::from_rgb(0.1, 1.0, 0.1);
@@ -159,6 +183,7 @@ impl INode2D for Mobiles {
                                 self.drawing_arc = false;
                         }
 //			godot_print!("Drawing arc!{0}", self.arc_length);
+			self.signals().play_sound().emit();
                         let mut arc = self.base_mut();
                         arc.draw_arc_ex(pos, 100.0, 0.0, arc_l, 15, col).width(10.0).done();
                 }

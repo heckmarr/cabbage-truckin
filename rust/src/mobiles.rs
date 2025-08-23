@@ -18,7 +18,7 @@ pub enum MobileKind {
 use godot::classes::Node2D;
 use godot::classes::INode2D;
 use godot::classes::AudioStreamPlayer;
-use godot::classes::AudioStreamOggVorbis;
+use godot::classes::AudioStreamWav;
 
 
 #[derive(GodotClass)]
@@ -32,7 +32,7 @@ pub struct Mobiles {
 	mob: MobileKind,
 	anim: Gd<AnimatedSprite2D>,
 	sound_player: Gd<AudioStreamPlayer>,
-	sound: Gd<AudioStreamOggVorbis>,
+	sound: Gd<AudioStreamWav>,
 	base: Base<Node2D>,
 }
 
@@ -95,7 +95,7 @@ impl INode2D for Mobiles {
 			mob: MobileKind::Customer,
 			anim: AnimatedSprite2D::new_alloc(),
 			sound_player: AudioStreamPlayer::new_alloc(),
-			sound: AudioStreamOggVorbis::new_gd(),
+			sound: AudioStreamWav::new_gd(),
 			base,
 		}
 	}
@@ -104,7 +104,7 @@ impl INode2D for Mobiles {
 		let sound_path = s_p.get_path();
 		let sound_p: Gd<AudioStreamPlayer> = s_p.get_node_as(&sound_path);
 		self.sound_player = sound_p;
-		self.sound = AudioStreamOggVorbis::load_from_file("res://audio/card-crackle.ogg").expect("No sound file!");
+		self.sound = AudioStreamWav::load_from_file("res://audio/card-flthbp.wav").expect("No sound file!");
 		self.sound_player.set_stream(&self.sound);
 		self.signals().play_sound().connect_self(Self::on_play_sound);
 		godot_print!("Connecting sounds for mobiles");

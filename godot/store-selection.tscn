@@ -77,6 +77,9 @@ script = ExtResource("11_noapp")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player/Customer"]
 
+[node name="Noise" type="AudioStreamPlayer" parent="Player/Customer"]
+max_polyphony = 7
+
 [node name="Stocker" type="Mobiles" parent="Player" groups=["Mobile"]]
 mob = "Stocker"
 script = ExtResource("12_ftiur")
@@ -93,6 +96,9 @@ script = ExtResource("14_moyx6")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player/Package"]
 texture = ExtResource("15_hnric")
+
+[node name="Noise" type="AudioStreamPlayer" parent="Player/Package"]
+max_polyphony = 7
 
 [node name="WarehousePerson" type="Mobiles" parent="Player" groups=["Mobile"]]
 mob = "WarehousePerson"

@@ -113,7 +113,11 @@ impl INode2D for Player {
 		self.direction = 0;
 		let event = Input::singleton();
 
-		if event.is_action_just_pressed("Pad-A") {
+		if event.is_action_just_pressed("ui_cancel") {
+			self.base().get_tree().expect("Not in a tree!").quit();
+		}
+
+		if event.is_action_just_pressed("Pad-A") || event.is_action_just_pressed("ui_select") {
 			self.damage_emit(50);
 			//Possess the selected object
 			match self.chosen_mob {
@@ -154,6 +158,16 @@ impl INode2D for Player {
 				}
 
 			}
+		}
+		if event.is_action_just_pressed("ui_select") {
+			self.signals().boss_just_booped().emit();
+		}
+		if event.is_action_just_released("ui_select") {
+			self.signals().unboop_the_boss().emit();
+		}
+		if event.is_action_pressed("ui_select") {
+			self.signals().boop_the_boss().emit();
+			
 		}
 		if event.is_action_just_pressed("Pad-B") {
 			self.signals().boss_just_booped().emit();

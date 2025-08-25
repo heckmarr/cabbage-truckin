@@ -23,7 +23,7 @@ impl Package {
 		}else {
 			let v = randi_range(1, (choose - 1).into()) as i32;
 			godot_print!("value chosen is {v}");
-			if self.collect() > tot {
+			if self.collect() >= tot || (self.collect() + v) > tot {
 				return 0;
 			}else {
 				self.items.push(v);
@@ -55,6 +55,7 @@ impl INode2D for Package {
 	fn ready(&mut self) {
 		let mut val = 0;
 		for r in 1..(self.rows + 1) {
+			godot_print!("num of row is {r}");
 			while self.collect() < (4 * r) {
 				let v = val;
 				let tot = 4 * r;

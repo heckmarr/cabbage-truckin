@@ -8,3 +8,4 @@ unsafe impl ExtensionLibrary for SpinnyBot {}
 mod player;
 mod mobiles;
 mod select;
+mod package;

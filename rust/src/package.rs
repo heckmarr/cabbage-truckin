@@ -1,5 +1,4 @@
 use godot::prelude::*;
-use godot::obj::Gd;
 use godot::classes::Node2D;
 use godot::classes::INode2D;
 
@@ -22,7 +21,7 @@ impl Package {
 			return 0;
 		}else {
 			let v = randi_range(1, (choose - 1).into()) as i32;
-			godot_print!("value chosen is {v}");
+//			godot_print!("value chosen is {v}");
 			if self.collect() >= tot || (self.collect() + v) > tot {
 				return 0;
 			}else {
@@ -55,7 +54,7 @@ impl INode2D for Package {
 	fn ready(&mut self) {
 		let mut val = 0;
 		for r in 1..(self.rows + 1) {
-			godot_print!("num of row is {r}");
+//			godot_print!("num of row is {r}");
 			while self.collect() < (4 * r) {
 				let v = val;
 				let tot = 4 * r;

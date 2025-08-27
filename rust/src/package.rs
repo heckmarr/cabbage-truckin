@@ -6,6 +6,7 @@ use godot::classes::INode2D;
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 pub struct Package{
+	pts: Vec<Vector2i>,
 	items: Vec<i32>,
 	rows: i32,
 	base: Base<Node2D>
@@ -26,6 +27,23 @@ impl Package {
 				return 0;
 			}else {
 				self.items.push(v);
+				let r = ((tot / 4) - 1 ) * 10;
+				godot_print!("row pts is {r}");
+				match v {
+					1 => {
+						self.pts.push(Vector2i::new( 10, r ));
+					}
+					2 => {
+						self.pts.push(Vector2i::new( 20, r ));
+					}
+					3 => {
+						self.pts.push(Vector2i::new( 30, r ));
+					}
+					_ => {
+						//pass
+					}
+				}
+				
 				val = v
 			}
 		}
@@ -47,6 +65,7 @@ impl INode2D for Package {
 		Self {
 			items: Vec::new(),
 			rows: 4,
+			pts: Vec::<Vector2i>::new(),
 			base,
 		}
 	}

@@ -62,18 +62,23 @@ impl Player {
 	fn on_unboop_the_boss(&mut self) {
 		self.tex = load("res://sprites/ghost-boss-normal.png") as Gd<Texture2D>;
 		self.spr.set_texture(&self.tex);
-		self.draw_arc = false;
-		self.arc_length = 0.0;
+		//self.draw_arc = false;
+		//self.arc_length = 0.0;
 	}
 	#[func]
 	fn on_boss_just_booped(&mut self) {
-		self.arc_length = 1.57;
+		//self.arc_length = 1.57;
 	}
 	#[func]
 	fn on_boop_the_boss(&mut self)  {
 		self.tex = load("res://sprites/ghost-boss-angry.png") as Gd<Texture2D>;
 		self.spr.set_texture(&self.tex);
+		if self.arc_length <= 0.0 {
+			self.draw_arc = false;
+			self.arc_length = 0.0;
+		}
 		self.draw_arc = true;
+		self.base_mut().queue_redraw();
 	}
 	fn on_damage_taken(&mut self, amount: i32) {
 		self.hitpoints -= amount;
@@ -119,6 +124,13 @@ impl INode2D for Player {
 
 		if event.is_action_just_pressed("Pad-A") || event.is_action_just_pressed("ui_select") {
 			self.damage_emit(50);
+			self.arc_length -= 0.01745329;
+			if self.arc_length <= 0.0 {
+				self.draw_arc = false;
+				self.chosen_mob = MobileKind::Customer;
+			}else {
+				self.draw_arc = true;
+			}
 			//Possess the selected object
 			match self.chosen_mob {
 	                        MobileKind::Chef => {
@@ -166,6 +178,8 @@ impl INode2D for Player {
 			self.signals().unboop_the_boss().emit();
 		}
 		if event.is_action_pressed("ui_select") {
+			self.arc_length -= 0.01745329;
+			self.draw_arc = true;
 			self.signals().boop_the_boss().emit();
 			
 		}
@@ -270,21 +284,21 @@ impl INode2D for Player {
 		}//scope of match and print
 	}
 
-//	fn draw(&mut self) {
-//		if self.draw_arc {
-//			let col = Color::from_rgb(0.1, 1.0, 0.1);
-//			let pos = self.base().get_position();
-//			let arc_l = self.arc_length;
-//			let draw_a = self.draw_arc;
-//			if self.arc_length <= 0.0 {
+	fn draw(&mut self) {
+		if self.draw_arc {
+			let col = Color::from_rgb(0.1, 1.0, 0.1);
+			let pos = self.base().get_position();
+			let arc_l = self.arc_length;
+			let draw_a = self.draw_arc;
+			if self.arc_length <= 0.0 {
 //				self.arc_length = 1.57;
-//				self.draw_arc = false;
-//			}
-//
-//			let mut arc = self.base_mut();
-//			arc.draw_arc_ex(pos, 300.0, 0.0, arc_l, 15, col).width(100.0).done();
-//		}
-//	}
+				self.draw_arc = false;
+			}
+
+			let mut arc = self.base_mut();
+			arc.draw_arc_ex(pos, 300.0, 0.0, arc_l, 15, col).width(100.0).done();
+		}
+	}
 
 	fn ready(&mut self) { 
 		//add the Player items to the scene by adding them as children of the current node

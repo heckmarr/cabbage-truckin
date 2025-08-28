@@ -19,15 +19,17 @@ use godot::global::randi_range;
 #[godot_api]
 impl Package {
 	
-	fn append_next(&mut self, mut val: i32, tot: i32) -> i32 {
+	fn append_next(&mut self, mut val: i32, tot: i32, mut num_in_row: i32) -> (i32, i32) {
 		let choose = 4 - val;
 		if choose <= 0 {
-			return 0;
+			return (0, num_in_row);
 		}else {
+			//this is the area you need to focus on, as it's calling Collect()
+			//before it's added the value, causing it to skip one
 			let v = randi_range(1, (choose - 1).into()) as i32;
-//			godot_print!("value chosen is {v}");
+			godot_print!("value chosen is {v}");
 			if self.collect() >= tot || (self.collect() + v) > tot {
-				return 0;
+				return (0, num_in_row);
 			}else {
 				self.items.push(v);
 				let r = ((tot / 4) - 1 ) * 10;
@@ -35,20 +37,41 @@ impl Package {
 				godot_print!("row pts is {r}");
 				match v {
 					1 => {
-						self.pts.push(Vector2i::new( 10, r ));
-						spr.set_position(Vector2::new( 10.0, r as f32));
+						num_in_row += 1;
+						let mut pix = 0;
+						if num_in_row == 1 {
+							//pass
+						}else {
+							pix = num_in_row * 10;
+						}
+						self.pts.push(Vector2i::new( pix, r ));
+						spr.set_position(Vector2::new( pix as f32, r as f32));
 						let tex = load("res://sprites/one-block.png") as Gd<Texture2D>;
 						spr.set_texture(&tex);
 					}
 					2 => {
-						self.pts.push(Vector2i::new( 20, r ));
-						spr.set_position(Vector2::new(20.0, r as f32));
+						num_in_row += 2;
+						let mut pix = 0;
+						if num_in_row == 2 {
+							//pass
+						} else {
+							pix = num_in_row * 10;
+						}
+						self.pts.push(Vector2i::new( pix, r ));
+						spr.set_position(Vector2::new(pix as f32, r as f32));
 						let tex = load("res://sprites/two-block.png") as Gd<Texture2D>;
 						spr.set_texture(&tex);
 					}
 					3 => {
-						self.pts.push(Vector2i::new( 30, r));
-						spr.set_position(Vector2::new( 30.0, r as f32));
+						num_in_row += 3;
+						let mut pix = 0;
+						if num_in_row == 3 {
+							//pass
+						}else {
+							pix = num_in_row * 10;
+						}
+						self.pts.push(Vector2i::new( pix,  r));
+						spr.set_position(Vector2::new( pix as f32, r as f32));
 						let tex = load("res://sprites/three-block.png") as Gd<Texture2D>;
 						spr.set_texture(&tex);
 					}
@@ -63,7 +86,7 @@ impl Package {
 				val = v
 			}
 		}
-		return val;
+		return (val, num_in_row);
 	}
 	fn collect(&mut self) -> i32 {
 		let mut tot = 0;
@@ -89,15 +112,17 @@ impl INode2D for Package {
 
 	fn ready(&mut self) {
 		let mut val = 0;
+		let mut num_in_row = 0;
 		for r in 1..(self.rows + 1) {
 //			godot_print!("num of row is {r}");
 			while self.collect() < (4 * r) {
 				let v = val;
 				let tot = 4 * r;
-				val = self.append_next(v, tot);
+				(val, num_in_row) = self.append_next(v, tot, num_in_row);
 //				godot_print!("collect() is {0}", self.collect());
 			}
-			val = 0
+			val = 0;
+			num_in_row = 0;
 		}
 		godot_print!("collect() is {0}", self.collect());
 

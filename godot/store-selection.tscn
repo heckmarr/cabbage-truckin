@@ -100,6 +100,8 @@ texture = ExtResource("15_hnric")
 [node name="Noise" type="AudioStreamPlayer" parent="Player/Package"]
 max_polyphony = 7
 
+[node name="PackageGenerator" type="Package" parent="Player/Package"]
+
 [node name="WarehousePerson" type="Mobiles" parent="Player" groups=["Mobile"]]
 mob = "WarehousePerson"
 script = ExtResource("16_6n20b")
@@ -115,8 +117,6 @@ texture = ExtResource("18_mngd8")
 
 [node name="Noise" type="AudioStreamPlayer" parent="Player"]
 max_polyphony = 7
-
-[node name="PackageGenerator" type="Package" parent="Player"]
 
 [connection signal="balete" from="Player/Chef" to="Player/Chef" method="_on_balete"]
 [connection signal="balete" from="Player/Cashier" to="Player/Cashier" method="_on_balete"]

@@ -197,5 +197,6 @@ impl Drop for Mobiles {
 		self.timer.queue_free();
 		godot_print!("Dropping {0}", self.anim);
 		self.anim.queue_free();
+//		self.sound_player.queue_free();
 	}
 }

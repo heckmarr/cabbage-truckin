@@ -332,8 +332,8 @@ impl INode2D for Player {
 impl Drop for Player {
 	fn drop(&mut self) {
 		godot_print!("dropping {0}", self.anim);
-		self.anim.queue_free();
+		//self.anim.queue_free();
 		self.cook_timer.queue_free();
-		self.spr.queue_free();
+		//self.spr.queue_free();
 	}
 }

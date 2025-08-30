@@ -1,5 +1,4 @@
 use godot::prelude::*;
-use godot::classes::AnimatedSprite2D;
 use godot::obj::Gd;
 use godot::obj::NewAlloc;
 
@@ -30,9 +29,6 @@ pub struct Mobiles {
 	timer: Gd<Timer>,
 	#[export]
 	mob: MobileKind,
-	anim: Gd<AnimatedSprite2D>,
-	sound_player: Gd<AudioStreamPlayer>,
-	sound: Gd<AudioStreamWav>,
 	base: Base<Node2D>,
 }
 
@@ -77,7 +73,12 @@ impl Mobiles {
 		godot_print!("packaging taking {amount} damage of {hp} total");
 	}
 	fn on_play_sound(&mut self) {
-		self.sound_player.play();
+		let s_p = self.base().find_child("Noise").expect("No sound player for this object!");
+		let sound_path = s_p.get_path();
+		let mut sound_p: Gd<AudioStreamPlayer> = s_p.get_node_as(&sound_path);
+
+		sound_p.play();
+
 	}
 
 }
@@ -93,19 +94,16 @@ impl INode2D for Mobiles {
 			hitpoints: 100,
 			timer: Timer::new_alloc(),
 			mob: MobileKind::Customer,
-			anim: AnimatedSprite2D::new_alloc(),
-			sound_player: AudioStreamPlayer::new_alloc(),
-			sound: AudioStreamWav::new_gd(),
 			base,
 		}
 	}
 	fn ready(&mut self)  {
 		let s_p = self.base().find_child("Noise").expect("No sound player for this object!");
 		let sound_path = s_p.get_path();
-		let sound_p: Gd<AudioStreamPlayer> = s_p.get_node_as(&sound_path);
-		self.sound_player = sound_p;
-		self.sound = AudioStreamWav::load_from_file("res://audio/card-flthbp.wav").expect("No sound file!");
-		self.sound_player.set_stream(&self.sound);
+		let mut sound_p: Gd<AudioStreamPlayer> = s_p.get_node_as(&sound_path);
+		
+		let sound = AudioStreamWav::load_from_file("res://audio/card-flthbp.wav").expect("No sound file!");
+		sound_p.set_stream(&sound);
 		self.signals().play_sound().connect_self(Self::on_play_sound);
 		godot_print!("Connecting sounds for mobiles");
 
@@ -195,8 +193,6 @@ impl Drop for Mobiles {
 	fn drop(&mut self) {
 		godot_print!("Dropping {0}", self.timer);
 		self.timer.queue_free();
-		godot_print!("Dropping {0}", self.anim);
-		self.anim.queue_free();
-//		self.sound_player.queue_free();
+		//self.sound_player.queue_free();
 	}
 }

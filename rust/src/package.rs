@@ -29,6 +29,7 @@ impl Package {
 				godot_print!("Accepted 1");
 				self.items.push(1);
 				let r = ((tot / 4) - 1 ) * 10;
+//				spr = Sprite2D::new_alloc();
 				let mut spr = Sprite2D::new_alloc();
 //				godot_print!("row pts is {r}");
 				let preceding = num_in_row;
@@ -46,7 +47,9 @@ impl Package {
 				self.pts.push(Vector2i::new( pix, r ));
 				spr.set_global_position(Vector2::new( pix as f32, r as f32));
 //				godot_print!("pix is {0}", pix as f32);
-				self.base_mut().call_deferred("add_sibling", &[spr.to_variant()]);
+				let spr_later = spr.to_variant();
+				self.base_mut().call_deferred("add_sibling", &[spr_later.clone()]);
+				self.base_mut().call_deferred("queue_free", &[spr_later]);
 				return num_in_row;
 			}
 			let v = randi_range(1, 3) as i32;
@@ -58,6 +61,7 @@ impl Package {
 				godot_print!("Accepted {v}");
 				self.items.push(v);
 				let r = ((tot / 4) - 1 ) * 10;
+//				spr = Sprite2D::new_alloc();
 				let mut spr = Sprite2D::new_alloc();
 //				godot_print!("row pts is {r}");
 				match v {
@@ -76,7 +80,9 @@ impl Package {
 						let tex = load("res://sprites/one-block.png") as Gd<Texture2D>;
 						spr.set_texture(&tex);
 						spr.set_global_position(Vector2::new( pix as f32, r as f32));
-						self.base_mut().call_deferred("add_sibling", &[spr.to_variant()]);
+						let spr_later = spr.to_variant();
+						self.base_mut().call_deferred("add_sibling", &[spr_later.clone()]);
+						self.base_mut().call_deferred("queue_free", &[spr_later]);
 //						godot_print!("pix is {0}", pix as f32);
 						return num_in_row;
 
@@ -96,7 +102,9 @@ impl Package {
 						let tex = load("res://sprites/two-block.png") as Gd<Texture2D>;
 						spr.set_texture(&tex);
 						spr.set_global_position(Vector2::new(pix as f32, r as f32));
-						self.base_mut().call_deferred("add_sibling", &[spr.to_variant()]);
+						let spr_later = spr.to_variant();
+						self.base_mut().call_deferred("add_sibling", &[spr_later.clone()]);
+						self.base_mut().call_deferred("queue_free", &[spr_later]);
 //						godot_print!("pix is {0}", pix as f32);
 						return num_in_row;
 					}
@@ -114,7 +122,9 @@ impl Package {
 						let tex = load("res://sprites/three-block.png") as Gd<Texture2D>;
 						spr.set_texture(&tex);
 						spr.set_global_position(Vector2::new( pix as f32, r as f32));
-						self.base_mut().call_deferred("add_sibling", &[spr.to_variant()]);
+						let spr_later = spr.to_variant();
+						self.base_mut().call_deferred("add_sibling", &[spr_later.clone()]);
+						self.base_mut().call_deferred("queue_free", &[spr_later]);
 //						godot_print!("pix is {0}", pix as f32);
 						return num_in_row;
 					}
@@ -169,4 +179,9 @@ impl INode2D for Package {
 
 	}
 
+}
+impl Drop for Package {
+	fn drop(&mut self) {
+
+	}
 }

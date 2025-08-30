@@ -1,6 +1,5 @@
 use godot::prelude::*;
 use godot::classes::Sprite2D;
-use godot::classes::AnimatedSprite2D;
 use godot::global::randi_range;
 use godot::obj::Gd;
 use godot::classes::Timer;
@@ -17,10 +16,7 @@ struct Player {
 	draw_arc: bool,
 	hitpoints: i32,
 	direction: i32,
-	spr: Gd<Sprite2D>,
-	anim: Gd<AnimatedSprite2D>,
 	cook_timer: Gd<Timer>,
-	tex: Gd<Texture2D>,
 	base: Base<Node2D>
 }
 use crate::mobiles::Mobiles;
@@ -60,8 +56,10 @@ impl Player {
 	}
 	#[func]
 	fn on_unboop_the_boss(&mut self) {
-		self.tex = load("res://sprites/ghost-boss-normal.png") as Gd<Texture2D>;
-		self.spr.set_texture(&self.tex);
+		let sprite = self.base().find_child("ghost_boss_spr").expect("No ghost boss sprite in tree!");
+		let mut spr: Gd<Sprite2D> = self.base_mut().get_node_as(&sprite.get_path());
+		let tex = load("res://sprites/ghost-boss-normal.png") as Gd<Texture2D>;
+		spr.set_texture(&tex);
 		//self.draw_arc = false;
 		//self.arc_length = 0.0;
 	}
@@ -71,8 +69,10 @@ impl Player {
 	}
 	#[func]
 	fn on_boop_the_boss(&mut self)  {
-		self.tex = load("res://sprites/ghost-boss-angry.png") as Gd<Texture2D>;
-		self.spr.set_texture(&self.tex);
+		let sprite = self.base().find_child("ghost_boss_spr").expect("No ghost boss sprite in tree!");
+		let mut spr: Gd<Sprite2D> = self.base_mut().get_node_as(&sprite.get_path());
+		let tex = load("res://sprites/ghost-boss-angry.png") as Gd<Texture2D>;
+		spr.set_texture(&tex);
 		if self.arc_length <= 0.0 {
 			self.draw_arc = false;
 			self.arc_length = 0.0;
@@ -102,13 +102,10 @@ impl INode2D for Player {
 			chosen_mob: MobileKind::Customer,
 			arc_length: 1.57,
 			draw_arc: false,
-			spr: Sprite2D::new_alloc(),
 			chosen: 0,
 			hitpoints: 100,
 			direction: 0,
-			anim: AnimatedSprite2D::new_alloc(),
 			cook_timer: Timer::new_alloc(),
-			tex: Texture2D::new_gd(),
 			base,
 		}
 	}
@@ -289,7 +286,6 @@ impl INode2D for Player {
 			let col = Color::from_rgb(0.1, 1.0, 0.1);
 			let pos = self.base().get_position();
 			let arc_l = self.arc_length;
-			let draw_a = self.draw_arc;
 			if self.arc_length <= 0.0 {
 //				self.arc_length = 1.57;
 				self.draw_arc = false;
@@ -302,9 +298,10 @@ impl INode2D for Player {
 
 	fn ready(&mut self) { 
 		//add the Player items to the scene by adding them as children of the current node
-		let sprite = self.base().find_child("ghost_boss_spr").expect("No ghost boss sprite in tree!");
-		let spr: Gd<Sprite2D> = self.base_mut().get_node_as(&sprite.get_path());
-		self.spr = spr;
+		//let sprite = self.base().find_child("ghost_boss_spr").expect("No ghost boss sprite in tree!");
+		//let spr: Gd<Sprite2D> = self.base_mut().get_node_as(&sprite.get_path());
+		//self.spr = spr;
+		//spr.queue_free();
 
 		let timer = self.base().get_tree().expect("Not in a tree!")
 				.create_timer(5.0).expect("No scene tree to speak of!");
@@ -331,9 +328,8 @@ impl INode2D for Player {
 }
 impl Drop for Player {
 	fn drop(&mut self) {
-		godot_print!("dropping {0}", self.anim);
-		//self.anim.queue_free();
 		self.cook_timer.queue_free();
+		godot_print!("Thanks for playing Ghost Boss");
 		//self.spr.queue_free();
 	}
 }

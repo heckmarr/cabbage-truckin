@@ -6,10 +6,10 @@ use godot::classes::Node2D;
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 pub struct BoundRect {
-	pub top_left: Vector2,
-	pub top_right: Vector2,
-	pub bottom_left: Vector2,
-	pub bottom_right: Vector2,
+	top_left: Vector2,
+	top_right: Vector2,
+	bottom_left: Vector2,
+	bottom_right: Vector2,
 	base: Base<Node2D>
 }
 

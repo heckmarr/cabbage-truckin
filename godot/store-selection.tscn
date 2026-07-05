@@ -1,121 +1,124 @@
-[gd_scene load_steps=19 format=3 uid="uid://4uby8dqg4hax"]
+[gd_scene format=3 uid="uid://4uby8dqg4hax"]
 
-[ext_resource type="Script" uid="uid://dg4saor4cdkag" path="res://player.gd" id="1_m0apk"]
-[ext_resource type="Script" uid="uid://dmk4ktpo52l2r" path="res://bound_rect.gd" id="2_2ngq4"]
-[ext_resource type="Texture2D" uid="uid://b62c2duqa6cty" path="res://sprites/targ-upper-left.png" id="3_lc0qw"]
-[ext_resource type="Texture2D" uid="uid://ivaaeruc6hcp" path="res://sprites/targ-upper-right.png" id="4_sc38b"]
-[ext_resource type="Texture2D" uid="uid://dy743hfc6k6hu" path="res://sprites/targ-lower-left.png" id="5_q21n5"]
-[ext_resource type="Texture2D" uid="uid://dpeep5d7ilj53" path="res://sprites/targ-lower-right.png" id="6_l8xr3"]
-[ext_resource type="Script" uid="uid://bmt8b2hxtvwvx" path="res://chef.gd" id="7_6u2sy"]
-[ext_resource type="Texture2D" uid="uid://cptm1oa2cijnw" path="res://sprites/chef-normal.png" id="8_sr27p"]
-[ext_resource type="Script" uid="uid://cxv0gwmv52i2h" path="res://cashier.gd" id="9_j4f8r"]
-[ext_resource type="Texture2D" uid="uid://pujnn31qo1d5" path="res://sprites/cashier-normal.png" id="10_8plwv"]
-[ext_resource type="Script" uid="uid://cjwv5wb00an0y" path="res://customer.gd" id="11_noapp"]
-[ext_resource type="Script" uid="uid://b2rp58x7mvug3" path="res://stocker.gd" id="12_ftiur"]
-[ext_resource type="Texture2D" uid="uid://dxrhpyiithwwi" path="res://sprites/cashier-checking-out.png" id="13_1c78d"]
-[ext_resource type="Script" uid="uid://bonx1v0hm6l78" path="res://package.gd" id="14_moyx6"]
-[ext_resource type="Texture2D" uid="uid://ck0aihpk6mhw1" path="res://sprites/package-normal.png" id="15_hnric"]
-[ext_resource type="Script" uid="uid://bimbl0cc2mivr" path="res://warehouse_person.gd" id="16_6n20b"]
-[ext_resource type="Texture2D" uid="uid://cmbo0d62enyr0" path="res://sprites/warehouse-normal.png" id="17_tn8o8"]
-[ext_resource type="Texture2D" uid="uid://b4446kjfs55gx" path="res://sprites/ghost-boss-normal.png" id="18_mngd8"]
+[ext_resource type="Script" uid="uid://xgql0k2hkhi2" path="res://player.gd" id="1_m0apk"]
+[ext_resource type="Script" uid="uid://bs25jvxbljbg5" path="res://bound_rect.gd" id="2_2ngq4"]
+[ext_resource type="Texture2D" uid="uid://c6jk54yi4tfks" path="res://sprites/targ-upper-left.png" id="3_lc0qw"]
+[ext_resource type="Texture2D" uid="uid://dloux14dik3n5" path="res://sprites/targ-upper-right.png" id="4_sc38b"]
+[ext_resource type="Texture2D" uid="uid://bx6rwg028i7v0" path="res://sprites/targ-lower-left.png" id="5_q21n5"]
+[ext_resource type="Texture2D" uid="uid://c7n332k8bi4ac" path="res://sprites/targ-lower-right.png" id="6_l8xr3"]
+[ext_resource type="Script" uid="uid://dh0l2qt461kkj" path="res://chef.gd" id="7_6u2sy"]
+[ext_resource type="Texture2D" uid="uid://1kngwp0220wx" path="res://sprites/chef-normal.png" id="8_sr27p"]
+[ext_resource type="Script" uid="uid://nj6sjdlgibl3" path="res://cashier.gd" id="9_j4f8r"]
+[ext_resource type="Texture2D" uid="uid://fwgvwmbs00wq" path="res://sprites/cashier-normal.png" id="10_8plwv"]
+[ext_resource type="Script" uid="uid://b7u5isiwentgd" path="res://customer.gd" id="11_noapp"]
+[ext_resource type="Script" uid="uid://bw5b1p0x45qw3" path="res://stocker.gd" id="12_ftiur"]
+[ext_resource type="Texture2D" uid="uid://bdtv1qkxm6c5u" path="res://sprites/cashier-checking-out.png" id="13_1c78d"]
+[ext_resource type="Script" uid="uid://b3oaxq2qhffdk" path="res://package.gd" id="14_moyx6"]
+[ext_resource type="Texture2D" uid="uid://bpmy26b8g58q6" path="res://sprites/package-normal.png" id="15_hnric"]
+[ext_resource type="Script" uid="uid://bqbiijmaroiec" path="res://warehouse_person.gd" id="16_6n20b"]
+[ext_resource type="Texture2D" uid="uid://c2ru0lto3y8s4" path="res://sprites/warehouse-normal.png" id="17_tn8o8"]
+[ext_resource type="Texture2D" uid="uid://bbx0w2uplb5rk" path="res://sprites/ghost-boss-normal.png" id="18_mngd8"]
 
-[node name="wewt" type="Node2D"]
+[sub_resource type="AudioStreamWAV" id="AudioStreamWAV_0dnxm"]
+
+[node name="wewt" type="Node2D" unique_id=951453985]
 position = Vector2(73, 99)
 
-[node name="Player" type="Player" parent="."]
+[node name="Player" type="Player" parent="." unique_id=861154523]
 script = ExtResource("1_m0apk")
 
-[node name="BoundRect" type="BoundRect" parent="Player" groups=["Mobile"]]
+[node name="BoundRect" type="BoundRect" parent="Player" unique_id=24071085 groups=["Mobile"]]
 visible = false
 script = ExtResource("2_2ngq4")
 
-[node name="TopLeft" type="Node2D" parent="Player/BoundRect"]
+[node name="TopLeft" type="Node2D" parent="Player/BoundRect" unique_id=1439963718]
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/BoundRect/TopLeft"]
+[node name="Sprite2D" type="Sprite2D" parent="Player/BoundRect/TopLeft" unique_id=512840249]
 texture = ExtResource("3_lc0qw")
 
-[node name="TopRight" type="Node2D" parent="Player/BoundRect"]
+[node name="TopRight" type="Node2D" parent="Player/BoundRect" unique_id=703820302]
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/BoundRect/TopRight"]
+[node name="Sprite2D" type="Sprite2D" parent="Player/BoundRect/TopRight" unique_id=1176529632]
 texture = ExtResource("4_sc38b")
 
-[node name="BottomLeft" type="Node2D" parent="Player/BoundRect"]
+[node name="BottomLeft" type="Node2D" parent="Player/BoundRect" unique_id=1088571178]
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/BoundRect/BottomLeft"]
+[node name="Sprite2D" type="Sprite2D" parent="Player/BoundRect/BottomLeft" unique_id=1678045294]
 texture = ExtResource("5_q21n5")
 
-[node name="BottomRight" type="Node2D" parent="Player/BoundRect"]
+[node name="BottomRight" type="Node2D" parent="Player/BoundRect" unique_id=1731645329]
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/BoundRect/BottomRight"]
+[node name="Sprite2D" type="Sprite2D" parent="Player/BoundRect/BottomRight" unique_id=851762926]
 texture = ExtResource("6_l8xr3")
 
-[node name="Chef" type="Mobiles" parent="Player" groups=["Chef", "Mobile"]]
+[node name="Chef" type="Mobiles" parent="Player" unique_id=1772077425 groups=["Chef", "Mobile"]]
 mob = "Chef"
 script = ExtResource("7_6u2sy")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/Chef"]
+[node name="Sprite2D" type="Sprite2D" parent="Player/Chef" unique_id=701723625]
 texture = ExtResource("8_sr27p")
 
-[node name="CookingTimer" type="Timer" parent="Player/Chef"]
+[node name="CookingTimer" type="Timer" parent="Player/Chef" unique_id=646828521]
 
-[node name="Noise" type="AudioStreamPlayer" parent="Player/Chef"]
+[node name="Noise" type="AudioStreamPlayer" parent="Player/Chef" unique_id=2069682581]
+stream = SubResource("AudioStreamWAV_0dnxm")
 max_polyphony = 7
 playback_type = 1
 
-[node name="Cashier" type="Mobiles" parent="Player" groups=["Mobile"]]
+[node name="Cashier" type="Mobiles" parent="Player" unique_id=472682901 groups=["Mobile"]]
 mob = "Cashier"
 script = ExtResource("9_j4f8r")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/Cashier"]
+[node name="Sprite2D" type="Sprite2D" parent="Player/Cashier" unique_id=1861156010]
 texture = ExtResource("10_8plwv")
 
-[node name="Noise" type="AudioStreamPlayer" parent="Player/Cashier"]
+[node name="Noise" type="AudioStreamPlayer" parent="Player/Cashier" unique_id=1459895589]
 max_polyphony = 7
 
-[node name="Customer" type="Mobiles" parent="Player"]
+[node name="Customer" type="Mobiles" parent="Player" unique_id=617042154]
 script = ExtResource("11_noapp")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/Customer"]
+[node name="Sprite2D" type="Sprite2D" parent="Player/Customer" unique_id=1175107721]
 
-[node name="Noise" type="AudioStreamPlayer" parent="Player/Customer"]
+[node name="Noise" type="AudioStreamPlayer" parent="Player/Customer" unique_id=116622234]
 max_polyphony = 7
 
-[node name="Stocker" type="Mobiles" parent="Player" groups=["Mobile"]]
+[node name="Stocker" type="Mobiles" parent="Player" unique_id=1751533194 groups=["Mobile"]]
 mob = "Stocker"
 script = ExtResource("12_ftiur")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/Stocker"]
+[node name="Sprite2D" type="Sprite2D" parent="Player/Stocker" unique_id=1656371905]
 texture = ExtResource("13_1c78d")
 
-[node name="Noise" type="AudioStreamPlayer" parent="Player/Stocker"]
+[node name="Noise" type="AudioStreamPlayer" parent="Player/Stocker" unique_id=623270687]
 max_polyphony = 7
 
-[node name="Package" type="Mobiles" parent="Player" groups=["Mobile"]]
+[node name="Package" type="Mobiles" parent="Player" unique_id=2107857409 groups=["Mobile"]]
 mob = "Package"
 script = ExtResource("14_moyx6")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/Package"]
+[node name="Sprite2D" type="Sprite2D" parent="Player/Package" unique_id=295869018]
 texture = ExtResource("15_hnric")
 
-[node name="Noise" type="AudioStreamPlayer" parent="Player/Package"]
+[node name="Noise" type="AudioStreamPlayer" parent="Player/Package" unique_id=41355438]
 max_polyphony = 7
 
-[node name="PackageGenerator" type="Package" parent="Player/Package"]
+[node name="PackageGenerator" type="Package" parent="Player/Package" unique_id=1756103449]
 
-[node name="WarehousePerson" type="Mobiles" parent="Player" groups=["Mobile"]]
+[node name="WarehousePerson" type="Mobiles" parent="Player" unique_id=594178555 groups=["Mobile"]]
 mob = "WarehousePerson"
 script = ExtResource("16_6n20b")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/WarehousePerson"]
+[node name="Sprite2D" type="Sprite2D" parent="Player/WarehousePerson" unique_id=2116312190]
 texture = ExtResource("17_tn8o8")
 
-[node name="Noise" type="AudioStreamPlayer" parent="Player/WarehousePerson"]
+[node name="Noise" type="AudioStreamPlayer" parent="Player/WarehousePerson" unique_id=1104498318]
 max_polyphony = 7
 
-[node name="ghost_boss_spr" type="Sprite2D" parent="Player"]
+[node name="ghost_boss_spr" type="Sprite2D" parent="Player" unique_id=947674072]
 texture = ExtResource("18_mngd8")
 
-[node name="Noise" type="AudioStreamPlayer" parent="Player"]
+[node name="Noise" type="AudioStreamPlayer" parent="Player" unique_id=1303741496]
 max_polyphony = 7
 
 [connection signal="balete" from="Player/Chef" to="Player/Chef" method="_on_balete"]

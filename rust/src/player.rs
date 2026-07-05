@@ -138,6 +138,7 @@ impl INode2D for Player {
 					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
 					mob_obj.signals().possessed().emit();
 					godot_print!("{mob} being possessed!");
+					mob_obj.signals().mobile_damage_taken().emit(25);
   	      	                }
                         	MobileKind::Stocker => {
 					let mob = self.base().find_child("Stocker").expect("Mob not chosen!");
@@ -145,6 +146,7 @@ impl INode2D for Player {
 					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
 					mob_obj.signals().possessed().emit();
 					godot_print!("{mob} being possessed!");
+					mob_obj.signals().mobile_damage_taken().emit(25);
 
                         	}
                         	MobileKind::Cashier => {
@@ -153,6 +155,7 @@ impl INode2D for Player {
 					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
 					mob_obj.signals().possessed().emit();
 					godot_print!("{mob} being possessed!");
+					mob_obj.signals().mobile_damage_taken().emit(25);
 
                         	}
                         	MobileKind::WarehousePerson => {
@@ -161,6 +164,7 @@ impl INode2D for Player {
 					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
 					mob_obj.signals().possessed().emit();
 					godot_print!("{mob} being possessed!");
+					mob_obj.signals().mobile_damage_taken().emit(25);
 
                         	}
 				_ => {

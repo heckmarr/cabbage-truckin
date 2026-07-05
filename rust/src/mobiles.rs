@@ -44,9 +44,9 @@ impl Mobiles {
 	#[signal]
 	fn mobile_random_damage_taken(amount: i32);
 	#[signal]
-	fn mobile_damage_taken(amount: i32);
+	pub fn mobile_damage_taken(amount: i32);
 	#[func]
-	fn mobile_damage_emit(&mut self, amount: i32) {
+	fn mobile_take_damage(&mut self, amount: i32) {
 		self.signals().mobile_damage_taken().emit(amount);
 	}
 	#[func]

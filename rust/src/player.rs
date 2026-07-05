@@ -116,7 +116,7 @@ impl INode2D for Player {
 		let event = Input::singleton();
 
 		if event.is_action_just_pressed("ui_cancel") {
-			self.base().get_tree().expect("Not in a tree!").quit();
+			self.base().get_tree().quit();
 		}
 
 		if event.is_action_just_pressed("Pad-A") || event.is_action_just_pressed("ui_select") {
@@ -303,8 +303,7 @@ impl INode2D for Player {
 		//self.spr = spr;
 		//spr.queue_free();
 
-		let timer = self.base().get_tree().expect("Not in a tree!")
-				.create_timer(5.0).expect("No scene tree to speak of!");
+		let timer = self.base().get_tree().create_timer(5.0);
 		timer.signals().timeout().connect(Player::on_timer_done);
 		
 		self.signals()

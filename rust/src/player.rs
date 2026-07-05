@@ -88,6 +88,7 @@ impl Player {
 			hp = 0
 		}
 		godot_print!("Player taking {amount} damage of {hp} total");
+		godot_print!("Scaring {:?} into working harder", self.chosen_mob);
 	}
 	#[signal]
 	fn balete();

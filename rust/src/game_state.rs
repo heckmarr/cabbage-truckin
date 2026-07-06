@@ -19,7 +19,7 @@ impl GameState {
 
 	fn die(&mut self) {
 		let cash = self.employees.entry(MobileKind::Cashier);
-		*cash = false;
+		
 		
 	}
 }
@@ -50,9 +50,39 @@ impl INode2D for GameState {
 		self.selected.insert(MobileKind::WarehousePerson, false);
 
 
-		for &employee_type in self.employees {
+		for (employee_type, alive) in &self.employees {
 			match employee_type {
 				MobileKind::Cashier => {
+					//Todo Fill in with all other mob types
+
+					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
+					//cashier.signals().mob_die().connect_self(Self::die);
+				},
+				MobileKind::Package => {
+					//Todo Fill in with all other mob types
+
+					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
+					//cashier.signals().mob_die().connect_self(Self::die);
+				},
+				MobileKind::WarehousePerson => {
+					//Todo Fill in with all other mob types
+
+					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
+					//cashier.signals().mob_die().connect_self(Self::die);
+				},
+				MobileKind::Chef => {
+					//Todo Fill in with all other mob types
+
+					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
+					//cashier.signals().mob_die().connect_self(Self::die);
+				},
+				MobileKind::Stocker => {
+					//Todo Fill in with all other mob types
+
+					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
+					//cashier.signals().mob_die().connect_self(Self::die);
+				},
+				MobileKind::Customer => {
 					//Todo Fill in with all other mob types
 
 					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");

@@ -70,7 +70,7 @@ impl Mobiles {
 		//stop at zero! He's dead already!
 		if hp <= 0 {
 			hp = 0;
-			
+			self.signals().mob_die().emit();
 			self.signals().balete().emit();
 		}
 		godot_print!("packaging taking {amount} damage of {hp} total");
@@ -113,7 +113,7 @@ impl INode2D for Mobiles {
 		let player_node = self.base().find_child("Player").expect("No player found!");
 		let player_path = player_node.get_path();
 		let player: Gd<Player> = player_node.get_node_as(&player_path);
-		
+		self.signals().mob_die().connect_other(&player, &player.null_employee);
 
 		godot_print!("Connecting signals for mobiles");
 		self.signals().possessed().connect_self(Self::on_possess);

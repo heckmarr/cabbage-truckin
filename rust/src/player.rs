@@ -10,7 +10,7 @@ use crate::mobiles::MobileKind;
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 pub struct Player {
-	employees: Array<u8>,
+	employees: Array<i32>,
 	chosen_mob: MobileKind,
 	chosen: i32,
 	arc_length: f32,
@@ -22,6 +22,7 @@ pub struct Player {
 }
 use crate::mobiles::Mobiles;
 use crate::select::BoundRect;
+use std::mem;
 
 use godot::classes::INode2D;
 
@@ -90,6 +91,17 @@ impl Player {
 		}
 		godot_print!("Player taking {amount} damage of {hp} total");
 		godot_print!("Scaring {:?} into working harder", self.chosen_mob);
+	}
+
+	fn null_employee(&mut self) {
+		let selected_mob = self.employees.at(self.chosen.try_into().unwrap());
+		match selected_mob {
+			0 => {mem::swap(&mut self.employees.at(0), &mut -1);}
+			1 => {mem::swap(&mut self.employees.at(1), &mut -1);}
+			2 => {mem::swap(&mut self.employees.at(2), &mut -1);}
+			3 => {mem::swap(&mut self.employees.at(3), &mut -1);}
+			_ => {}
+		}
 	}
 	#[signal]
 	fn balete();

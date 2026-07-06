@@ -93,7 +93,7 @@ impl Player {
 		godot_print!("Scaring {:?} into working harder", self.chosen_mob);
 	}
 
-	fn null_employee(&mut self) {
+	pub fn null_employee(&mut self) {
 		let selected_mob = self.employees.at(self.chosen.try_into().unwrap());
 		match selected_mob {
 			0 => {mem::swap(&mut self.employees.at(0), &mut -1);}

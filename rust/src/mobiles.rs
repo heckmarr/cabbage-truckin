@@ -110,10 +110,10 @@ impl INode2D for Mobiles {
 		self.signals().play_sound().connect_self(Self::on_play_sound);
 		godot_print!("Connecting sounds for mobiles");
 		
-		let player_node = self.base().find_child("Player").expect("No player found!");
+		let player_node = self.base().find_parent("Player").expect("No player found!");
 		let player_path = player_node.get_path();
 		let player: Gd<Player> = player_node.get_node_as(&player_path);
-		self.signals().mob_die().connect_other(&player, &player.null_employee);
+		self.signals().mob_die().connect_other(&player, Player::null_employee);
 
 		godot_print!("Connecting signals for mobiles");
 		self.signals().possessed().connect_self(Self::on_possess);

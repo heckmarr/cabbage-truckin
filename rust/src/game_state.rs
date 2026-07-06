@@ -2,6 +2,8 @@ use godot::prelude::*;
 
 use std::collections::HashMap;
 use crate::mobiles::MobileKind;
+use crate::mobiles::Mobiles;
+use crate::select::BoundRect;
 
 #[derive(GodotClass)]
 #[class(base=Node2D)]
@@ -96,8 +98,45 @@ impl INode2D for GameState {
 			}
 		}
 		for (employee_, selected) in &self.selected {
+			
+			//Get the selection bounding rectangle and set it as visible
+			let mut bounding_rect: Gd<Node> = self.base().find_child("BoundRect").expect("No bounding Rect in scene!");
+			let br_path = bounding_rect.get_path();
+
+			let mut br_obj: Gd<BoundRect> = bounding_rect.get_node_as(&br_path);
+			let pos = br_obj.get_position();
+			br_obj.set_visible(true);
 			match employee_ {
 				MobileKind::Cashier => {
+					if *selected {
+						//Get the mobile and it's path
+						let mob: Gd<Node> = self.base().find_child("Cashier").expect("Cashier is toast");
+						let mob_path = mob.get_path();
+						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+						//set position of selection
+						br_obj.set_position(mob_obj.get_position());
+						let mob_name = mob.get_name();
+						//get that position for pretty printing
+						let pos = mob_obj.get_position();
+						godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
+						
+					}
+					//Todo Fill in with all other mob types
+
+					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
+					//cashier.signals().mob_die().connect_self(Self::die);
+				},
+				MobileKind::Package => {
+					if *selected {
+						break;
+					}
+
+					//Todo Fill in with all other mob types
+
+					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
+					//cashier.signals().mob_die().connect_self(Self::die);
+				},
+				MobileKind::WarehousePerson => {
 					if *selected {
 						break;
 					}
@@ -106,31 +145,28 @@ impl INode2D for GameState {
 					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
 					//cashier.signals().mob_die().connect_self(Self::die);
 				},
-				MobileKind::Package => {
-					//Todo Fill in with all other mob types
-
-					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
-					//cashier.signals().mob_die().connect_self(Self::die);
-				},
-				MobileKind::WarehousePerson => {
-					//Todo Fill in with all other mob types
-
-					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
-					//cashier.signals().mob_die().connect_self(Self::die);
-				},
 				MobileKind::Chef => {
+					if *selected {
+						break;
+					}
 					//Todo Fill in with all other mob types
 
 					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
 					//cashier.signals().mob_die().connect_self(Self::die);
 				},
 				MobileKind::Stocker => {
+					if *selected {
+						break;
+					}
 					//Todo Fill in with all other mob types
 
 					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
 					//cashier.signals().mob_die().connect_self(Self::die);
 				},
 				MobileKind::Customer => {
+					if *selected {
+						break;
+					}
 					//Todo Fill in with all other mob types
 
 					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");

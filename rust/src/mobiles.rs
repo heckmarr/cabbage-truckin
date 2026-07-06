@@ -73,7 +73,8 @@ impl Mobiles {
 			self.signals().mob_die().emit();
 			self.signals().balete().emit();
 		}
-		godot_print!("packaging taking {amount} damage of {hp} total");
+		let name = self.base().get_name();
+		godot_print!("{:?} taking {amount} damage of {hp} total", name);
 	}
 	fn on_play_sound(&mut self) {
 		let s_p = self.base().find_child("Noise").expect("No sound player for this object!");

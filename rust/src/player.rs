@@ -9,7 +9,8 @@ use crate::mobiles::MobileKind;
 
 #[derive(GodotClass)]
 #[class(base=Node2D)]
-struct Player {
+pub struct Player {
+	employees: Array<u8>,
 	chosen_mob: MobileKind,
 	chosen: i32,
 	arc_length: f32,
@@ -100,6 +101,7 @@ impl INode2D for Player {
 		godot_print!("Initializing Player"); //Prints to the godot console
 
 		Self {
+			employees: Array::new(),
 			chosen_mob: MobileKind::Customer,
 			arc_length: 1.57,
 			draw_arc: false,
@@ -223,13 +225,8 @@ impl INode2D for Player {
 			}else if self.chosen > 3 {
 				self.chosen = 0;
 			}
-			let mut types_of_mob = Array::new();
-			types_of_mob.push(0);
-			types_of_mob.push(1);
-			types_of_mob.push(2);
-			types_of_mob.push(3);
 			if print {
-				let selected_mob = types_of_mob.at(self.chosen.try_into().unwrap());
+				let selected_mob = self.employees.at(self.chosen.try_into().unwrap());
 				let br: Gd<Node> = self.base_mut().find_child("BoundRect").expect("No BoundRect in scene!");
 				let br_path = br.get_path();
 				let mut br_obj: Gd<BoundRect> = br.get_node_as(&br_path);
@@ -307,6 +304,14 @@ impl INode2D for Player {
 		//let spr: Gd<Sprite2D> = self.base_mut().get_node_as(&sprite.get_path());
 		//self.spr = spr;
 		//spr.queue_free();
+
+		let mut types_of_mob = Array::new();
+		types_of_mob.push(0);
+		types_of_mob.push(1);
+		types_of_mob.push(2);
+		types_of_mob.push(3);
+		self.employees = types_of_mob.clone();
+
 
 		let timer = self.base().get_tree().create_timer(5.0);
 		timer.signals().timeout().connect(Player::on_timer_done);

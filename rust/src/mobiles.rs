@@ -36,6 +36,8 @@ pub struct Mobiles {
 #[godot_api]
 impl Mobiles {
 	#[signal]
+	pub fn mob_die();
+	#[signal]
 	fn play_sound();
 	#[signal]
 	pub fn possessed();
@@ -68,6 +70,7 @@ impl Mobiles {
 		//stop at zero! He's dead already!
 		if hp <= 0 {
 			hp = 0;
+			
 			self.signals().balete().emit();
 		}
 		godot_print!("packaging taking {amount} damage of {hp} total");
@@ -83,7 +86,7 @@ impl Mobiles {
 
 }
 use godot::global::randi_range;
-
+use crate::player::Player;
 #[godot_api]
 impl INode2D for Mobiles {
 	fn init(base: Base<Node2D>) -> Self {
@@ -106,7 +109,11 @@ impl INode2D for Mobiles {
 		sound_p.set_stream(&sound);
 		self.signals().play_sound().connect_self(Self::on_play_sound);
 		godot_print!("Connecting sounds for mobiles");
-
+		
+		let player_node = self.base().find_child("Player").expect("No player found!");
+		let player_path = player_node.get_path();
+		let player: Gd<Player> = player_node.get_node_as(&player_path);
+		
 
 		godot_print!("Connecting signals for mobiles");
 		self.signals().possessed().connect_self(Self::on_possess);

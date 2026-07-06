@@ -4,7 +4,7 @@ use godot::obj::NewAlloc;
 
 use godot::classes::Timer;
 
-#[derive(Debug, GodotConvert, Var, Export, Clone)]
+#[derive(Debug, GodotConvert, Var, Export, Clone, Eq, Hash, PartialEq)]
 #[godot(via = GString)]
 pub enum MobileKind {
 	Package,

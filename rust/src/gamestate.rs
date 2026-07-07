@@ -205,7 +205,7 @@ impl INode2D for GameState {
 		//Selected bounding rectangles
 		//currently unused
 		let _selected_mob = MobileKind::Cashier;
-
+		self.bound_selection(MobileKind::Cashier, "Cashier".into());
 		for (employee_type, _alive) in &self.employees {
 			match employee_type {
 				MobileKind::Cashier => {
@@ -260,7 +260,7 @@ impl INode2D for GameState {
 			let _pos = br_obj.get_position();
 			br_obj.set_visible(true);
 			if self.direction == 0 {
-				godot_print!("*************NOT GOING ANYWHERE");
+				//godot_print!("*************NOT GOING ANYWHERE");
 				break;	
 			}
 			match employee_ {

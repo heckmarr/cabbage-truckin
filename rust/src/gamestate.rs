@@ -1,4 +1,3 @@
-use crate::player::Player;
 use godot::prelude::*;
 
 use std::collections::HashMap;
@@ -19,8 +18,13 @@ pub struct GameState {
 	
 }
 
+use crate::player::Player;
 #[godot_api]
 impl GameState {
+	#[signal]
+	fn boss_transform();
+	#[signal]
+	fn boss_return_to_normal();
 	#[signal]
 	fn mob_die();
 	fn bound_selection(&mut self, mob_kind: MobileKind, name: GString) {
@@ -284,30 +288,28 @@ impl INode2D for GameState {
 		//todo draw the arc
 		if event.is_action_just_pressed("ui_select") {
 			self.signals().boss_transform().emit();
-			let mut al = player.get_arc_length();
-			al -= 0.01745329;
-			player.set_arc_length(al);
-			player.set_draw_arc(true);
+		//	let mut al = player.get_arc_length();
+		//	al -= 0.01745329;
+		//	player.set_arc_length(al);
+		//	player.set_draw_arc(true);
 		}
 		if event.is_action_just_released("ui_select") {
 			self.signals().boss_return_to_normal().emit();
 		}
 		//Move the selection
 		if event.is_action_just_pressed("ui_left") {
-			self.direction = -1;
-			self.chosen = self.chosen + self.direction;
 		}
 
 		if event.is_action_just_pressed("ui_right") {
 			
 		}
 
-
+		//*
 		//regenerate the arc
-		let al = player.get_arc_length();
-		if al <= 3 {
-			al += 0.08;
-			player.set_arc_length(al);
-		}
+		//let mut al = player.arc_length;
+		//if al <= 3 {
+		//	al += 0.08;
+		//	player.arc_length = al;
+		//}*//
 	}
 }

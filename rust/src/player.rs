@@ -8,10 +8,11 @@ use godot::classes::INode2D;
 use crate::mobiles::Mobiles;
 
 use crate::mobiles::MobileKind;
-#[derive(GodotClass, Var)]
+#[derive(GodotConvert, GodotClass, Var)]
 #[class(base=Node2D)]
 pub struct Player {
 	employees: Array<i32>,
+	#[godot]
 	chosen_mob: MobileKind,
 	chosen: i32,
 	//expose the arc length

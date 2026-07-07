@@ -5,8 +5,8 @@ struct SpinnyBot;
 #[gdextension]
 unsafe impl ExtensionLibrary for SpinnyBot {}
 
-mod player;
 mod mobiles;
 mod select;
 mod package;
-mod game_state;
+mod gamestate;
+mod player;

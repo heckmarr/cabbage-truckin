@@ -372,6 +372,9 @@ impl INode2D for GameState {
 		if event.is_action_just_released("ui_select") {
 			player.signals().transform_the_boss().emit();
 			player.bind_mut().set_draw_arc(false);
+			let mob: Gd<Mobiles> = self.get_mobile();
+			mob.signals().possessed().emit();
+			mob.signals().mobile_damage_taken().emit(25);
 		}
 		//Move the selection
 		if event.is_action_just_pressed("ui_left") {

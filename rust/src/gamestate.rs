@@ -119,7 +119,7 @@ impl GameState {
 	}
 
 
-	fn die(&mut self) {
+	pub fn die(&mut self) {
 		for (employee_, selected) in self.selected.clone() {
 			
 			match employee_ {

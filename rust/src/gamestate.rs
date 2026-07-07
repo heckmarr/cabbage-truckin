@@ -49,9 +49,22 @@ impl GameState {
 		godot_print!("{:?} at {:?} being selected at {:?}", name, mob_path, pos);
 		match mob_kind {
 			MobileKind::WarehousePerson => {
-				self.selected.insert(MobileKind::Cashier, false);
-				self.selected.insert(MobileKind::WarehousePerson, true);
+				self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = false);
+				self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = true);
 			},
+			MobileKind::Chef => {
+				self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = false);
+				self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = true);
+			},
+			MobileKind::Stocker => {
+				self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = false);
+				self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = true);
+			},
+			MobileKind::Cashier => {
+				self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = false);
+				self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = true);
+			}
+
 			_ => {}
 		}
 			

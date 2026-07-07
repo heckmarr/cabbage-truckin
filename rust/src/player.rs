@@ -46,9 +46,9 @@ impl Player {
 	}
 
 	#[signal]
-	fn transform_the_boss();
+	pub fn transform_the_boss();
 	#[signal]
-	fn boss_just_transformed();
+	pub fn boss_just_transformed();
 
 	#[signal]
 	fn damage_taken(amount: i32);

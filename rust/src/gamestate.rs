@@ -311,7 +311,7 @@ impl INode2D for GameState {
 		//transform the Player
 		//todo draw the arc
 		if event.is_action_just_pressed("ui_select") {
-			self.signals().boss_transform().emit();
+			player.signals().boss_just_transformed().emit();
 			let mut al = player.bind_mut().get_arc_length();
 			al -= 0.01745329;
 			player.bind_mut().set_arc_length(al);

@@ -40,16 +40,16 @@ impl Player {
 		self.arc_length = amount;
 	}
 
+	//setter
+	pub fn set_draw_arc(&mut self, draw: bool) {
+		self.draw_arc = draw;
+	}
+
 	#[signal]
-	fn unboop_the_boss();
+	fn transform_the_boss();
 	#[signal]
-	fn boop_the_boss();
-	#[signal]
-	fn boss_just_booped();
-	#[signal]
-	fn damage_all_mobiles(amount: i32);
-	#[signal]
-	fn random_damage_taken(amount: i32);
+	fn boss_just_transformed();
+
 	#[signal]
 	fn damage_taken(amount: i32);
 	#[func]
@@ -61,13 +61,7 @@ impl Player {
 		self.signals().damage_taken().emit(amount);
 	}
 	#[func]
-	fn random_damage_emit(&mut self) {
-		//The random number range is 100-500
-		let rand_num = randi_range(100, 500) as i32;
-		self.signals().random_damage_taken().emit(rand_num);
-	}
-	#[func]
-	fn on_unboop_the_boss(&mut self) {
+	fn on_transform_the_boss(&mut self) {
 		let sprite = self.base().find_child("ghost_boss_spr").expect("No ghost boss sprite in tree!");
 		let mut spr: Gd<Sprite2D> = self.base_mut().get_node_as(&sprite.get_path());
 		let tex = load("res://sprites/ghost-boss-normal.png") as Gd<Texture2D>;
@@ -76,11 +70,8 @@ impl Player {
 		//self.arc_length = 0.0;
 	}
 	#[func]
-	fn on_boss_just_booped(&mut self) {
-		//self.arc_length = 1.57;
-	}
-	#[func]
-	fn on_boop_the_boss(&mut self)  {
+	fn on_boss_just_transformed(&mut self) {
+		self.set_arc_length(1.57);
 		let sprite = self.base().find_child("ghost_boss_spr").expect("No ghost boss sprite in tree!");
 		let mut spr: Gd<Sprite2D> = self.base_mut().get_node_as(&sprite.get_path());
 		let tex = load("res://sprites/ghost-boss-angry.png") as Gd<Texture2D>;
@@ -256,20 +247,14 @@ impl INode2D for Player {
 		timer.signals().timeout().connect(Player::on_timer_done);
 		
 		self.signals()
-			.boss_just_booped()
-			.connect_self(Player::on_boss_just_booped);
+			.boss_just_transformed()
+			.connect_self(Player::on_boss_just_transformed);
 		self.signals()
-			.unboop_the_boss()
-			.connect_self(Player::on_unboop_the_boss);
-		self.signals()
-			.boop_the_boss()
-			.connect_self(Player::on_boop_the_boss);
+			.transform_the_boss()
+			.connect_self(Player::on_transform_the_boss);
 		godot_print!("Connecting signals for Boss"); 
 		self.signals()
 			.damage_taken()
-			.connect_self(Player::on_damage_taken);
-		self.signals()
-			.random_damage_taken()
 			.connect_self(Player::on_damage_taken);
 	}
 

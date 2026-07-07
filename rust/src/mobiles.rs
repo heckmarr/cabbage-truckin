@@ -23,7 +23,7 @@ use godot::classes::AudioStreamWav;
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 pub struct Mobiles {
-	drawing_arc: bool,
+	draw_arc: bool,
 	arc_length: f32,
 	hitpoints: i32,
 	timer: Gd<Timer>,
@@ -35,6 +35,8 @@ pub struct Mobiles {
 
 #[godot_api]
 impl Mobiles {
+	
+
 	#[signal]
 	pub fn mob_die();
 	#[signal]
@@ -53,10 +55,10 @@ impl Mobiles {
 	}
 	#[func]
 	fn on_possess(&mut self) {
-		self.drawing_arc = true;
+		self.draw_arc = true;
 		self.arc_length = 1.57;
 		let name = self.base().get_name();
-		godot_print!("Setting arc for {name} to {0}", self.drawing_arc);
+		godot_print!("Setting arc for {name} to {0}", self.draw_arc);
 	}
 	#[func]
 	fn mobile_random_damage_emit(&mut self) {
@@ -67,14 +69,14 @@ impl Mobiles {
 	fn on_mobile_damage_taken(&mut self, amount: i32) {
 		self.hitpoints -= amount;
 		let mut hp = self.hitpoints;
+		let name = self.base().get_name();
+		godot_print!("{:?} taking {amount} damage of {hp} total", name);
 		//stop at zero! He's dead already!
 		if hp <= 0 {
 			hp = 0;
 			self.signals().mob_die().emit();
 			self.signals().balete().emit();
 		}
-		let name = self.base().get_name();
-		godot_print!("{:?} taking {amount} damage of {hp} total", name);
 	}
 	fn on_play_sound(&mut self) {
 		let s_p = self.base().find_child("Noise").expect("No sound player for this object!");
@@ -94,7 +96,7 @@ impl INode2D for Mobiles {
 	fn init(base: Base<Node2D>) -> Self {
 		godot_print!("Mobile ready");
 		Self {
-			drawing_arc: false,
+			draw_arc: false,
 			arc_length: 1.57,
 			hitpoints: 100,
 			timer: Timer::new_alloc(),
@@ -166,10 +168,10 @@ impl INode2D for Mobiles {
 		}
 	}
 	fn process(&mut self, _delta: f32) {
-		if self.drawing_arc {
+		if self.draw_arc {
                         self.arc_length = self.arc_length - 0.01745329;
                         if self.arc_length <= 0.0 {
-                                self.drawing_arc = false;
+                                self.draw_arc = false;
                         }
                         self.base_mut().queue_redraw();
 //                        godot_print!("arc length is {0}", self.arc_length);
@@ -179,7 +181,7 @@ impl INode2D for Mobiles {
 
 
 	fn draw(&mut self) {
-                if self.drawing_arc {
+                if self.draw_arc {
                         let col = Color::from_rgb(0.1, 1.0, 0.1);
 			//Pos is relative to the sprite in this call, so we initialize it to Vector2(0, 0)
 			let pos = Vector2::new(0.0, 0.0);
@@ -187,7 +189,7 @@ impl INode2D for Mobiles {
                         let arc_l = self.arc_length;
                         if self.arc_length <= 0.0 {
                                 self.arc_length = 1.57;
-                                self.drawing_arc = false;
+                                self.draw_arc = false;
                         }
 //			godot_print!("Drawing arc!{0}", self.arc_length);
 			self.signals().play_sound().emit();

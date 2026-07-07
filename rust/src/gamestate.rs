@@ -46,7 +46,7 @@ impl GameState {
 		let name = mob.get_name();
 		//get that position for pretty printing
 		let pos = mob_obj.get_position();
-		godot_print!("{:?} at {:?} being selected at {:?}", name, mob_path, pos);
+/*		godot_print!("{:?} at {:?} being selected at {:?}", name, mob_path, pos);
 		match mob_kind {
 			MobileKind::WarehousePerson => {
 				self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = false);
@@ -66,11 +66,11 @@ impl GameState {
 			}
 
 			_ => {}
-		}
+		}*/
 			
 	}
 
-	fn move_selection(&mut self) {
+	fn move_selection_left(&mut self) {
 		for (employee_, selected) in self.selected.clone() {
 			
 			match employee_ {
@@ -78,25 +78,87 @@ impl GameState {
 					if selected {
 						//if this is the one selected, move to the next
 						let _ = &mut self.bound_selection(MobileKind::WarehousePerson,  "WarehousePerson".into());	
-						
+						self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = false);
+						self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = true);
+
 					}
 				},
 				MobileKind::WarehousePerson => {
 					if selected {
 						//if this is the one selected, move to the next
 						let _ = &mut self.bound_selection(MobileKind::Chef, "Chef".into());
+						self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = false);
+						self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = true);
 					}
 				},
 				MobileKind::Chef => {
 					if selected {
 						//if this is the one selected, move to the next					
 						let _ = &mut self.bound_selection(MobileKind::Stocker, "Stocker".into());
+						self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = false);
+						self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = true);
 					}
 				},
 				MobileKind::Stocker => {
 					if selected {
 						//if this is the one selected, move to the next
 						let _ = &mut self.bound_selection(MobileKind::Cashier, "Cashier".into());
+						self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = false);
+						self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = true);
+					}
+				},
+				MobileKind::Customer => {
+					if selected {
+						//Should never reach this!
+						break;
+					}
+				},
+				MobileKind::Package => {
+					if selected {
+						//This either!
+						break;
+					}
+
+				},
+				
+			}
+		}
+
+	}
+	fn move_selection_right(&mut self) {
+		for (employee_, selected) in self.selected.clone() {
+			
+			match employee_ {
+				MobileKind::Stocker => {
+					if selected {
+						//if this is the one selected, move to the next
+						let _ = &mut self.bound_selection(MobileKind::Chef,  "Chef".into());	
+						self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = false);
+						self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = true);
+					}
+				},
+				MobileKind::Chef => {
+					if selected {
+						//if this is the one selected, move to the next
+						let _ = &mut self.bound_selection(MobileKind::WarehousePerson, "WarehousePerson".into());
+						self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = false);
+						self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = true);
+					}
+				},
+				MobileKind::WarehousePerson=> {
+					if selected {
+						//if this is the one selected, move to the next					
+						let _ = &mut self.bound_selection(MobileKind::Cashier, "Cashier".into());
+						self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = false);
+						self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = true);
+					}
+				},
+				MobileKind::Cashier => {
+					if selected {
+						//if this is the one selected, move to the next
+						let _ = &mut self.bound_selection(MobileKind::Stocker, "Stocker".into());
+						self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = false);
+						self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = true);
 					}
 				},
 				MobileKind::Customer => {
@@ -365,11 +427,12 @@ impl INode2D for GameState {
 		//Move the selection
 		if event.is_action_just_pressed("ui_left") {
 			self.direction = -1;
-			self.move_selection();
+			self.move_selection_left();
 		}
 
 		if event.is_action_just_pressed("ui_right") {
-			
+			self.direction = 1;
+			self.move_selection_right();
 		}
 
 		

@@ -46,27 +46,7 @@ impl GameState {
 		let name = mob.get_name();
 		//get that position for pretty printing
 		let pos = mob_obj.get_position();
-/*		godot_print!("{:?} at {:?} being selected at {:?}", name, mob_path, pos);
-		match mob_kind {
-			MobileKind::WarehousePerson => {
-				self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = false);
-				self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = true);
-			},
-			MobileKind::Chef => {
-				self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = false);
-				self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = true);
-			},
-			MobileKind::Stocker => {
-				self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = false);
-				self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = true);
-			},
-			MobileKind::Cashier => {
-				self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = false);
-				self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = true);
-			}
-
-			_ => {}
-		}*/
+//		godot_print!("{:?} at {:?} being selected at {:?}", name, mob_path, pos);
 			
 	}
 
@@ -312,90 +292,6 @@ impl INode2D for GameState {
 	}
 
 	fn process(&mut self, _delta: f32) {
-		for (employee_, selected) in &self.selected {
-			
-			//Get the selection bounding rectangle and set it as visible
-			let bounding_rect: Gd<Node> = self.base().find_child("BoundRect").expect("No bounding Rect in scene!");
-			let br_path = bounding_rect.get_path();
-
-			let mut br_obj: Gd<BoundRect> = bounding_rect.get_node_as(&br_path);
-			let _pos = br_obj.get_position();
-			br_obj.set_visible(true);
-			if self.direction == 0 {
-				//godot_print!("*************NOT GOING ANYWHERE");
-				break;	
-			}
-			match employee_ {
-				MobileKind::Cashier => {
-					if *selected {
-						//Get the mobile and its path
-						let mob: Gd<Node> = self.base().find_child("Cashier").expect("Cashier is toast");
-						let mob_path = mob.get_path();
-						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-						//set position of selection
-						br_obj.set_position(mob_obj.get_position());
-						let mob_name = mob.get_name();
-						//get that position for pretty printing
-						let pos = mob_obj.get_position();
-						//godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
-						
-					}
-				},
-				MobileKind::Package => {
-					if *selected {
-						break;
-					}
-
-				},
-				MobileKind::WarehousePerson => {
-					if *selected {
-						//Get the mobile and its path
-						let mob: Gd<Node> = self.base().find_child("WarehousePerson").expect("WarehousePerson is toast");
-						let mob_path = mob.get_path();
-						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-						//set position of selection
-						br_obj.set_position(mob_obj.get_position());
-						let mob_name = mob.get_name();
-						//get that position for pretty printing
-						let pos = mob_obj.get_position();
-						//godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
-					}
-				},
-				MobileKind::Chef => {
-					if *selected {
-						//Get the mobile and its path
-						let mob: Gd<Node> = self.base().find_child("Chef").expect("Chef is toast");
-						let mob_path = mob.get_path();
-						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-						//set position of selection
-						br_obj.set_position(mob_obj.get_position());
-						let mob_name = mob.get_name();
-						//get that position for pretty printing
-						let pos = mob_obj.get_position();
-						//godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
-					}
-				},
-				MobileKind::Stocker => {
-					if *selected {
-						//Get the mobile and its path
-						let mob: Gd<Node> = self.base().find_child("Stocker").expect("Stocker is toast");
-						let mob_path = mob.get_path();
-						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-						//set position of selection
-						br_obj.set_position(mob_obj.get_position());
-						let mob_name = mob.get_name();
-						//get that position for pretty printing
-						let pos = mob_obj.get_position();
-						//godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
-					}
-				},
-				MobileKind::Customer => {
-					if *selected {
-						break;
-					}
-				},
-			}
-		}
 		//Draw the arc for the boss
 		let player_node = self.base().find_child("Player").expect("Player is dead!");
 		let player_path = player_node.get_path();

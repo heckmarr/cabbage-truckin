@@ -13,7 +13,7 @@ use godot::classes::Node2D;
 pub struct GameState {
 	employees: HashMap<MobileKind, bool>,
 	selected: HashMap<MobileKind, bool>,
-	current: (MobileKind, bool),
+	direction: i32,
 	base: Base<Node2D>
 	
 }
@@ -173,11 +173,11 @@ impl INode2D for GameState {
 	fn init(base: Base<Node2D>) -> Self {
 		Self {
 			
-
+			direction: 0,
 			//collections for selection and live checking
 			selected: HashMap::new(),
 			employees: HashMap::new(),
-			current: (MobileKind::Cashier, true),
+//			current: (MobileKind::Cashier, true),
 			base,
 		}
 	}
@@ -191,7 +191,7 @@ impl INode2D for GameState {
 		self.employees.insert(MobileKind::WarehousePerson, true);
 		
 		//start with the cashier
-		self.current = (MobileKind::Cashier, true);
+		//self.current = (MobileKind::Cashier, true);
 
 		self.selected.insert(MobileKind::Cashier, true);
 		self.selected.insert(MobileKind::Customer, false);
@@ -199,7 +199,9 @@ impl INode2D for GameState {
 		self.selected.insert(MobileKind::Chef, false);
 		self.selected.insert(MobileKind::Stocker, false);
 		self.selected.insert(MobileKind::WarehousePerson, false);
-
+		
+		//set the number of states you can change to
+//		self.current = vec![0, 1, 2, 3];
 		//Selected bounding rectangles
 		//currently unused
 		let _selected_mob = MobileKind::Cashier;
@@ -244,6 +246,10 @@ impl INode2D for GameState {
 				},
 			}
 		}
+		godot_print!("*****************GAMESTATE READY");
+	}
+
+	fn process(&mut self, _delta: f32) {
 		for (employee_, selected) in &self.selected {
 			
 			//Get the selection bounding rectangle and set it as visible
@@ -253,6 +259,10 @@ impl INode2D for GameState {
 			let mut br_obj: Gd<BoundRect> = bounding_rect.get_node_as(&br_path);
 			let _pos = br_obj.get_position();
 			br_obj.set_visible(true);
+			if self.direction == 0 {
+				godot_print!("*************NOT GOING ANYWHERE");
+				break;	
+			}
 			match employee_ {
 				MobileKind::Cashier => {
 					if *selected {
@@ -265,7 +275,7 @@ impl INode2D for GameState {
 						let mob_name = mob.get_name();
 						//get that position for pretty printing
 						let pos = mob_obj.get_position();
-						godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
+						//godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
 						
 					}
 				},
@@ -286,7 +296,7 @@ impl INode2D for GameState {
 						let mob_name = mob.get_name();
 						//get that position for pretty printing
 						let pos = mob_obj.get_position();
-						godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
+						//godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
 					}
 				},
 				MobileKind::Chef => {
@@ -300,7 +310,7 @@ impl INode2D for GameState {
 						let mob_name = mob.get_name();
 						//get that position for pretty printing
 						let pos = mob_obj.get_position();
-						godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
+						//godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
 					}
 				},
 				MobileKind::Stocker => {
@@ -314,7 +324,7 @@ impl INode2D for GameState {
 						let mob_name = mob.get_name();
 						//get that position for pretty printing
 						let pos = mob_obj.get_position();
-						godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
+						//godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
 					}
 				},
 				MobileKind::Customer => {
@@ -324,9 +334,6 @@ impl INode2D for GameState {
 				},
 			}
 		}
-	}
-
-	fn process(&mut self, _delta: f32) {
 		//Draw the arc for the boss
 		let player_node = self.base().find_child("Player").expect("Player is dead!");
 		let player_path = player_node.get_path();
@@ -357,6 +364,8 @@ impl INode2D for GameState {
 		}
 		//Move the selection
 		if event.is_action_just_pressed("ui_left") {
+			self.direction = -1;
+			self.move_selection();
 		}
 
 		if event.is_action_just_pressed("ui_right") {

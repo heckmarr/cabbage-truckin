@@ -198,14 +198,14 @@ impl INode2D for Player {
 			}
 		}
 		if event.is_action_just_pressed("ui_left") {
-			godot_print!("moving selection left");
-			self.direction = -1;
-			self.chosen = self.chosen + self.direction;
+			//godot_print!("moving selection left");
+			//self.direction = -1;
+			//self.chosen = self.chosen + self.direction;
 		}
 		if event.is_action_just_pressed("ui_right") {
-			godot_print!("Moving selection to the right");
-			self.direction = 1;
-			self.chosen = self.chosen + self.direction;
+			//godot_print!("Moving selection to the right");
+			//self.direction = 1;
+			//self.chosen = self.chosen + self.direction;
 		}
 		{//match scope
 			let mut print = true;

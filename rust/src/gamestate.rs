@@ -162,6 +162,7 @@ impl GameState {
 
 	pub fn get_mobile(&mut self) -> Gd<Mobiles> {
 		let mut mob_node = self.base().find_child("Package").expect("No package!");
+		let mut no_return: bool = false;
 		for (employee_, selected) in self.selected.clone() {
 			
 			match employee_ {
@@ -190,16 +191,24 @@ impl GameState {
 					}
 				},
 				MobileKind::Package => {
-					break;
+					no_return = true;
 				},
 				MobileKind::Customer => {
-					break;
+					no_return = true;
 				}
 			}
 		}
-		let mob_path = mob_node.get_path();
-		let mob: Gd<Mobiles> = mob_node.get_node_as(&mob_path);
-		return mob;
+		if no_return {
+			//This will be a headache once we start getting rid of nodes
+			mob_node = self.base().find_child("Cashier").expect("No Cashier!");
+			let mob_path = mob_node.get_path();
+			let mob: Gd<Mobiles> = mob_node.get_node_as(&mob_path);
+			return mob;
+		}else {
+			let mob_path = mob_node.get_path();
+			let mob: Gd<Mobiles> = mob_node.get_node_as(&mob_path);
+			return mob;
+		}
 		
 	}
 

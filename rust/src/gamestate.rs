@@ -160,6 +160,49 @@ impl GameState {
 
 	}
 
+	pub fn get_mobile(&mut self) -> Gd<Mobiles> {
+		let mut mob_node = self.base().find_child("Package").expect("No package!");
+		for (employee_, selected) in self.selected.clone() {
+			
+			match employee_ {
+				MobileKind::Cashier => {
+					if selected {
+						//if this is the one selected, return it
+						mob_node = self.base().find_child("Cashier").expect("No Cashier!");
+					}
+				},
+				MobileKind::WarehousePerson => {
+					if selected {
+						//if this is the one selected, return it
+						mob_node = self.base().find_child("WarehousePerson").expect("No WarehousePerson!");
+					}
+				},
+				MobileKind::Chef => {
+					if selected {
+						//if this is the one selected, return it
+						mob_node = self.base().find_child("Chef").expect("No Chef!");
+					}
+				},
+				MobileKind::Stocker => {
+					if selected {
+						//if this is the one selected, return it
+						mob_node = self.base().find_child("Stocker").expect("No Stocker!");
+					}
+				},
+				MobileKind::Package => {
+					break;
+				},
+				MobileKind::Customer => {
+					break;
+				}
+			}
+		}
+		let mob_path = mob_node.get_path();
+		let mob: Gd<Mobiles> = mob_node.get_node_as(&mob_path);
+		return mob;
+		
+	}
+
 
 	pub fn die(&mut self) {
 		for (employee_, selected) in self.selected.clone() {

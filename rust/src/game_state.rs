@@ -23,7 +23,7 @@ pub struct GameState {
 impl GameState {
 	#[signal]
 	fn mob_die();
-	fn bound_selection(&mut self, mob_name: GString) {
+	fn bound_selection(&mut self, mob_kind: MobileKind, name: GString) {
 		//Get the selection bounding rectangle and set it as visible
 		let mut bounding_rect: Gd<Node> = self.base().find_child("BoundRect").expect("No bounding Rect in scene!");
 		let br_path = bounding_rect.get_path();
@@ -33,20 +33,21 @@ impl GameState {
 		br_obj.set_visible(true);
 			
 		//Get the next mobile in the pattern and its path
-		let mob: Gd<Node> = self.base().find_child(&mob_name).expect("{mob_name} is toast");
+		let mob: Gd<Node> = self.base().find_child(&name).expect("{mob_name} is toast");
 		let mob_path = mob.get_path();
 		let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
 		//set position of selection
 		br_obj.set_position(mob_obj.get_position());
-		let mob_name = mob.get_name();
+		let name = mob.get_name();
 		//get that position for pretty printing
 		let pos = mob_obj.get_position();
-		godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
-		match mob_name {
-			"WarehousePerson" => {
+		godot_print!("{:?} at {:?} being selected at {:?}", name, mob_path, pos);
+		match mob_kind {
+			MobileKind::WarehousePerson => {
 				self.selected.insert(MobileKind::Cashier, false);
 				self.selected.insert(MobileKind::WarehousePerson, true);
 			},
+			_ => {}
 		}
 			
 	}
@@ -58,26 +59,26 @@ impl GameState {
 				MobileKind::Cashier => {
 					if selected {
 						//if this is the one selected, move to the next
-						&mut self.bound_selection("WarehousePerson".into());	
+						&mut self.bound_selection(MobileKind::WarehousePerson,  "WarehousePerson".into());	
 						
 					}
 				},
 				MobileKind::WarehousePerson => {
 					if selected {
 						//if this is the one selected, move to the next
-						&mut self.bound_selection("Chef".into());
+						&mut self.bound_selection(MobileKind::Chef, "Chef".into());
 					}
 				},
 				MobileKind::Chef => {
 					if selected {
 						//if this is the one selected, move to the next					
-						&mut self.bound_selection("Stocker".into());
+						&mut self.bound_selection(MobileKind::Stocker, "Stocker".into());
 					}
 				},
 				MobileKind::Stocker => {
 					if selected {
 						//if this is the one selected, move to the next
-						&mut self.bound_selection("Cashier".into());
+						&mut self.bound_selection(MobileKind::Cashier, "Cashier".into());
 					}
 				},
 				MobileKind::Customer => {
@@ -91,6 +92,7 @@ impl GameState {
 					}
 
 				},
+				_ => {}
 			}
 		}
 

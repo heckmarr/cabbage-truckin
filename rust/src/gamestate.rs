@@ -101,11 +101,13 @@ impl GameState {
 				},
 				MobileKind::Customer => {
 					if selected {
+						//Should never reach this!
 						break;
 					}
 				},
 				MobileKind::Package => {
 					if selected {
+						//This either!
 						break;
 					}
 
@@ -118,7 +120,49 @@ impl GameState {
 
 
 	fn die(&mut self) {
-		let _cash = self.employees.entry(MobileKind::Cashier);
+		for (employee_, selected) in self.selected.clone() {
+			
+			match employee_ {
+				MobileKind::Cashier => {
+					if selected {
+						//if this is the one selected, remove it
+						self.selected.remove(&MobileKind::Cashier);						
+					}
+				},
+				MobileKind::WarehousePerson => {
+					if selected {
+						//if this is the one selected, remove it
+						self.selected.remove(&MobileKind::Cashier);						
+					}
+				},
+				MobileKind::Chef => {
+					if selected {
+						//if this is the one selected, remove it					
+						self.selected.remove(&MobileKind::Cashier);						
+					}
+				},
+				MobileKind::Stocker => {
+					if selected {
+						//if this is the one selected, remove it
+						self.selected.remove(&MobileKind::Cashier);						
+					}
+				},
+				MobileKind::Customer => {
+					if selected {
+						//Should never reach this!
+						break;
+					}
+				},
+				MobileKind::Package => {
+					if selected {
+						//This either!
+						break;
+					}
+
+				},
+				
+			}
+		}
 		
 		
 	}

@@ -318,7 +318,8 @@ impl INode2D for GameState {
 			player.bind_mut().set_draw_arc(true);
 		}
 		if event.is_action_just_released("ui_select") {
-			self.signals().boss_return_to_normal().emit();
+			player.signals().transform_the_boss().emit();
+			player.bind_mut().set_draw_arc(false);
 		}
 		//Move the selection
 		if event.is_action_just_pressed("ui_left") {

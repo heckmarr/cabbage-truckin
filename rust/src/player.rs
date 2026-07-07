@@ -4,15 +4,12 @@ use godot::global::randi_range;
 use godot::obj::Gd;
 use godot::classes::Timer;
 use godot::classes::Node2D;
-use godot::classes::INode2D;
-use crate::mobiles::Mobiles;
 
 use crate::mobiles::MobileKind;
-#[derive(GodotConvert, GodotClass, Var)]
+#[derive(GodotClass)]
 #[class(base=Node2D)]
 pub struct Player {
 	employees: Array<i32>,
-	#[godot]
 	chosen_mob: MobileKind,
 	chosen: i32,
 	//expose the arc length
@@ -28,6 +25,8 @@ pub struct Player {
 }
 use crate::select::BoundRect;
 use std::mem;
+use godot::classes::INode2D;
+use crate::mobiles::Mobiles;
 
 
 use godot::classes::Input;

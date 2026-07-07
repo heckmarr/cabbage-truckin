@@ -29,11 +29,12 @@ impl GameState {
 	fn mob_die();
 	fn bound_selection(&mut self, mob_kind: MobileKind, name: GString) {
 		//Get the selection bounding rectangle and set it as visible
-		let mut bounding_rect: Gd<Node> = self.base().find_child("BoundRect").expect("No bounding Rect in scene!");
+		let bounding_rect: Gd<Node> = self.base().find_child("BoundRect").expect("No bounding Rect in scene!");
 		let br_path = bounding_rect.get_path();
 
 		let mut br_obj: Gd<BoundRect> = bounding_rect.get_node_as(&br_path);
-		let pos = br_obj.get_position();
+		//set before use
+		let _pos = br_obj.get_position();
 		br_obj.set_visible(true);
 			
 		//Get the next mobile in the pattern and its path
@@ -63,26 +64,26 @@ impl GameState {
 				MobileKind::Cashier => {
 					if selected {
 						//if this is the one selected, move to the next
-						&mut self.bound_selection(MobileKind::WarehousePerson,  "WarehousePerson".into());	
+						let _ = &mut self.bound_selection(MobileKind::WarehousePerson,  "WarehousePerson".into());	
 						
 					}
 				},
 				MobileKind::WarehousePerson => {
 					if selected {
 						//if this is the one selected, move to the next
-						&mut self.bound_selection(MobileKind::Chef, "Chef".into());
+						let _ = &mut self.bound_selection(MobileKind::Chef, "Chef".into());
 					}
 				},
 				MobileKind::Chef => {
 					if selected {
 						//if this is the one selected, move to the next					
-						&mut self.bound_selection(MobileKind::Stocker, "Stocker".into());
+						let _ = &mut self.bound_selection(MobileKind::Stocker, "Stocker".into());
 					}
 				},
 				MobileKind::Stocker => {
 					if selected {
 						//if this is the one selected, move to the next
-						&mut self.bound_selection(MobileKind::Cashier, "Cashier".into());
+						let _ = &mut self.bound_selection(MobileKind::Cashier, "Cashier".into());
 					}
 				},
 				MobileKind::Customer => {
@@ -96,7 +97,7 @@ impl GameState {
 					}
 
 				},
-				_ => {}
+				
 			}
 		}
 
@@ -104,7 +105,7 @@ impl GameState {
 
 
 	fn die(&mut self) {
-		let cash = self.employees.entry(MobileKind::Cashier);
+		let _cash = self.employees.entry(MobileKind::Cashier);
 		
 		
 	}
@@ -143,9 +144,10 @@ impl INode2D for GameState {
 		self.selected.insert(MobileKind::WarehousePerson, false);
 
 		//Selected bounding rectangles
-		let selected_mob = MobileKind::Cashier;
+		//currently unused
+		let _selected_mob = MobileKind::Cashier;
 
-		for (employee_type, alive) in &self.employees {
+		for (employee_type, _alive) in &self.employees {
 			match employee_type {
 				MobileKind::Cashier => {
 					//Todo Fill in with all other mob types
@@ -188,11 +190,11 @@ impl INode2D for GameState {
 		for (employee_, selected) in &self.selected {
 			
 			//Get the selection bounding rectangle and set it as visible
-			let mut bounding_rect: Gd<Node> = self.base().find_child("BoundRect").expect("No bounding Rect in scene!");
+			let bounding_rect: Gd<Node> = self.base().find_child("BoundRect").expect("No bounding Rect in scene!");
 			let br_path = bounding_rect.get_path();
 
 			let mut br_obj: Gd<BoundRect> = bounding_rect.get_node_as(&br_path);
-			let pos = br_obj.get_position();
+			let _pos = br_obj.get_position();
 			br_obj.set_visible(true);
 			match employee_ {
 				MobileKind::Cashier => {
@@ -271,7 +273,7 @@ impl INode2D for GameState {
 		//Draw the arc for the boss
 		let player_node = self.base().find_child("Player").expect("Player is dead!");
 		let player_path = player_node.get_path();
-		let player: Gd<Player> = player_node.get_node_as(&player_path);
+		let mut player: Gd<Player> = player_node.get_node_as(&player_path);
 		//Deal with input
 		let event = Input::singleton();
 
@@ -304,12 +306,12 @@ impl INode2D for GameState {
 			
 		}
 
-		//*
+		
 		//regenerate the arc
-		//let mut al = player.arc_length;
-		//if al <= 3 {
-		//	al += 0.08;
-		//	player.arc_length = al;
-		//}*//
+		let mut al = player.bind_mut().get_arc_length();
+		if al <= 3.0 {
+			al += 0.08;
+			player.bind_mut().set_arc_length(al);
+		}
 	}
 }

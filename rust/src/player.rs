@@ -13,17 +13,15 @@ pub struct Player {
 	chosen_mob: MobileKind,
 	chosen: i32,
 	//expose the arc length
-	#[var(pub)]
 	arc_length: f32,
 	//expose the drawing arc
-	#[var(pub)]
 	draw_arc: bool,
 	hitpoints: i32,
 	direction: i32,
 	cook_timer: Gd<Timer>,
 	base: Base<Node2D>
 }
-use crate::select::BoundRect;
+//use crate::select::BoundRect;
 use std::mem;
 use godot::classes::INode2D;
 use crate::mobiles::Mobiles;
@@ -33,6 +31,15 @@ use godot::classes::Input;
 use godot::classes::Texture2D;
 #[godot_api]
 impl Player {
+	//getter
+	pub fn get_arc_length(&mut self) -> f32 {
+		return self.arc_length;
+	}
+	//setter
+	pub fn set_arc_length(&mut self, amount: f32) {
+		self.arc_length = amount;
+	}
+
 	#[signal]
 	fn unboop_the_boss();
 	#[signal]

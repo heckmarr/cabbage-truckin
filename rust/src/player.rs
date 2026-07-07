@@ -66,8 +66,9 @@ impl Player {
 		let mut spr: Gd<Sprite2D> = self.base_mut().get_node_as(&sprite.get_path());
 		let tex = load("res://sprites/ghost-boss-normal.png") as Gd<Texture2D>;
 		spr.set_texture(&tex);
-		//self.draw_arc = false;
+		self.draw_arc = false;
 		//self.arc_length = 0.0;
+		self.base_mut().queue_redraw();
 	}
 	#[func]
 	fn on_boss_just_transformed(&mut self) {
@@ -138,12 +139,12 @@ impl INode2D for Player {
 		if event.is_action_just_pressed("Pad-A") || event.is_action_just_pressed("ui_select") {
 			self.damage_emit(50);
 			self.arc_length -= 0.01745329;
-			if self.arc_length <= 0.0 {
+		/*	if self.arc_length <= 0.0 {
 				self.draw_arc = false;
 				self.chosen_mob = MobileKind::Customer;
 			}else {
 				self.draw_arc = true;
-			}
+			}*/
 			//Possess the selected object
 			match self.chosen_mob {
 	                        MobileKind::Chef => {

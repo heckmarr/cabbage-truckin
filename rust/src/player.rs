@@ -9,15 +9,9 @@ use crate::mobiles::MobileKind;
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 pub struct Player {
-	employees: Array<i32>,
-	chosen_mob: MobileKind,
-	chosen: i32,
-	//expose the arc length
 	arc_length: f32,
-	//expose the drawing arc
 	draw_arc: bool,
 	hitpoints: i32,
-	direction: i32,
 	cook_timer: Gd<Timer>,
 	base: Base<Node2D>
 }
@@ -92,19 +86,8 @@ impl Player {
 			hp = 0
 		}
 		godot_print!("Boss taking {amount} damage of {hp} total");
-		godot_print!("Scaring {:?} into working harder", self.chosen_mob);
 	}
 
-	pub fn null_employee(&mut self) {
-		let selected_mob = self.employees.at(self.chosen.try_into().unwrap());
-		match selected_mob {
-			0 => {mem::swap(&mut self.employees.at(0), &mut -1);}
-			1 => {mem::swap(&mut self.employees.at(1), &mut -1);}
-			2 => {mem::swap(&mut self.employees.at(2), &mut -1);}
-			3 => {mem::swap(&mut self.employees.at(3), &mut -1);}
-			_ => {}
-		}
-	}
 	#[signal]
 	fn balete();
 }
@@ -115,13 +98,9 @@ impl INode2D for Player {
 		godot_print!("Initializing Player"); //Prints to the godot console
 
 		Self {
-			employees: Array::new(),
-			chosen_mob: MobileKind::Customer,
 			arc_length: 1.57,
 			draw_arc: false,
-			chosen: 0,
 			hitpoints: 100,
-			direction: 0,
 			cook_timer: Timer::new_alloc(),
 			base,
 		}
@@ -129,89 +108,9 @@ impl INode2D for Player {
 	fn process(&mut self, _delta: f32) {
 
 
-		self.direction = 0;
-		let event = Input::singleton();
+		//nothing to see here!
 
-		if event.is_action_just_pressed("ui_cancel") {
-			self.base().get_tree().quit();
-		}
 
-		if event.is_action_just_pressed("Pad-A") || event.is_action_just_pressed("ui_select") {
-			self.damage_emit(50);
-			self.arc_length -= 0.01745329;
-		/*	if self.arc_length <= 0.0 {
-				self.draw_arc = false;
-				self.chosen_mob = MobileKind::Customer;
-			}else {
-				self.draw_arc = true;
-			}*/
-			//Possess the selected object
-			match self.chosen_mob {
-	                        MobileKind::Chef => {
-
-					let mob = self.base().find_child("Chef").expect("Mob not chosen!");
-					let mob_path = mob.get_path();
-					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-					mob_obj.signals().possessed().emit();
-					godot_print!("{mob} being possessed!");
-					mob_obj.signals().mobile_damage_taken().emit(25);
-  	      	                }
-                        	MobileKind::Stocker => {
-					let mob = self.base().find_child("Stocker").expect("Mob not chosen!");
-					let mob_path = mob.get_path();
-					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-					mob_obj.signals().possessed().emit();
-					godot_print!("{mob} being possessed!");
-					mob_obj.signals().mobile_damage_taken().emit(25);
-
-                        	}
-                        	MobileKind::Cashier => {
-					let mob = self.base().find_child("Cashier").expect("Mob not chosen!");
-					let mob_path = mob.get_path();
-					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-					mob_obj.signals().possessed().emit();
-					godot_print!("{mob} being possessed!");
-					mob_obj.signals().mobile_damage_taken().emit(25);
-
-                        	}
-                        	MobileKind::WarehousePerson => {
-					let mob = self.base().find_child("WarehousePerson").expect("Mob not chosen!");
-					let mob_path = mob.get_path();
-					let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
-					mob_obj.signals().possessed().emit();
-					godot_print!("{mob} being possessed!");
-					mob_obj.signals().mobile_damage_taken().emit(25);
-
-                        	}
-				_ => {
-					//pass
-				}
-
-			}
-		}
-		if event.is_action_just_pressed("ui_left") {
-			//godot_print!("moving selection left");
-			//self.direction = -1;
-			//self.chosen = self.chosen + self.direction;
-		}
-		if event.is_action_just_pressed("ui_right") {
-			//godot_print!("Moving selection to the right");
-			//self.direction = 1;
-			//self.chosen = self.chosen + self.direction;
-		}
-		{//match scope
-			let mut print = true;
-			if self.direction == 0 {
-				print = false;
-			}
-			if self.chosen < 0 {
-				self.chosen = 3;
-			}else if self.chosen > 3 {
-				self.chosen = 0;
-			}
-			if print {
-			}//scope of print
-		}//scope of match and print
 	}
 
 	fn draw(&mut self) {
@@ -230,19 +129,6 @@ impl INode2D for Player {
 	}
 
 	fn ready(&mut self) { 
-		//add the Player items to the scene by adding them as children of the current node
-		//let sprite = self.base().find_child("ghost_boss_spr").expect("No ghost boss sprite in tree!");
-		//let spr: Gd<Sprite2D> = self.base_mut().get_node_as(&sprite.get_path());
-		//self.spr = spr;
-		//spr.queue_free();
-
-		let mut types_of_mob = Array::new();
-		types_of_mob.push(0);
-		types_of_mob.push(1);
-		types_of_mob.push(2);
-		types_of_mob.push(3);
-		self.employees = types_of_mob.clone();
-
 
 		let timer = self.base().get_tree().create_timer(5.0);
 		timer.signals().timeout().connect(Player::on_timer_done);

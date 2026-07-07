@@ -1,3 +1,4 @@
+use crate::player::Player;
 use godot::prelude::*;
 
 use std::collections::HashMap;
@@ -5,11 +6,15 @@ use crate::mobiles::MobileKind;
 use crate::mobiles::Mobiles;
 use crate::select::BoundRect;
 
+use godot::classes::Input;
+use godot::classes::Node2D;
+
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 pub struct GameState {
 	employees: HashMap<MobileKind, bool>,
 	selected: HashMap<MobileKind, bool>,
+	current: (MobileKind, bool),
 	base: Base<Node2D>
 	
 }
@@ -18,6 +23,79 @@ pub struct GameState {
 impl GameState {
 	#[signal]
 	fn mob_die();
+	fn bound_selection(&mut self, mob_name: &str) {
+		//Get the selection bounding rectangle and set it as visible
+		let mut bounding_rect: Gd<Node> = self.base().find_child("BoundRect").expect("No bounding Rect in scene!");
+		let br_path = bounding_rect.get_path();
+
+		let mut br_obj: Gd<BoundRect> = bounding_rect.get_node_as(&br_path);
+		let pos = br_obj.get_position();
+		br_obj.set_visible(true);
+			
+		//Get the next mobile in the pattern and its path
+		let mob: Gd<Node> = self.base().find_child(mob_name).expect("{mob_name} is toast");
+		let mob_path = mob.get_path();
+		let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+		//set position of selection
+		br_obj.set_position(mob_obj.get_position());
+		let mob_name = mob.get_name();
+		//get that position for pretty printing
+		let pos = mob_obj.get_position();
+		godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
+		match mob_name {
+			"WarehousePerson" => {
+				self.selected.insert(MobileKind::Cashier, false);
+				self.selected.insert(MobileKind::WarehousePerson, true);
+			},
+		}
+			
+	}
+
+	fn move_selection(&mut self) {
+		for (employee_, selected) in self.selected {
+			
+			match employee_ {
+				MobileKind::Cashier => {
+					if selected {
+						//if this is the one selected, move to the next
+						&mut self.bound_selection("WarehousePerson");	
+						
+					}
+				},
+				MobileKind::WarehousePerson => {
+					if selected {
+						//if this is the one selected, move to the next
+						&mut self.bound_selection("Chef");
+					}
+				},
+				MobileKind::Chef => {
+					if selected {
+						//if this is the one selected, move to the next					
+						&mut self.bound_selection("Stocker");
+					}
+				},
+				MobileKind::Stocker => {
+					if selected {
+						//if this is the one selected, move to the next
+						&mut self.bound_selection("Cashier");
+					}
+				},
+				MobileKind::Customer => {
+					if selected {
+						break;
+					}
+				},
+				MobileKind::Package => {
+					if selected {
+						break;
+					}
+
+				},
+			}
+		}
+
+	}
+
 
 	fn die(&mut self) {
 		let cash = self.employees.entry(MobileKind::Cashier);
@@ -35,6 +113,7 @@ impl INode2D for GameState {
 			//collections for selection and live checking
 			selected: HashMap::new(),
 			employees: HashMap::new(),
+			current: (MobileKind::Cashier, true),
 			base,
 		}
 	}
@@ -47,6 +126,9 @@ impl INode2D for GameState {
 		self.employees.insert(MobileKind::Stocker, true);
 		self.employees.insert(MobileKind::WarehousePerson, true);
 		
+		//start with the cashier
+		self.current = (MobileKind::Cashier, true);
+
 		self.selected.insert(MobileKind::Cashier, true);
 		self.selected.insert(MobileKind::Customer, false);
 		self.selected.insert(MobileKind::Package, false);
@@ -109,7 +191,7 @@ impl INode2D for GameState {
 			match employee_ {
 				MobileKind::Cashier => {
 					if *selected {
-						//Get the mobile and it's path
+						//Get the mobile and its path
 						let mob: Gd<Node> = self.base().find_child("Cashier").expect("Cashier is toast");
 						let mob_path = mob.get_path();
 						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
@@ -121,62 +203,109 @@ impl INode2D for GameState {
 						godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
 						
 					}
-					//Todo Fill in with all other mob types
-
-					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
-					//cashier.signals().mob_die().connect_self(Self::die);
 				},
 				MobileKind::Package => {
 					if *selected {
 						break;
 					}
 
-					//Todo Fill in with all other mob types
-
-					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
-					//cashier.signals().mob_die().connect_self(Self::die);
 				},
 				MobileKind::WarehousePerson => {
 					if *selected {
-						break;
+						//Get the mobile and its path
+						let mob: Gd<Node> = self.base().find_child("WarehousePerson").expect("WarehousePerson is toast");
+						let mob_path = mob.get_path();
+						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+						//set position of selection
+						br_obj.set_position(mob_obj.get_position());
+						let mob_name = mob.get_name();
+						//get that position for pretty printing
+						let pos = mob_obj.get_position();
+						godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
 					}
-					//Todo Fill in with all other mob types
-
-					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
-					//cashier.signals().mob_die().connect_self(Self::die);
 				},
 				MobileKind::Chef => {
 					if *selected {
-						break;
+						//Get the mobile and its path
+						let mob: Gd<Node> = self.base().find_child("Chef").expect("Chef is toast");
+						let mob_path = mob.get_path();
+						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+						//set position of selection
+						br_obj.set_position(mob_obj.get_position());
+						let mob_name = mob.get_name();
+						//get that position for pretty printing
+						let pos = mob_obj.get_position();
+						godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
 					}
-					//Todo Fill in with all other mob types
-
-					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
-					//cashier.signals().mob_die().connect_self(Self::die);
 				},
 				MobileKind::Stocker => {
 					if *selected {
-						break;
+						//Get the mobile and its path
+						let mob: Gd<Node> = self.base().find_child("Stocker").expect("Stocker is toast");
+						let mob_path = mob.get_path();
+						let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
+						//set position of selection
+						br_obj.set_position(mob_obj.get_position());
+						let mob_name = mob.get_name();
+						//get that position for pretty printing
+						let pos = mob_obj.get_position();
+						godot_print!("{:?} at {:?} being selected at {:?}", mob_name, mob_path, pos);
 					}
-					//Todo Fill in with all other mob types
-
-					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
-					//cashier.signals().mob_die().connect_self(Self::die);
 				},
 				MobileKind::Customer => {
 					if *selected {
 						break;
 					}
-					//Todo Fill in with all other mob types
-
-					//let cashier = self.base().find_child("Cashier").expect("Cashier is already dead!");
-					//cashier.signals().mob_die().connect_self(Self::die);
 				},
 			}
 		}
 	}
 
 	fn process(&mut self, _delta: f32) {
+		//Draw the arc for the boss
+		let player_node = self.base().find_child("Player").expect("Player is dead!");
+		let player_path = player_node.get_path();
+		let player: Gd<Player> = player_node.get_node_as(&player_path);
+		//Deal with input
+		let event = Input::singleton();
 
+		//quit on esc
+		if event.is_action_just_pressed("ui_cancel") {
+			self.base().get_tree().quit();
+		}
+		//scare on select
+		if event.is_action_just_pressed("ui_select") {
+			//Also draw the arc
+		}
+
+		//transform the Player
+		//todo draw the arc
+		if event.is_action_just_pressed("ui_select") {
+			self.signals().boss_transform().emit();
+			let mut al = player.get_arc_length();
+			al -= 0.01745329;
+			player.set_arc_length(al);
+			player.set_draw_arc(true);
+		}
+		if event.is_action_just_released("ui_select") {
+			self.signals().boss_return_to_normal().emit();
+		}
+		//Move the selection
+		if event.is_action_just_pressed("ui_left") {
+			self.direction = -1;
+			self.chosen = self.chosen + self.direction;
+		}
+
+		if event.is_action_just_pressed("ui_right") {
+			
+		}
+
+
+		//regenerate the arc
+		let al = player.get_arc_length();
+		if al <= 3 {
+			al += 0.08;
+			player.set_arc_length(al);
+		}
 	}
 }

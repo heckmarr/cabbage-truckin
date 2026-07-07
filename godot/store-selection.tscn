@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://4uby8dqg4hax"]
 
+[ext_resource type="Script" uid="uid://caoaef5xbbj30" path="res://game_state.gd" id="1_2ngq4"]
 [ext_resource type="Script" uid="uid://xgql0k2hkhi2" path="res://player.gd" id="1_m0apk"]
 [ext_resource type="Script" uid="uid://bs25jvxbljbg5" path="res://bound_rect.gd" id="2_2ngq4"]
 [ext_resource type="Texture2D" uid="uid://c6jk54yi4tfks" path="res://sprites/targ-upper-left.png" id="3_lc0qw"]
@@ -25,6 +26,7 @@
 position = Vector2(73, 99)
 
 [node name="GameState" type="GameState" parent="." unique_id=1023883610]
+script = ExtResource("1_2ngq4")
 
 [node name="Player" type="Player" parent="GameState" unique_id=861154523]
 script = ExtResource("1_m0apk")

@@ -23,7 +23,7 @@ pub struct GameState {
 impl GameState {
 	#[signal]
 	fn mob_die();
-	fn bound_selection(&mut self, mob_name: &str) {
+	fn bound_selection(&mut self, mob_name: GString) {
 		//Get the selection bounding rectangle and set it as visible
 		let mut bounding_rect: Gd<Node> = self.base().find_child("BoundRect").expect("No bounding Rect in scene!");
 		let br_path = bounding_rect.get_path();
@@ -33,7 +33,7 @@ impl GameState {
 		br_obj.set_visible(true);
 			
 		//Get the next mobile in the pattern and its path
-		let mob: Gd<Node> = self.base().find_child(mob_name).expect("{mob_name} is toast");
+		let mob: Gd<Node> = self.base().find_child(&mob_name).expect("{mob_name} is toast");
 		let mob_path = mob.get_path();
 		let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
 		//set position of selection
@@ -52,32 +52,32 @@ impl GameState {
 	}
 
 	fn move_selection(&mut self) {
-		for (employee_, selected) in self.selected {
+		for (employee_, selected) in self.selected.clone() {
 			
 			match employee_ {
 				MobileKind::Cashier => {
 					if selected {
 						//if this is the one selected, move to the next
-						&mut self.bound_selection("WarehousePerson");	
+						&mut self.bound_selection("WarehousePerson".into());	
 						
 					}
 				},
 				MobileKind::WarehousePerson => {
 					if selected {
 						//if this is the one selected, move to the next
-						&mut self.bound_selection("Chef");
+						&mut self.bound_selection("Chef".into());
 					}
 				},
 				MobileKind::Chef => {
 					if selected {
 						//if this is the one selected, move to the next					
-						&mut self.bound_selection("Stocker");
+						&mut self.bound_selection("Stocker".into());
 					}
 				},
 				MobileKind::Stocker => {
 					if selected {
 						//if this is the one selected, move to the next
-						&mut self.bound_selection("Cashier");
+						&mut self.bound_selection("Cashier".into());
 					}
 				},
 				MobileKind::Customer => {

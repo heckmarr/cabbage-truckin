@@ -29,18 +29,21 @@ Follow the instructions on setting up your path variable, or the `cargo` line
 will fail
 
 Clone the repository
+
 `git clone https://github.com/heckmarr/cabbage-truckin.git`
 
 move into the rust source folder
+
 `cd cabbage-truckin/rust/src`
 
 build the GDExtension
+
 `cargo build`
 
 Then run the Godot binary and open the folder called `godot` in the
 root of the repository.
 
-Once everything is all loaded, you should be able to press the *Play*
+Once everything is all loaded, you should be able to press the "*Play*"
 button in the Godot editor, and you'll be off to the races!
 
 ### Current state

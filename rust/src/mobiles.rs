@@ -68,12 +68,11 @@ impl Mobiles {
 	}
 	fn on_mobile_damage_taken(&mut self, amount: i32) {
 		self.hitpoints -= amount;
-		let mut hp = self.hitpoints;
+		let hp = self.hitpoints;
 		let name = self.base().get_name();
 		godot_print!("{:?} taking {amount} damage of {hp} total", name);
 		//stop at zero! He's dead already!
 		if hp <= 0 {
-			hp = 0;
 			self.signals().mob_die().emit();
 			self.signals().balete().emit();
 		}
@@ -89,7 +88,6 @@ impl Mobiles {
 
 }
 use godot::global::randi_range;
-use crate::player::Player;
 use crate::gamestate::GameState;
 #[godot_api]
 impl INode2D for Mobiles {

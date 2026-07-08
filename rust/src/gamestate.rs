@@ -14,7 +14,6 @@ pub struct GameState {
 	employees: HashMap<MobileKind, bool>,
 	selected: HashMap<MobileKind, bool>,
 	selected_mob: (MobileKind, StringName),
-	direction: i32,
 	base: Base<Node2D>
 	
 }
@@ -30,7 +29,7 @@ impl GameState {
 	fn boss_return_to_normal();
 	#[signal]
 	fn mob_die();
-	fn bound_selection(&mut self, mob_kind: MobileKind, name: GString) {
+	fn bound_selection(&mut self, _mob_kind: MobileKind, name: GString) {
 		//Get the selection bounding rectangle and set it as visible
 		let bounding_rect: Gd<Node> = self.base().find_child("BoundRect").expect("No bounding Rect in scene!");
 		let br_path = bounding_rect.get_path();
@@ -46,9 +45,9 @@ impl GameState {
 		let mob_obj: Gd<Mobiles> = mob.get_node_as(&mob_path);
 		//set position of selection
 		br_obj.set_position(mob_obj.get_position());
-		let name = mob.get_name();
-		//get that position for pretty printing
-		let pos = mob_obj.get_position();
+//		let name = mob.get_name();
+//debug		//get that position for pretty printing
+//		let pos = mob_obj.get_position();
 //		godot_print!("{:?} at {:?} being selected at {:?}", name, mob_path, pos);
 			
 	}
@@ -145,7 +144,7 @@ impl GameState {
 
 
 		{//mob_node lifetime
-		let (mob_type, mob_name) = self.get_mobile_enum();
+		let (_mob_type, mob_name) = self.get_mobile_enum();
 
 
 		let mob_node = self.base().find_child(&mob_name). expect("No mobile!");
@@ -259,7 +258,6 @@ impl INode2D for GameState {
 	fn init(base: Base<Node2D>) -> Self {
 		Self {
 			
-			direction: 0,
 			//collections for selection and live checking
 			selected: HashMap::new(),
 			employees: HashMap::new(),
@@ -286,11 +284,12 @@ impl INode2D for GameState {
 		self.selected.insert(MobileKind::Stocker, false);
 		self.selected.insert(MobileKind::WarehousePerson, false);
 		
-		//set the number of states you can change to
-//		self.current = vec![0, 1, 2, 3];
-		//Selected bounding rectangles
-		//currently unused
-		let _selected_mob = MobileKind::Cashier;
+		//Unpack the tuple, use to bound the selection
+		let (_mob_k, _mob_n) = &self.selected_mob;
+//This is ugly and I hate it
+//		self.bound_selection(mob_k.clone(), (&(*mob_n)).into());
+
+//This is descriptive and I don't hate it
 		self.bound_selection(MobileKind::Cashier, "Cashier".into());
 		godot_print!("*****************GAMESTATE READY");
 	}

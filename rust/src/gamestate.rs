@@ -13,10 +13,13 @@ use godot::classes::Node2D;
 pub struct GameState {
 	employees: HashMap<MobileKind, bool>,
 	selected: HashMap<MobileKind, bool>,
+	selected_mob: (MobileKind, StringName),
 	direction: i32,
 	base: Base<Node2D>
 	
 }
+
+
 
 use crate::player::Player;
 #[godot_api]
@@ -51,164 +54,106 @@ impl GameState {
 	}
 
 	fn move_selection_left(&mut self) {
-		for (employee_, selected) in self.selected.clone() {
-			
-			match employee_ {
-				MobileKind::Cashier => {
-					if selected {
-						//if this is the one selected, move to the next
-						let _ = &mut self.bound_selection(MobileKind::WarehousePerson,  "WarehousePerson".into());	
-						self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = false);
-						self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = true);
 
-					}
+		let (enum_to_match, _) = self.get_mobile_enum();
+		match enum_to_match {
+				MobileKind::Cashier => {
+					//if this is the one selected, move to the next
+					let _ = &mut self.bound_selection(MobileKind::WarehousePerson,  "WarehousePerson".into());	
+					self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = false);
+					self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = true);
+	
 				},
 				MobileKind::WarehousePerson => {
-					if selected {
-						//if this is the one selected, move to the next
-						let _ = &mut self.bound_selection(MobileKind::Chef, "Chef".into());
-						self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = false);
-						self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = true);
-					}
+					//if this is the one selected, move to the next
+					let _ = &mut self.bound_selection(MobileKind::Chef, "Chef".into());
+					self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = false);
+					self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = true);
 				},
 				MobileKind::Chef => {
-					if selected {
-						//if this is the one selected, move to the next					
-						let _ = &mut self.bound_selection(MobileKind::Stocker, "Stocker".into());
-						self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = false);
-						self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = true);
-					}
+					//if this is the one selected, move to the next					
+					let _ = &mut self.bound_selection(MobileKind::Stocker, "Stocker".into());
+					self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = false);
+					self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = true);
 				},
 				MobileKind::Stocker => {
-					if selected {
-						//if this is the one selected, move to the next
-						let _ = &mut self.bound_selection(MobileKind::Cashier, "Cashier".into());
-						self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = false);
-						self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = true);
-					}
+					//if this is the one selected, move to the next
+					let _ = &mut self.bound_selection(MobileKind::Cashier, "Cashier".into());
+					self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = false);
+					self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = true);
+					
 				},
 				MobileKind::Customer => {
-					if selected {
-						//Should never reach this!
-						break;
-					}
 				},
 				MobileKind::Package => {
-					if selected {
-						//This either!
-						break;
-					}
-
 				},
 				
 			}
-		}
+		
 
 	}
 	fn move_selection_right(&mut self) {
-		for (employee_, selected) in self.selected.clone() {
-			
-			match employee_ {
+
+
+		let (enum_to_match, _) = self.get_mobile_enum();
+		match enum_to_match {
 				MobileKind::Stocker => {
-					if selected {
-						//if this is the one selected, move to the next
-						let _ = &mut self.bound_selection(MobileKind::Chef,  "Chef".into());	
-						self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = false);
-						self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = true);
-					}
+					//if this is the one selected, move to the next
+					let _ = &mut self.bound_selection(MobileKind::Chef,  "Chef".into());	
+					self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = false);
+					self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = true);
+					
 				},
 				MobileKind::Chef => {
-					if selected {
-						//if this is the one selected, move to the next
-						let _ = &mut self.bound_selection(MobileKind::WarehousePerson, "WarehousePerson".into());
-						self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = false);
-						self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = true);
-					}
+					
+					//if this is the one selected, move to the next
+					let _ = &mut self.bound_selection(MobileKind::WarehousePerson, "WarehousePerson".into());
+					self.selected.entry(MobileKind::Chef).and_modify(|sel| *sel = false);
+					self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = true);
+					
 				},
-				MobileKind::WarehousePerson=> {
-					if selected {
-						//if this is the one selected, move to the next					
-						let _ = &mut self.bound_selection(MobileKind::Cashier, "Cashier".into());
-						self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = false);
-						self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = true);
-					}
+				MobileKind::WarehousePerson => {
+					
+					//if this is the one selected, move to the next					
+					let _ = &mut self.bound_selection(MobileKind::Cashier, "Cashier".into());
+					self.selected.entry(MobileKind::WarehousePerson).and_modify(|sel| *sel = false);
+					self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = true);
+					
 				},
 				MobileKind::Cashier => {
-					if selected {
-						//if this is the one selected, move to the next
-						let _ = &mut self.bound_selection(MobileKind::Stocker, "Stocker".into());
-						self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = false);
-						self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = true);
-					}
+					
+					//if this is the one selected, move to the next
+					let _ = &mut self.bound_selection(MobileKind::Stocker, "Stocker".into());
+					self.selected.entry(MobileKind::Cashier).and_modify(|sel| *sel = false);
+					self.selected.entry(MobileKind::Stocker).and_modify(|sel| *sel = true);
+					
 				},
 				MobileKind::Customer => {
-					if selected {
 						//Should never reach this!
-						break;
-					}
 				},
 				MobileKind::Package => {
-					if selected {
 						//This either!
-						break;
-					}
 
 				},
 				
 			}
-		}
+		
 
 	}
 
 	pub fn get_mobile(&mut self) -> Gd<Mobiles> {
-		let mut mob_node = self.base().find_child("Package").expect("No package!");
-		let mut no_return: bool = false;
-		for (employee_, selected) in self.selected.clone() {
-			
-			match employee_ {
-				MobileKind::Cashier => {
-					if selected {
-						//if this is the one selected, return it
-						mob_node = self.base().find_child("Cashier").expect("No Cashier!");
-					}
-				},
-				MobileKind::WarehousePerson => {
-					if selected {
-						//if this is the one selected, return it
-						mob_node = self.base().find_child("WarehousePerson").expect("No WarehousePerson!");
-					}
-				},
-				MobileKind::Chef => {
-					if selected {
-						//if this is the one selected, return it
-						mob_node = self.base().find_child("Chef").expect("No Chef!");
-					}
-				},
-				MobileKind::Stocker => {
-					if selected {
-						//if this is the one selected, return it
-						mob_node = self.base().find_child("Stocker").expect("No Stocker!");
-					}
-				},
-				MobileKind::Package => {
-					no_return = true;
-				},
-				MobileKind::Customer => {
-					no_return = true;
-				}
-			}
-		}
-		if no_return {
-			//This will be a headache once we start getting rid of nodes
-			mob_node = self.base().find_child("Cashier").expect("No Cashier!");
-			let mob_path = mob_node.get_path();
-			let mob: Gd<Mobiles> = mob_node.get_node_as(&mob_path);
-			return mob;
-		}else {
-			let mob_path = mob_node.get_path();
-			let mob: Gd<Mobiles> = mob_node.get_node_as(&mob_path);
-			return mob;
-		}
+
+
+		{//mob_node lifetime
+		let (mob_type, mob_name) = self.get_mobile_enum();
+
+
+		let mob_node = self.base().find_child(&mob_name). expect("No mobile!");
+		let mob_path = mob_node.get_path();
+		let mob: Gd<Mobiles> = mob_node.get_node_as(&mob_path);
+		godot_print!("*************returning {:?}", mob.get_name());
+		return mob;
+		}//mob_node lifetime
 		
 	}
 
@@ -226,19 +171,19 @@ impl GameState {
 				MobileKind::WarehousePerson => {
 					if selected {
 						//if this is the one selected, remove it
-						self.selected.remove(&MobileKind::Cashier);						
+						self.selected.remove(&MobileKind::WarehousePerson);						
 					}
 				},
 				MobileKind::Chef => {
 					if selected {
 						//if this is the one selected, remove it					
-						self.selected.remove(&MobileKind::Cashier);						
+						self.selected.remove(&MobileKind::Chef);						
 					}
 				},
 				MobileKind::Stocker => {
 					if selected {
 						//if this is the one selected, remove it
-						self.selected.remove(&MobileKind::Cashier);						
+						self.selected.remove(&MobileKind::Stocker);						
 					}
 				},
 				MobileKind::Customer => {
@@ -260,6 +205,53 @@ impl GameState {
 		
 		
 	}
+	pub fn get_mobile_enum(&mut self) -> (MobileKind, String) {
+		for (employee_, selected) in self.selected.clone() {
+			
+			match employee_ {
+				MobileKind::Cashier => {
+					if selected {
+						//if this is the one selected, return it
+						return (MobileKind::Cashier, "Cashier".into());
+					}
+				},
+				MobileKind::WarehousePerson => {
+					if selected {
+						//if this is the one selected, return it
+						return (MobileKind::WarehousePerson, "WarehousePerson".into());
+					}
+				},
+				MobileKind::Chef => {
+					if selected {
+						//if this is the one selected, return it
+						return (MobileKind::Chef, "Chef".into());
+					}
+				},
+				MobileKind::Stocker => {
+					if selected {
+						//if this is the one selected, return it
+						return (MobileKind::Stocker, "Stocker".into());
+					}
+				},
+				MobileKind::Customer => {
+					if selected {
+						//Should never reach this!
+						break;
+					}
+				},
+				MobileKind::Package => {
+					if selected {
+						//This either!
+						break;
+					}
+
+				},
+				
+			}
+		}
+		
+		return (MobileKind::Cashier, "Cashier".into())
+	}
 }
 
 #[godot_api]
@@ -271,7 +263,7 @@ impl INode2D for GameState {
 			//collections for selection and live checking
 			selected: HashMap::new(),
 			employees: HashMap::new(),
-//			current: (MobileKind::Cashier, true),
+			selected_mob: (MobileKind::Cashier, "Cashier".into()),
 			base,
 		}
 	}

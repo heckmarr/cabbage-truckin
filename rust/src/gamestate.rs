@@ -292,6 +292,12 @@ impl INode2D for GameState {
 		//currently unused
 		let _selected_mob = MobileKind::Cashier;
 		self.bound_selection(MobileKind::Cashier, "Cashier".into());
+		godot_print!("*****************GAMESTATE READY");
+	}
+
+	fn process(&mut self, _delta: f32) {
+
+		//handle dead mobs
 		for (employee_type, _alive) in &self.employees {
 			match employee_type {
 				MobileKind::Cashier => {
@@ -314,10 +320,6 @@ impl INode2D for GameState {
 				},
 			}
 		}
-		godot_print!("*****************GAMESTATE READY");
-	}
-
-	fn process(&mut self, _delta: f32) {
 		//Draw the arc for the boss
 		let player_node = self.base().find_child("Player").expect("Player is dead!");
 		let player_path = player_node.get_path();

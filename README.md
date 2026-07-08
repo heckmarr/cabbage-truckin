@@ -34,7 +34,7 @@ Clone the repository
 
 move into the rust source folder
 
-`cd cabbage-truckin/rust/src`
+`cd cabbage-truckin/rust`
 
 build the GDExtension
 

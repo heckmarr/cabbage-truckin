@@ -354,12 +354,10 @@ impl INode2D for GameState {
 		}
 		//Move the selection
 		if event.is_action_just_pressed("ui_left") {
-			self.direction = -1;
 			self.move_selection_left();
 		}
 
 		if event.is_action_just_pressed("ui_right") {
-			self.direction = 1;
 			self.move_selection_right();
 		}
 

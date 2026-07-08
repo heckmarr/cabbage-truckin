@@ -36,6 +36,8 @@ Download the latest rust build via [rustup](https://rustup.rs/)
 Follow the instructions on setting up your path variable once rustup is installed, or the `cargo` line
 will fail
 
+
+### Build steps
 clone the repository
 
 `git clone https://github.com/heckmarr/cabbage-truckin.git`

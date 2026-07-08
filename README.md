@@ -15,13 +15,14 @@ The todo list includes
 - Making a death knell (Make a minor overtone)
 
 
-##To play Ghost Boss
+## To play Ghost Boss
 
 Currently you have to build from source yourself. Godot 4.7 and rust 1.29.0
 are required. Rust is used as an extension for GDScript in this project, providing type safety
 and the swiftness of Rust.
 
 Download [Godot](https://godotengine.org/)
+
 Download [Rust](https://rustup.rs/)
 
 Follow the instructions on setting up your path variable, or the `cargo` line
@@ -42,7 +43,7 @@ root of the repository.
 Once everything is all loaded, you should be able to press the *Play*
 button in the Godot editor, and you'll be off to the races!
 
-###Current state
+### Current state
 You can use up your scary boss points to fry the workers, and there is a package
 that is randomly assembled and shown, and workers die when pressed too hard. Press left and right
 to move the selector, and spacebar to go Bad Boss mode on the worker. When you are out of

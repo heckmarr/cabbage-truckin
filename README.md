@@ -17,18 +17,26 @@ The todo list includes
 
 ## To play Ghost Boss
 
-Currently you have to build from source yourself. Godot 4.7 and rust 1.29.0
+Currently you have to build from source yourself. Git, Godot 4.7 and Rust 1.29.0
 are required. Rust is used as an extension for GDScript in this project, providing type safety
 and the swiftness of Rust.
 
-Download [Godot](https://godotengine.org/)
+Fedora
 
-Download [Rust](https://rustup.rs/)
+`sudo dnf install git`
 
-Follow the instructions on setting up your path variable, or the `cargo` line
+Debian/Ubuntu
+
+`sudo apt install git`
+
+Download the latest [Godot](https://godotengine.org/) (Currently 4.7)
+
+Download the latest rust build via rustup [rustup](https://rustup.rs/)
+
+Follow the instructions on setting up your path variable once rustup is installed, or the `cargo` line
 will fail
 
-Clone the repository
+clone the repository
 
 `git clone https://github.com/heckmarr/cabbage-truckin.git`
 

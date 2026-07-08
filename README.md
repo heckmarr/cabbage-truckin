@@ -31,7 +31,7 @@ Debian/Ubuntu
 
 Download the latest [Godot](https://godotengine.org/) (Currently 4.7)
 
-Download the latest rust build via rustup [rustup](https://rustup.rs/)
+Download the latest rust build via [rustup](https://rustup.rs/)
 
 Follow the instructions on setting up your path variable once rustup is installed, or the `cargo` line
 will fail

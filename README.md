@@ -6,6 +6,11 @@ This is a silly game, gotten to MVP in a month, now in the process of
 being polished and enhanced.
 
 The todo list includes
+- Random package destruction
+- Package distribution
+- Points
+- Number font
+- Mobile actions
 - Background images
 - Foreground images
 - Humorous boss quotes

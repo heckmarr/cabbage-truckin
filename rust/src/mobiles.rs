@@ -127,37 +127,37 @@ impl INode2D for Mobiles {
 			.connect_self(Self::on_mobile_damage_taken);
 		match self.mob {
 			MobileKind::Chef => {godot_print!("Chef!");
-					self.base_mut().set_position(Vector2::new(300.0, 200.0));
+					self.base_mut().set_position(Vector2::new(370.0, 300.0));
 					let pos = self.base().get_position();
 					let mob_name = self.base().get_name();
 					godot_print!("{mob_name} position moving to x: {pos}");
 			}
 			MobileKind::Customer => {godot_print!("Customer!");
-					self.base_mut().set_position(Vector2::new(300.0, 200.0));
+					self.base_mut().set_position(Vector2::new(370.0, 300.0));
 					let pos = self.base().get_position();
 					let mob_name = self.base().get_name();
 					godot_print!("{mob_name} position moving to x: {pos}");
 			}
 			MobileKind::Stocker => {godot_print!("Stocker!");
-					self.base_mut().set_position(Vector2::new(650.0, 350.0));
+					self.base_mut().set_position(Vector2::new(720.0, 450.0));
 					let pos = self.base().get_position();
 					let mob_name = self.base().get_name();
 					godot_print!("{mob_name} position moving to x: {pos}");
 			}
 			MobileKind::Cashier => {godot_print!("Cashier!");
-					self.base_mut().set_position(Vector2::new(200.0, 400.0));
+					self.base_mut().set_position(Vector2::new(270.0, 500.0));
 					let pos = self.base().get_position();
 					let mob_name = self.base().get_name();
 					godot_print!("{mob_name} position moving to x: {pos}");
 			}
 			MobileKind::Package => {godot_print!("Package!");
-					self.base_mut().set_position(Vector2::new(800.0, 0.0));
+					self.base_mut().set_position(Vector2::new(870.0,100.0));
 					let pos = self.base().get_position();
 					let mob_name = self.base().get_name();
 					godot_print!("{mob_name} position moving to x: {pos}");
 			}
 			MobileKind::WarehousePerson => {godot_print!("WarehousePerson!");
-					self.base_mut().set_position(Vector2::new(600.0, 0.0));
+					self.base_mut().set_position(Vector2::new(670.0, 100.0));
 					let pos = self.base().get_position();
 					let mob_name = self.base().get_name();
 					godot_print!("{mob_name} position moving to x: {pos}");

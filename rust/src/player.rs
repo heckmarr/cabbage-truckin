@@ -93,7 +93,7 @@ impl Player {
 impl INode2D for Player {
 	fn init(base: Base<Node2D>) -> Self {
 		godot_print!("Initializing Player"); //Prints to the godot console
-
+		
 		Self {
 			arc_length: 1.57,
 			draw_arc: false,
@@ -130,6 +130,9 @@ impl INode2D for Player {
 		let timer = self.base().get_tree().create_timer(5.0);
 		timer.signals().timeout().connect(Player::on_timer_done);
 		
+
+		godot_print!("Putting the boss in the big chair");
+		self.base_mut().set_position(Vector2::new(75.0, 100.0));
 		self.signals()
 			.boss_just_transformed()
 			.connect_self(Player::on_boss_just_transformed);

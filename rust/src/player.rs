@@ -132,7 +132,7 @@ impl INode2D for Player {
 		
 
 		godot_print!("Putting the boss in the big chair");
-		self.base_mut().set_position(Vector2::new(75.0, 100.0));
+		self.base_mut().set_position(Vector2::new(75.0, 300.0));
 		self.signals()
 			.boss_just_transformed()
 			.connect_self(Player::on_boss_just_transformed);

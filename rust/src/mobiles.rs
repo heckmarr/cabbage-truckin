@@ -127,7 +127,7 @@ impl INode2D for Mobiles {
 			.connect_self(Self::on_mobile_damage_taken);
 		match self.mob {
 			MobileKind::Chef => {godot_print!("Chef!");
-					self.base_mut().set_position(Vector2::new(370.0, 300.0));
+					self.base_mut().set_position(Vector2::new(225.0, 75.0));
 					let pos = self.base().get_position();
 					let mob_name = self.base().get_name();
 					godot_print!("{mob_name} position moving to x: {pos}");

@@ -151,13 +151,13 @@ impl INode2D for Mobiles {
 					godot_print!("{mob_name} position moving to x: {pos}");
 			}
 			MobileKind::Package => {godot_print!("Package!");
-					self.base_mut().set_position(Vector2::new(870.0,100.0));
+					self.base_mut().set_position(Vector2::new(970.0,100.0));
 					let pos = self.base().get_position();
 					let mob_name = self.base().get_name();
 					godot_print!("{mob_name} position moving to x: {pos}");
 			}
 			MobileKind::WarehousePerson => {godot_print!("WarehousePerson!");
-					self.base_mut().set_position(Vector2::new(670.0, 100.0));
+					self.base_mut().set_position(Vector2::new(825.0, 100.0));
 					let pos = self.base().get_position();
 					let mob_name = self.base().get_name();
 					godot_print!("{mob_name} position moving to x: {pos}");

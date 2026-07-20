@@ -1,24 +1,24 @@
 [gd_scene format=3 uid="uid://4uby8dqg4hax"]
 
 [ext_resource type="Script" uid="uid://b3ywjdiaqwdpl" path="res://game_state.gd" id="1_2ngq4"]
-[ext_resource type="Script" uid="uid://cpnn1eoaoto7s" path="res://player.gd" id="1_m0apk"]
-[ext_resource type="Script" uid="uid://ca76itfg4ukeo" path="res://bound_rect.gd" id="2_2ngq4"]
-[ext_resource type="Texture2D" uid="uid://ca6n33osa5khb" path="res://sprites/targ-upper-left.png" id="3_lc0qw"]
-[ext_resource type="Texture2D" uid="uid://bmoilk4l0q0wl" path="res://sprites/targ-upper-right.png" id="4_sc38b"]
-[ext_resource type="Texture2D" uid="uid://ktcjdiy80u3h" path="res://sprites/targ-lower-left.png" id="5_q21n5"]
-[ext_resource type="Texture2D" uid="uid://b6sn1psnisima" path="res://sprites/targ-lower-right.png" id="6_l8xr3"]
-[ext_resource type="Script" uid="uid://cmai3in5albnq" path="res://chef.gd" id="7_6u2sy"]
-[ext_resource type="Texture2D" uid="uid://bje5kbb5bsn13" path="res://sprites/chef-normal.png" id="8_sr27p"]
-[ext_resource type="Script" uid="uid://djwbtodv4pbk8" path="res://cashier.gd" id="9_j4f8r"]
-[ext_resource type="Texture2D" uid="uid://c55h3xyb4hi15" path="res://sprites/cashier-normal.png" id="10_8plwv"]
-[ext_resource type="Script" uid="uid://cqqrwcupqb45h" path="res://customer.gd" id="11_noapp"]
-[ext_resource type="Script" uid="uid://cu77soogicyon" path="res://stocker.gd" id="12_ftiur"]
-[ext_resource type="Texture2D" uid="uid://5vdvdl41umph" path="res://sprites/cashier-checking-out.png" id="13_1c78d"]
-[ext_resource type="Script" uid="uid://tx4nnqjxsquj" path="res://package.gd" id="14_moyx6"]
-[ext_resource type="Texture2D" uid="uid://d12y1lluxgw6p" path="res://sprites/package-normal.png" id="15_hnric"]
-[ext_resource type="Script" uid="uid://dy5qrn43qmg6k" path="res://warehouse_person.gd" id="16_6n20b"]
-[ext_resource type="Texture2D" uid="uid://d2oul2780ffm5" path="res://sprites/warehouse-normal.png" id="17_tn8o8"]
-[ext_resource type="Texture2D" uid="uid://br5nkoghevp3p" path="res://sprites/ghost-boss-normal.png" id="18_mngd8"]
+[ext_resource type="Script" uid="uid://xgql0k2hkhi2" path="res://player.gd" id="1_m0apk"]
+[ext_resource type="Script" uid="uid://bs25jvxbljbg5" path="res://bound_rect.gd" id="2_2ngq4"]
+[ext_resource type="Texture2D" uid="uid://c6jk54yi4tfks" path="res://sprites/targ-upper-left.png" id="3_lc0qw"]
+[ext_resource type="Texture2D" uid="uid://dloux14dik3n5" path="res://sprites/targ-upper-right.png" id="4_sc38b"]
+[ext_resource type="Texture2D" uid="uid://bx6rwg028i7v0" path="res://sprites/targ-lower-left.png" id="5_q21n5"]
+[ext_resource type="Texture2D" uid="uid://c7n332k8bi4ac" path="res://sprites/targ-lower-right.png" id="6_l8xr3"]
+[ext_resource type="Script" uid="uid://bhv26i0gedbo7" path="res://chef.gd" id="7_6u2sy"]
+[ext_resource type="Texture2D" uid="uid://1kngwp0220wx" path="res://sprites/chef-normal.png" id="8_sr27p"]
+[ext_resource type="Script" uid="uid://c14kmrvtmwa27" path="res://cashier.gd" id="9_j4f8r"]
+[ext_resource type="Texture2D" uid="uid://fwgvwmbs00wq" path="res://sprites/cashier-normal.png" id="10_8plwv"]
+[ext_resource type="Script" uid="uid://irrp2x84nide" path="res://customer.gd" id="11_noapp"]
+[ext_resource type="Script" uid="uid://jdscvfa50gkp" path="res://stocker.gd" id="12_ftiur"]
+[ext_resource type="Texture2D" uid="uid://bdtv1qkxm6c5u" path="res://sprites/cashier-checking-out.png" id="13_1c78d"]
+[ext_resource type="Script" uid="uid://uuh3su213vpp" path="res://package.gd" id="14_moyx6"]
+[ext_resource type="Texture2D" uid="uid://bpmy26b8g58q6" path="res://sprites/package-normal.png" id="15_hnric"]
+[ext_resource type="Script" uid="uid://c4qteiy4j81ch" path="res://warehouse_person.gd" id="16_6n20b"]
+[ext_resource type="Texture2D" uid="uid://c2ru0lto3y8s4" path="res://sprites/warehouse-normal.png" id="17_tn8o8"]
+[ext_resource type="Texture2D" uid="uid://bbx0w2uplb5rk" path="res://sprites/ghost-boss-normal.png" id="18_mngd8"]
 [ext_resource type="Texture2D" uid="uid://bvsy70j0d7nbp" path="res://sprites/tables/cheftable01.png" id="20_l8xr3"]
 [ext_resource type="Texture2D" uid="uid://c77vc5icu416i" path="res://sprites/tables/cheftable02.png" id="21_6u2sy"]
 [ext_resource type="Texture2D" uid="uid://b0fpp2vsa5sex" path="res://sprites/tables/cheftable03.png" id="22_sr27p"]
@@ -132,16 +132,20 @@ texture = ExtResource("6_l8xr3")
 
 [node name="ChefTable" type="Node2D" parent="GameState/Tables" unique_id=948045006]
 
-[node name="01" type="Sprite2D" parent="GameState/Tables/ChefTable" unique_id=843914756]
+[node name="01" type="Background" parent="GameState/Tables/ChefTable" unique_id=1358242635]
+mob = "Chef"
 texture = ExtResource("20_l8xr3")
 
-[node name="02" type="Sprite2D" parent="GameState/Tables/ChefTable" unique_id=1198799607]
+[node name="02" type="Background" parent="GameState/Tables/ChefTable" unique_id=780044339]
+mob = "Chef"
 texture = ExtResource("21_6u2sy")
 
-[node name="03" type="Sprite2D" parent="GameState/Tables/ChefTable" unique_id=462980131]
+[node name="03" type="Background" parent="GameState/Tables/ChefTable" unique_id=1820361969]
+mob = "Chef"
 texture = ExtResource("22_sr27p")
 
-[node name="04" type="Sprite2D" parent="GameState/Tables/ChefTable" unique_id=2124327350]
+[node name="04" type="Background" parent="GameState/Tables/ChefTable" unique_id=1944837114]
+mob = "Chef"
 texture = ExtResource("23_j4f8r")
 
 [connection signal="balete" from="GameState/Package" to="GameState/Package" method="_on_balete"]

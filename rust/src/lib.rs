@@ -10,3 +10,4 @@ mod select;
 mod package;
 mod gamestate;
 mod player;
+mod backgrounds;

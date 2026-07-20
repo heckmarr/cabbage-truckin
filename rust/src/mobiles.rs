@@ -200,8 +200,6 @@ impl INode2D for Mobiles {
 
 impl Drop for Mobiles {
 	fn drop(&mut self) {
-		godot_print!("Dropping {0}", self.timer);
-		self.timer.queue_free();
 		//self.sound_player.queue_free();
 	}
 }

@@ -38,24 +38,35 @@ impl ISprite2D for Background {
 	}
 
 	fn ready(&mut self) {
-		godot_print!("Position all sprites");
+		//Position all sprites
 	
 		match self.mob {
-                        MobileKind::Chef => {godot_print!("Chefs table");
+                        MobileKind::Chef => {//godot_print!("Chefs table");
 				let nam: String = self.base().get_name().to_string();
 				let nam_str: &str = nam.as_str();
 				match nam_str {
 					"01" =>
-					{self.base_mut().set_position(Vector2::new(200.0, 125.0));}
+					{
+						godot_print!("Positioning part 01chef");
+						self.base_mut().set_position(Vector2::new(200.0, 125.0));
+					}
 					"02" =>
-					{self.base_mut().set_position(Vector2::new(350.0, 125.0));}
+					{
+						godot_print!("Positioning part 02chef");
+						self.base_mut().set_position(Vector2::new(350.0, 125.0));
+					}
 					"03" =>
-					{self.base_mut().set_position(Vector2::new(500.0, 125.0));}
+					{
+						godot_print!("Positioning part 03chef");
+						self.base_mut().set_position(Vector2::new(500.0, 125.0));
+					}
 					"04" =>
-					{self.base_mut().set_position(Vector2::new(650.0, 125.0));}
+					{	
+						godot_print!("Positioning part 04chef");
+						self.base_mut().set_position(Vector2::new(650.0, 125.0));
+					}
 					&_ => todo!()
 				}
-                                godot_print!("Table positioned");
                         }
                         MobileKind::Customer => {godot_print!("Customer!");
                         }

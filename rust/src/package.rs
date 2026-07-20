@@ -49,7 +49,6 @@ impl Package {
 //				godot_print!("pix is {0}", pix as f32);
 				let spr_later = spr.to_variant();
 				self.base_mut().call_deferred("add_sibling", &[spr_later.clone()]);
-				self.base_mut().call_deferred("queue_free", &[spr_later]);
 				return num_in_row;
 			}
 			let v = randi_range(1, 3) as i32;
@@ -82,7 +81,7 @@ impl Package {
 						spr.set_global_position(Vector2::new( pix as f32, r as f32));
 						let spr_later = spr.to_variant();
 						self.base_mut().call_deferred("add_sibling", &[spr_later.clone()]);
-						self.base_mut().call_deferred("queue_free", &[spr_later]);
+						//self.base_mut().call_deferred("queue_free", &[spr_later]);
 //						godot_print!("pix is {0}", pix as f32);
 						return num_in_row;
 
@@ -104,7 +103,7 @@ impl Package {
 						spr.set_global_position(Vector2::new(pix as f32, r as f32));
 						let spr_later = spr.to_variant();
 						self.base_mut().call_deferred("add_sibling", &[spr_later.clone()]);
-						self.base_mut().call_deferred("queue_free", &[spr_later]);
+						//self.base_mut().call_deferred("queue_free", &[spr_later]);
 //						godot_print!("pix is {0}", pix as f32);
 						return num_in_row;
 					}
@@ -124,7 +123,7 @@ impl Package {
 						spr.set_global_position(Vector2::new( pix as f32, r as f32));
 						let spr_later = spr.to_variant();
 						self.base_mut().call_deferred("add_sibling", &[spr_later.clone()]);
-						self.base_mut().call_deferred("queue_free", &[spr_later]);
+						//self.base_mut().call_deferred("queue_free", &[spr_later]);
 //						godot_print!("pix is {0}", pix as f32);
 						return num_in_row;
 					}
@@ -182,6 +181,6 @@ impl INode2D for Package {
 }
 impl Drop for Package {
 	fn drop(&mut self) {
-
+		
 	}
 }
